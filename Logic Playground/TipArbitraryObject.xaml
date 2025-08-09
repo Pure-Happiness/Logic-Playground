@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Logic_Playground.TipArbitraryObject"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <TextBlock>
+		<Run Text="ArbitraryO NAME name t" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=" produces a scope "/>
+		<Run Text="NAME" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=","/>
+		<LineBreak/>
+		<Run Text="in which "/>
+		<Run Text="name" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=" refers to an arbitrary object of type "/>
+		<Run Text="t" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text="."/>
+    </TextBlock>
+</UserControl>

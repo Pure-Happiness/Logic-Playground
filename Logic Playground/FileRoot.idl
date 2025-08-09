@@ -1,0 +1,25 @@
+import "MainPage.idl";
+import "Operation.idl";
+namespace Logic_Playground
+{
+    delegate void Func();
+    [default_interface]
+    runtimeclass FileRoot 
+    {
+        FileRoot();
+        void Self(FileRoot self);
+        void InitAsNewFile();
+        Windows.Foundation.IAsyncOperation<String> InitAsFile(Windows.Storage.StorageFile file);
+        void ReadContent(String content);
+        MainPage PageRoot{ get; };
+        MainPage Focus;
+        Windows.Foundation.IAsyncAction AddOperation(Operation TMDoperation, Boolean redo);
+        void Save(Microsoft.UI.Xaml.Controls.TabViewItem position);
+        void SaveAs(Microsoft.UI.Xaml.Controls.TabViewItem file);
+        void Undo();
+        void Redo();
+        void Add();
+        void JustRelease();
+        Boolean TryRelease(Microsoft.UI.Xaml.Controls.TabViewItem position, Func op);
+    }
+}

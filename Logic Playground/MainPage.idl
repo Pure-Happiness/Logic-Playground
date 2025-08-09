@@ -1,0 +1,64 @@
+import "FileRoot.idl";
+import "Operation.idl";
+import "LinkedMap.idl";
+import "Theorem.idl";
+import "Obj.idl";
+import "Type.idl";
+import "TheoremPanel.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass MainPage : Microsoft.UI.Xaml.Controls.Page
+    {
+        MainPage();
+        void Self(MainPage self);
+        Microsoft.UI.Xaml.Controls.TabViewItem Position;
+        void Parent(MainPage parent);
+        FileRoot Root;
+        String Header;
+        void InitAsAssume(Theorem assumption, TheoremPanel panel);
+        void InitAsArbitraryO(Obj aO);
+        void InitAsArbitraryT(Type aT);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationObject(String ID, String name, String expression, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationType(String name, String expression, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationCopy(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationFunction(String ID, String param, String image, String arg, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationTemplate(String ID, String param, String image, String arg, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEI(String ID, String a, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEIB(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEIF(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEIT(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEE(String ID, String id, String f, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationEEB(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationET(String ID, String idA, String idB, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationER(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationC0(String ID, String id, String a, String b, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationC1(String ID, String id, String a, String b, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationC2(String ID, String idA, String idB, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationC3(String ID, String id, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationUF(String ID, String id, String a, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationUT(String ID, String id, String t, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationScope(String NAME, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationAssume(String NAME, String ID, String p, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationArbitraryObject(String NAME, String name, String t, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationArbitraryType(String NAME, String name, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationExport(String ID, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationExit(Boolean redo);
+        void RemoveObject(String ID, String name);
+        void RemoveType(String name);
+        void RemoveTheorem(String name);
+        void RemoveScope();
+        void RemoveExport(String name);
+        void RemoveExit();
+        void AddTheorem(Theorem theorem, TheoremPanel panel);
+        void RemoveScope2(String name);
+        IVectorView<MainPage> Children{ get; };
+        Microsoft.UI.Xaml.Controls.UIElementCollection Path{ get; };
+        LinkedMap Objects{ get; };
+        LinkedMap Types{ get; };
+        LinkedMap Theorems{ get; };
+        [default_overload]
+        void Display();
+        void Display(Microsoft.UI.Xaml.UIElement item);
+    }
+}

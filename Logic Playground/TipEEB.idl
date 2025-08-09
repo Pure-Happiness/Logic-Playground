@@ -1,0 +1,8 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass TipEEB : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        TipEEB();
+    }
+}

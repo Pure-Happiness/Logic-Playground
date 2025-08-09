@@ -1,0 +1,16 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass MainWindow : Microsoft.UI.Xaml.Window
+    {
+        MainWindow();
+        void Self(MainWindow self);
+        void OpenNewTab();
+        void OpenTab(Microsoft.UI.Xaml.Controls.Page page, IInspectable header);
+        void CloseTab(Microsoft.UI.Xaml.Controls.TabViewItem item);
+        void ChangePage(Microsoft.UI.Xaml.Controls.TabViewItem item, Microsoft.UI.Xaml.Controls.Page page, IInspectable header);
+        void AddTabItem(Microsoft.UI.Xaml.Controls.TabViewItem item);
+        void RemoveTabItem(Microsoft.UI.Xaml.Controls.TabViewItem item);
+        void Display(Microsoft.UI.Xaml.Controls.TabViewItem item);
+    }
+}

@@ -1,0 +1,8 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass TipTemplate : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        TipTemplate();
+    }
+}

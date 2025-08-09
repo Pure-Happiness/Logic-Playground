@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Logic_Playground.TipObject"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <TextBlock>
+		<Run Text="Object ID name a" FontFamily="{StaticResource CascadiaCode}"/>
+		<LineBreak/>
+		<Run Text="defines an alias "/>
+		<Run Text="name" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=" for the object "/>
+		<Run Text="a" FontFamily="{StaticResource CascadiaCode}"/>
+        <Run Text=","/>
+        <LineBreak/>
+		<Run Text="and produces a theorem "/>
+		<Run Text="name=a" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=" named "/>
+		<Run Text="ID" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text="."/>
+    </TextBlock>
+</UserControl>

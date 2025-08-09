@@ -1,0 +1,491 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>逻辑游乐场</value>
+  </data>
+  <data name="addButton.Label" xml:space="preserve">
+    <value>新建</value>
+    <comment>NewTab Bar</comment>
+  </data>
+  <data name="Dark.Content" xml:space="preserve">
+    <value>深色</value>
+    <comment>Settings Theme</comment>
+  </data>
+  <data name="languageBlock.Text" xml:space="preserve">
+    <value>语言</value>
+    <comment>Settings Language</comment>
+  </data>
+  <data name="Light.Content" xml:space="preserve">
+    <value>浅色</value>
+    <comment>Settings Theme</comment>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>新建标签页</value>
+    <comment>NewTab Header</comment>
+  </data>
+  <data name="openButton.Label" xml:space="preserve">
+    <value>打开</value>
+    <comment>NewTab Bar</comment>
+  </data>
+  <data name="recentBlock.Text" xml:space="preserve">
+    <value>最近使用的文件</value>
+    <comment>NewTab Bar</comment>
+  </data>
+  <data name="setButton.Label" xml:space="preserve">
+    <value>设置</value>
+    <comment>NewTab &amp; MainWindow Bar</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+    <comment>Settings Header</comment>
+  </data>
+  <data name="settingsTitle.Text" xml:space="preserve">
+    <value>设置（下次启动时生效）</value>
+    <comment>Settings Bar</comment>
+  </data>
+  <data name="System.Content" xml:space="preserve">
+    <value>使用系统设置</value>
+    <comment>Settings Theme</comment>
+  </data>
+  <data name="themeBlock.Text" xml:space="preserve">
+    <value>主题</value>
+    <comment>Settings Theme</comment>
+  </data>
+  <data name="OpenFilePickerFailure" xml:space="preserve">
+    <value>呃呃，无法启动文件选取器😵‍💫</value>
+    <comment>NewTab Error</comment>
+  </data>
+  <data name="文件.Text" xml:space="preserve">
+    <value>文件</value>
+    <comment>MainPage Menu File</comment>
+  </data>
+  <data name="保存.Text" xml:space="preserve">
+    <value>保存</value>
+    <comment>MainPage Menu File</comment>
+  </data>
+  <data name="另存为.Text" xml:space="preserve">
+    <value>另存为</value>
+    <comment>MainPage Menu File</comment>
+  </data>
+  <data name="导入.Content" xml:space="preserve">
+    <value>导入</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="未命名" xml:space="preserve">
+    <value>未命名</value>
+    <comment>MainPage Header</comment>
+  </data>
+  <data name="编辑.Text" xml:space="preserve">
+    <value>编辑</value>
+    <comment>MainPage Menu Edit</comment>
+  </data>
+  <data name="撤销.Text" xml:space="preserve">
+    <value>撤销</value>
+    <comment>MainPage Menu Edit</comment>
+  </data>
+  <data name="重做.Text" xml:space="preserve">
+    <value>重做</value>
+    <comment>MainPage Menu Edit</comment>
+  </data>
+  <data name="上一级.Label" xml:space="preserve">
+    <value>上一级</value>
+    <comment>MainPage Bar</comment>
+  </data>
+  <data name="OpenFileFailure" xml:space="preserve">
+    <value>呃呃，无法打开指定的文件😵‍💫</value>
+    <comment>NewTab &amp; RecentListItem Error</comment>
+  </data>
+  <data name="确认按钮.Content" xml:space="preserve">
+    <value>确认</value>
+    <comment>MainPage Operation</comment>
+  </data>
+  <data name="Go to definition" xml:space="preserve">
+    <value>转到定义</value>
+    <comment>Type &amp; Object Flyout</comment>
+  </data>
+  <data name="Open here" xml:space="preserve">
+    <value>在此处打开</value>
+    <comment>Type &amp; Object Flyout</comment>
+  </data>
+  <data name="Open in new tab" xml:space="preserve">
+    <value>在新标签页中打开</value>
+    <comment>Type &amp; Object Flyout</comment>
+  </data>
+  <data name="非类型名称" xml:space="preserve">
+    <value> 非类型名称。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="错误消息.Text" xml:space="preserve">
+    <value>错误消息：</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="错误位置.Text" xml:space="preserve">
+    <value>错误位置：</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="类型符号错误" xml:space="preserve">
+    <value>类型运算符两侧必须有类型。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="类型连接错误" xml:space="preserve">
+    <value>两个类型必须通过运算符连接。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="缺少左括号" xml:space="preserve">
+    <value>括号不匹配（缺少左括号）。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="缺少右括号" xml:space="preserve">
+    <value>括号不匹配（缺少右括号）。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="Open.Text" xml:space="preserve">
+    <value>打开</value>
+    <comment>RecentListItem Swipe</comment>
+  </data>
+  <data name="Remove.Text" xml:space="preserve">
+    <value>移除此项</value>
+    <comment>RecentListItem Swipe</comment>
+  </data>
+  <data name="RemoveItem" xml:space="preserve">
+    <value>移除此项</value>
+    <comment>RecentListItem Right-click</comment>
+  </data>
+  <data name="Recovery.Header" xml:space="preserve">
+    <value>恢复未保存的文件</value>
+    <comment>Settings Recovery</comment>
+  </data>
+  <data name="别名.Content" xml:space="preserve">
+    <value>别名</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="函数和模板.Content" xml:space="preserve">
+    <value>函数和模板</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="等于.Content" xml:space="preserve">
+    <value>等于</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="选择.Content" xml:space="preserve">
+    <value>选择</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="全称量词.Content" xml:space="preserve">
+    <value>全称量词</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="范围.Content" xml:space="preserve">
+    <value>范围</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="物体.Content" xml:space="preserve">
+    <value>物体</value>
+    <comment>MainPage Aliases</comment>
+  </data>
+  <data name="类型.Content" xml:space="preserve">
+    <value>类型</value>
+    <comment>MainPage Aliases</comment>
+  </data>
+  <data name="非物体名称" xml:space="preserve">
+    <value> 非物体名称。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="物体符号错误" xml:space="preserve">
+    <value>非“!”的物体运算符两侧必须有物体。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="物体连接错误" xml:space="preserve">
+    <value>两个物体必须通过运算符连接。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="全称量词错误" xml:space="preserve">
+    <value>“!”的操作数不合要求。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="函数模板错误" xml:space="preserve">
+    <value>“#”的操作数不合要求。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="等于错误" xml:space="preserve">
+    <value>“=”的操作数类型不相同。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="选择错误" xml:space="preserve">
+    <value>“?”的第一运算数类型应为“bool”。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="选项错误" xml:space="preserve">
+    <value>“?”的第二、三操作数类型应相同。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="已声明为物体" xml:space="preserve">
+    <value> 已声明为物体。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="此处不应有类型" xml:space="preserve">
+    <value>此处不应有类型。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="此处不应有物体" xml:space="preserve">
+    <value>此处不应有物体。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="此处不应有参数" xml:space="preserve">
+    <value>此处不应有参数。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="函数错误" xml:space="preserve">
+    <value>函数实参类型不匹配形参。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="已声明为类型" xml:space="preserve">
+    <value> 已声明为类型。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="函数定义错误" xml:space="preserve">
+    <value>“@”的操作数不合要求。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="此处应有参数" xml:space="preserve">
+    <value>此处应有参数。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="“:”前不应是表达式" xml:space="preserve">
+    <value>“:”前不应是表达式。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="三元运算符“?”要有三元" xml:space="preserve">
+    <value>三元运算符“?”要有三元。</value>
+    <comment>MainPage Error Object</comment>
+  </data>
+  <data name="复制.Content" xml:space="preserve">
+    <value>复制定理</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="无法写入文件" xml:space="preserve">
+    <value>无法写入文件</value>
+    <comment>MainPage Error File</comment>
+  </data>
+  <data name="文件读取错误" xml:space="preserve">
+    <value>文件中存在错误，只读取到错误首次出现的位置之前。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="读取文件失败" xml:space="preserve">
+    <value>读取文件失败</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="ReplaceFailure" xml:space="preserve">
+    <value>替换原文件失败</value>
+    <comment>Settings Recovery</comment>
+  </data>
+  <data name="OpenOriginalFailure" xml:space="preserve">
+    <value>打开文件失败</value>
+    <comment>Settings Recovery</comment>
+  </data>
+  <data name="OpenSaveFailure" xml:space="preserve">
+    <value>无法打开用于恢复的文件</value>
+    <comment>Settings Recovery</comment>
+  </data>
+  <data name="是否保存" xml:space="preserve">
+    <value>是否保存？</value>
+    <comment>MainPage Warning</comment>
+  </data>
+  <data name="是" xml:space="preserve">
+    <value>保存</value>
+    <comment>MainPage Warning</comment>
+  </data>
+  <data name="否" xml:space="preserve">
+    <value>丢弃</value>
+    <comment>MainPage Warning</comment>
+  </data>
+  <data name="取消" xml:space="preserve">
+    <value>取消</value>
+    <comment>MainPage Warning</comment>
+  </data>
+  <data name="MoreInformation.Text" xml:space="preserve">
+    <value>更多信息见文档。</value>
+    <comment>ToolTip</comment>
+  </data>
+  <data name="函数.Content" xml:space="preserve">
+    <value>函数</value>
+    <comment>MainPage FT</comment>
+  </data>
+  <data name="模板.Content" xml:space="preserve">
+    <value>模板</value>
+    <comment>MainPage FT</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="依据不合要求" xml:space="preserve">
+    <value>依据不合要求</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="非焦点" xml:space="preserve">
+    <value>禁止在非焦点范围执行操作。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="普通范围.Content" xml:space="preserve">
+    <value>普通范围</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="假设.Content" xml:space="preserve">
+    <value>假设</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="任意物体.Content" xml:space="preserve">
+    <value>任意物体</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="任意类型.Content" xml:space="preserve">
+    <value>任意类型</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="导出.Content" xml:space="preserve">
+    <value>导出</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="选择文件.Content" xml:space="preserve">
+    <value>选择文件</value>
+    <comment>MainPage Import</comment>
+  </data>
+  <data name="NotATheorem" xml:space="preserve">
+    <value> 不可视作定理。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="离开.Content" xml:space="preserve">
+    <value>离开</value>
+    <comment>MainPage Scopes</comment>
+  </data>
+  <data name="无母" xml:space="preserve">
+    <value>当前范围无母范围。</value>
+    <comment>MainPage Error</comment>
+  </data>
+  <data name="导航到上一级" xml:space="preserve">
+    <value>导航到上一级</value>
+    <comment>MainPage Bar</comment>
+  </data>
+  <data name="导航到" xml:space="preserve">
+    <value>导航到 </value>
+    <comment>BreadcrumbItem</comment>
+  </data>
+</root>

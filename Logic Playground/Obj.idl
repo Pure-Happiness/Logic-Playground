@@ -1,0 +1,45 @@
+import "MainPage.idl";
+import "Enumerations.idl";
+import "Type.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Obj : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        Obj();
+        Obj(Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+        void Self(Obj self);
+        MainPage PagePosition{ get; };
+        ObjectCategory Category{ get; };
+        String Label{ get; };
+        Obj Left{ get; };
+        Obj Right{ get; };
+        Type MyType{ get; };
+        IVector<Obj> Sames{ get; };
+        void ChainCheck();
+        void ChainUncheck();
+        void Display();
+        void InitAsTrue();
+        void InitAsFalse();
+        void InitAsParameter(Type type, String label);
+        void InitAsParameter2(Obj declaration);
+        void InitAsType(Type type);
+        void InitAsDeclareF(Obj left, Obj right);
+        void InitAsDeclareT(Obj left, Obj right);
+        void InitAsApplyF(Obj left, Obj right);
+        void InitAsApplyT(Obj left, Obj right);
+        void InitAsForallF(Obj x);
+        void InitAsForallT(Obj x);
+        void InitAsEqual(Obj left, Obj right);
+        void InitAsOptions(Obj left, Obj right);
+        void InitAsChoose(Obj left, Obj right);
+        void InitAsAlias(Obj definition, String label);
+        void InitAsAlias2(Obj declaration);
+        static IVectorView<Microsoft.UI.Xaml.UIElement> Generate(Obj obj);
+        static String GenerateText(Obj obj);
+        static Boolean Equal(Obj x, Obj y);
+        static Obj ApplyFunction(Obj func, Obj arg, Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+        static Obj ApplyTemplate(Obj func, Type arg, Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+        static Obj Clone(Obj original, Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+    }
+}

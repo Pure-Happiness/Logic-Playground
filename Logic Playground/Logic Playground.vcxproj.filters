@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainWindow.xaml" />
+    <Page Include="NewTab.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="Settings.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="RecentListItem.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="BreadcrumbItem.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="ExpressionContainer.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="Bracket.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="Obj.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="Type.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="ErrorFlyout.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="TheoremPanel.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="TipObject.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipType.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipCopy.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipFunction.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipTemplate.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="Theorem.xaml">
+      <Filter>Controls</Filter>
+    </Page>
+    <Page Include="TipEI.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipEIB.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipEIF.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipEE.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipEEB.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipEITShit.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipER.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipET.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipC0.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipC1.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipC2.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipC3.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipUF.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipUT.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipScope.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipAssume.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipArbitraryObject.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipArbitraryType.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+    <Page Include="TipExport.xaml">
+      <Filter>ToolTips</Filter>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="MainWindow.idl" />
+    <Midl Include="FileRoot.idl">
+      <Filter>Data</Filter>
+    </Midl>
+    <Midl Include="LinkedMap.idl">
+      <Filter>Data</Filter>
+    </Midl>
+    <Midl Include="Operation.idl">
+      <Filter>Data</Filter>
+    </Midl>
+    <Midl Include="Enumerations.idl">
+      <Filter>Data</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallTile.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallTile.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallTile.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallTile.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SmallTile.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LargeTile.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LargeTile.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LargeTile.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LargeTile.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\LargeTile.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-16.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-32.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-48.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-256.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\BadgeLogo.scale-100.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\BadgeLogo.scale-125.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\BadgeLogo.scale-150.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\BadgeLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\BadgeLogo.scale-400.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{f505d968-1abb-4c3a-84a0-ef1624ba1a2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages">
+      <UniqueIdentifier>{3adfeafb-d8de-4624-a4be-72d6760fed40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{6c2bf434-afb5-44ee-ae93-53b20ba48ddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{b35a0de6-705f-4440-a84a-6cac991b9a22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ToolTips">
+      <UniqueIdentifier>{f17e7331-f887-4e04-8eb0-fbfc519f447a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\CascadiaCode-Bold.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+    <Font Include="Assets\CascadiaCode-BoldItalic.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+    <Font Include="Assets\CascadiaCode-Italic.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+    <Font Include="Assets\CascadiaCode-Light.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+    <Font Include="Assets\CascadiaCode-LightItalic.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+    <Font Include="Assets\CascadiaCode-Regular.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
+  </ItemGroup>
+</Project>

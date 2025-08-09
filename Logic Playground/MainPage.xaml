@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Logic_Playground.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Logic_Playground"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Background="{ThemeResource TabViewItemHeaderBackgroundSelected}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <AppBarButton
+                Icon="Up"
+                x:Name="上一级"
+                x:Uid="上一级"
+                Click="MoveToParent"
+                PointerPressed="ParentMiddleClick"
+                RightTapped="ParentRightClick"
+                IsEnabled="False"/>
+            <ScrollView
+	            Grid.Column="1"
+                Background="{ThemeResource LayerFillColorDefaultBrush}"
+                VerticalAlignment="Center"
+	            VerticalScrollMode="Disabled">
+                <StackPanel x:Name="路径" Padding="8" Orientation="Horizontal"/>
+            </ScrollView>
+            <AppBarButton Grid.Column="2" Icon="Setting" x:Uid="setButton" Click="OpenSettings"/>
+        </Grid>
+        <ScrollView
+            Grid.Row="1"
+            x:Name="滚"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            Margin="36,36,36,8"
+            CornerRadius="8"
+            HorizontalScrollMode="Disabled">
+            <StackPanel x:Name="主面板" Margin="0,0,12,0" Padding="0,16"/>
+        </ScrollView>
+        <Grid
+            Grid.Row="2"
+            x:Name="操作面板"
+            Background="{ThemeResource LayerFillColorDefaultBrush}"
+            Margin="36,8,36,36"
+            Padding="8"
+            CornerRadius="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Margin="8" VerticalAlignment="Center">
+                <SymbolIcon Symbol="GlobalNavigationButton"/>
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutSubItem x:Uid="文件">
+                            <MenuFlyoutItem x:Uid="保存" Click="SaveClick">
+                                <UIElement.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="S" Modifiers="Control"/>
+                                </UIElement.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="另存为" Click="SaveAsClick">
+                                <UIElement.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="S" Modifiers="Control,Shift"/>
+                                </UIElement.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="编辑">
+                            <MenuFlyoutItem x:Uid="撤销" Click="UndoClick">
+                                <UIElement.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Z" Modifiers="Control"/>
+                                </UIElement.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="重做" Click="RedoClick">
+                                <UIElement.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="Y" Modifiers="Control"/>
+                                </UIElement.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                        </MenuFlyoutSubItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+            <ComboBox
+                Grid.Column="1"
+		        x:Name="操作类别"
+		        Margin="8"
+		        VerticalAlignment="Center"
+		        SelectedIndex="0"
+		        SelectionChanged="OperationCategoryChosen">
+                <ComboBoxItem x:Uid="别名"/>
+                <ComboBoxItem x:Uid="复制">
+                    <ToolTipService.ToolTip>
+                        <local:TipCopy/>
+                    </ToolTipService.ToolTip>
+                </ComboBoxItem>
+                <ComboBoxItem x:Uid="函数和模板"/>
+                <ComboBoxItem x:Uid="等于"/>
+                <ComboBoxItem x:Uid="选择"/>
+                <ComboBoxItem x:Uid="全称量词"/>
+                <ComboBoxItem x:Uid="范围"/>
+                <ComboBoxItem x:Uid="导入"/>
+            </ComboBox>
+            <Grid Grid.Column="2" x:Name="别名操作">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    x:Name="别名操作类别"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="AliasesOperationCategoryChosen">
+                    <ComboBoxItem x:Uid="物体">
+                        <ToolTipService.ToolTip>
+                            <local:TipObject/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="类型">
+                        <ToolTipService.ToolTip>
+                            <local:TipType/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="物体别名">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="物体定理名称"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="ObjectTheoremNameChanged"
+                        KeyDown="ObjectTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+		                x:Name="物体名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="name"
+		                TextChanged="ObjectNameChanged"
+                        KeyDown="ObjectNameFinished"/>
+                    <TextBox
+		                Grid.Column="2"
+		                x:Name="物体表达式"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="a"
+		                TextChanged="ObjectExpressionChanged"
+                        KeyDown="ObjectExpressionFinished"/>
+                    <Button
+		                Grid.Column="3"
+		                x:Name="物体确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="ObjectConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipObject/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="类型别名" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="类型名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="name"
+		                TextChanged="TypeNameChanged"
+                        KeyDown="TypeNameFinished"/>
+                    <TextBox
+		                Grid.Column="1"
+		                x:Name="类型表达式"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="t"
+		                TextChanged="TypeExpressionChanged"
+                        KeyDown="TypeExpressionFinished"/>
+                    <Button
+		                Grid.Column="2"
+		                x:Name="类型确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="TypeConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipType/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="复制操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="新定理名称"
+                    Margin="8"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource CascadiaCode}"
+                    PlaceholderText="ID"
+                    TextChanged="CopyNewChanged"
+                    KeyDown="CopyNewFinished"/>
+                <TextBox
+                    Grid.Column="1"
+                    x:Name="原定理名称"
+                    Margin="8"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource CascadiaCode}"
+                    PlaceholderText="id"
+                    TextChanged="CopyOriginalChanged"
+                    KeyDown="CopyOriginalFinished"/>
+                <Button
+                    Grid.Column="2"
+                    x:Name="复制确认"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    x:Uid="确认按钮"
+                    IsEnabled="False"
+                    Click="CopyConfirm">
+                    <ToolTipService.ToolTip>
+                        <local:TipCopy/>
+                    </ToolTipService.ToolTip>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="函数操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    x:Name="函数操作类别"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="FTOperationCategoryChosen">
+                    <ComboBoxItem x:Uid="函数">
+                        <ToolTipService.ToolTip>
+                            <local:TipFunction/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="模板">
+                        <ToolTipService.ToolTip>
+                            <local:TipTemplate/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="函数">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="函数定理名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID"
+		                TextChanged="FunctionTheoremNameChanged"
+		                KeyDown="FunctionTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="函数参数名称"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="param"
+                        TextChanged="FunctionParameterNameChanged"
+                        KeyDown="FunctionParameterNameFinished"/>
+                    <TextBox
+                        Grid.Column="2"
+                        x:Name="函数像表达式"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="image"
+                        TextChanged="FunctionImageExpressionChanged"
+                        KeyDown="FunctionImageExpressionFinished"/>
+                    <TextBox
+                        Grid.Column="3"
+                        x:Name="函数实参表达式"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="arg"
+                        TextChanged="FunctionArgumentExpressionChanged"
+                        KeyDown="FunctionArgumentExpressionFinished"/>
+                    <Button
+                        Grid.Column="4"
+                        x:Name="函数确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="FunctionConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipFunction/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="模板" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="模板定理名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID"
+		                TextChanged="TemplateTheoremNameChanged"
+		                KeyDown="TemplateTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+		                x:Name="模板参数名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="param"
+		                TextChanged="TemplateParameterNameChanged"
+		                KeyDown="TemplateParameterNameFinished"/>
+                    <TextBox
+		                Grid.Column="2"
+		                x:Name="模板像表达式"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="image"
+		                TextChanged="TemplateImageExpressionChanged"
+		                KeyDown="TemplateImageExpressionFinished"/>
+                    <TextBox
+		                Grid.Column="3"
+		                x:Name="模板实参表达式"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="arg"
+		                TextChanged="TemplateArgumentExpressionChanged"
+		                KeyDown="TemplateArgumentExpressionFinished"/>
+                    <Button
+		                Grid.Column="4"
+		                x:Name="模板确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="TemplateConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipTemplate/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="等于操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+		            x:Name="等于操作类别"
+		            Margin="8"
+		            VerticalAlignment="Center"
+		            SelectedIndex="0"
+                    SelectionChanged="EqualityOperationCategoryChosen">
+                    <ComboBoxItem Content="EI">
+                        <ToolTipService.ToolTip>
+                            <local:TipEI/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="EIB">
+                        <ToolTipService.ToolTip>
+                            <local:TipEIB/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="EIF">
+                        <ToolTipService.ToolTip>
+                            <local:TipEIF/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="EIT">
+                        <ToolTipService.ToolTip>
+                            <local:TipEITShit/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="EE">
+                        <ToolTipService.ToolTip>
+                            <local:TipEE/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="EEB">
+                        <ToolTipService.ToolTip>
+                            <local:TipEEB/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="ET">
+                        <ToolTipService.ToolTip>
+                            <local:TipET/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="ER">
+                        <ToolTipService.ToolTip>
+                            <local:TipER/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="EI">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="EI定理名称"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="EITheoremNameChanged"
+                        KeyDown="EITheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="EI对象名称"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="a"
+                        TextChanged="EIObjectChanged"
+                        KeyDown="EIObjectFinished"/>
+                    <Button
+                        Grid.Column="2"
+                        x:Name="EI确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="EIConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEI/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EIB" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="EIB定理名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="EIBTheoremNameChanged"
+			            KeyDown="EIBTheoremNameFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="EIB依据名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="EIBReasonNameChanged"
+			            KeyDown="EIBReasonNameFinished"/>
+                    <Button
+			            Grid.Column="2"
+			            x:Name="EIB确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="EIBConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEIB/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EIF" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="EIF定理名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="EIFTheoremNameChanged"
+			            KeyDown="EIFTheoremNameFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="EIF依据名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="EIFReasonNameChanged"
+			            KeyDown="EIFReasonNameFinished"/>
+                    <Button
+			            Grid.Column="2"
+			            x:Name="EIF确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="EIFConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEIF/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EIT" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="EIT定理名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="EITTheoremNameChanged"
+			            KeyDown="EITTheoremNameFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="EIT依据名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="EITReasonNameChanged"
+			            KeyDown="EITReasonNameFinished"/>
+                    <Button
+			            Grid.Column="2"
+			            x:Name="EIT确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="EITConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEITShit/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EE" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="EE定理名称"
+			            Margin="8"
+			            Width="108"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="EETheoremNameChanged"
+			            KeyDown="EETheoremNameFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="EE依据名称"
+			            Margin="8"
+			            Width="108"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="EEReasonNameChanged"
+			            KeyDown="EEReasonNameFinished"/>
+                    <TextBox
+                        Grid.Column="2"
+                        x:Name="EE函数"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="f"
+                        TextChanged="EEFunctionChanged"
+                        KeyDown="EEFunctionFinished"/>
+                    <Button
+			            Grid.Column="3"
+			            x:Name="EE确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="EEConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEE/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EEB" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="EEB定理名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="EEBTheoremNameChanged"
+			            KeyDown="EEBTheoremNameFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="EEB依据名称"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="EEBReasonNameChanged"
+			            KeyDown="EEBReasonNameFinished"/>
+                    <Button
+			            Grid.Column="2"
+			            x:Name="EEB确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="EEBConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipEEB/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="ET" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="ET定理名称"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="ETTheoremNameChanged"
+                        KeyDown="ETTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="ETidA"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="idA"
+                        TextChanged="ETidAChanged"
+                        KeyDown="ETidAFinished"/>
+                    <TextBox
+	                    Grid.Column="2"
+	                    x:Name="ETidB"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="idB"
+	                    TextChanged="ETidBChanged"
+	                    KeyDown="ETidBFinished"/>
+                    <Button
+                        Grid.Column="3"
+                        x:Name="ET确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="ETConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipET/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="ER" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="ER定理名称"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID"
+		                TextChanged="ERTheoremNameChanged"
+		                KeyDown="ERTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="ER依据名称"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="ERReasonNameChanged"
+                        KeyDown="ERReasonNameFinished"/>
+                    <Button
+		                Grid.Column="2"
+		                x:Name="ER确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="ERConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipER/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="选择操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+		            x:Name="选择操作类别"
+		            Margin="8"
+		            VerticalAlignment="Center"
+		            SelectedIndex="0"
+		            SelectionChanged="ChoicesOperationCategoryChosen">
+                    <ComboBoxItem Content="C0">
+                        <ToolTipService.ToolTip>
+                            <local:TipC0/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="C1">
+                        <ToolTipService.ToolTip>
+                            <local:TipC1/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="C2">
+                        <ToolTipService.ToolTip>
+                            <local:TipC2/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="C3">
+                        <ToolTipService.ToolTip>
+                            <local:TipC3/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="C0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="C0ID"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="C0IDChanged"
+                        KeyDown="C0IDFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="C0id"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="C0idChanged"
+                        KeyDown="C0idFinished"/>
+                    <TextBox
+	                    Grid.Column="2"
+	                    x:Name="C0a"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="a"
+	                    TextChanged="C0aChanged"
+	                    KeyDown="C0aFinished"/>
+                    <TextBox
+	                    Grid.Column="3"
+	                    x:Name="C0b"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="b"
+	                    TextChanged="C0bChanged"
+	                    KeyDown="C0bFinished"/>
+                    <Button
+                        Grid.Column="4"
+                        x:Name="C0确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="C0Confirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipC0/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="C1" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="C1ID"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="C1IDChanged"
+                        KeyDown="C1IDFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="C1id"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="C1idChanged"
+                        KeyDown="C1idFinished"/>
+                    <TextBox
+	                    Grid.Column="2"
+	                    x:Name="C1a"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="a"
+	                    TextChanged="C1aChanged"
+	                    KeyDown="C1aFinished"/>
+                    <TextBox
+	                    Grid.Column="3"
+	                    x:Name="C1b"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="b"
+	                    TextChanged="C1bChanged"
+	                    KeyDown="C1bFinished"/>
+                    <Button
+                        Grid.Column="2"
+                        x:Name="C1确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="C1Confirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipC1/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="C2Shit" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="C2ID"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="C2IDChanged"
+			            KeyDown="C2IDFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="C2idA"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="idA"
+			            TextChanged="C2idAChanged"
+			            KeyDown="C2idAFinished"/>
+                    <TextBox
+	                    Grid.Column="2"
+	                    x:Name="C2idB"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="idB"
+	                    TextChanged="C2idBChanged"
+	                    KeyDown="C2idBFinished"/>
+                    <Button
+			            Grid.Column="3"
+			            x:Name="C2确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="C2Confirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipC2/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="C3" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="C3ID"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="C3IDChanged"
+			            KeyDown="C3IDFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="C3id"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="C3idChanged"
+			            KeyDown="C3idFinished"/>
+                    <Button
+			            Grid.Column="2"
+			            x:Name="C3确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="C3Confirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipC3/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="量词操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+		            x:Name="量词操作类别"
+		            Margin="8"
+		            VerticalAlignment="Center"
+		            SelectedIndex="0"
+		            SelectionChanged="UQOperationCategoryChosen">
+                    <ComboBoxItem Content="UF">
+                        <ToolTipService.ToolTip>
+                            <local:TipUF/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="UT">
+                        <ToolTipService.ToolTip>
+                            <local:TipUT/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="UF">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="UFID"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID"
+		                TextChanged="UFIDChanged"
+		                KeyDown="UFIDFinished"/>
+                    <TextBox
+		                Grid.Column="1"
+		                x:Name="UFid"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="id"
+		                TextChanged="UFidChanged"
+		                KeyDown="UFidFinished"/>
+                    <TextBox
+		                Grid.Column="2"
+		                x:Name="UFa"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="a"
+		                TextChanged="UFaChanged"
+		                KeyDown="UFaFinished"/>
+                    <Button
+		                Grid.Column="3"
+		                x:Name="UF确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="UFConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipUF/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="UT" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+			            x:Name="UTID"
+			            Margin="8"
+			            Width="108"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="ID"
+			            TextChanged="UTIDChanged"
+			            KeyDown="UTIDFinished"/>
+                    <TextBox
+			            Grid.Column="1"
+			            x:Name="UTid"
+			            Margin="8"
+			            Width="108"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="id"
+			            TextChanged="UTidChanged"
+			            KeyDown="UTidFinished"/>
+                    <TextBox
+			            Grid.Column="2"
+			            x:Name="UTt"
+			            Margin="8"
+			            HorizontalAlignment="Stretch"
+			            VerticalAlignment="Center"
+			            FontFamily="{StaticResource CascadiaCode}"
+			            PlaceholderText="a"
+			            TextChanged="UTtChanged"
+			            KeyDown="UTtFinished"/>
+                    <Button
+			            Grid.Column="3"
+			            x:Name="UT确认"
+			            Margin="8"
+			            VerticalAlignment="Center"
+			            x:Uid="确认按钮"
+			            IsEnabled="False"
+			            Click="UTConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipUT/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="范围操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    x:Name="范围操作类别"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="ScopeOperationCategoryChosen">
+                    <ComboBoxItem x:Uid="普通范围">
+                        <ToolTipService.ToolTip>
+                            <local:TipScope/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="假设">
+                        <ToolTipService.ToolTip>
+                            <local:TipAssume/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="任意物体">
+                        <ToolTipService.ToolTip>
+                            <local:TipArbitraryObject/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="任意类型">
+                        <ToolTipService.ToolTip>
+                            <local:TipArbitraryType/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="导出">
+                        <ToolTipService.ToolTip>
+                            <local:TipExport/>
+                        </ToolTipService.ToolTip>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Uid="离开"/>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="普通范围">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="范围名称"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="NAME"
+                        TextChanged="ScopeNameChanged"
+                        KeyDown="ScopeNameFinished"/>
+                    <Button
+                        Grid.Column="1"
+                        x:Name="范围确认"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        IsEnabled="False"
+                        Click="ScopeConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipScope/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="假设" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="假设名称"
+		                Margin="8"
+		                Width="108"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="NAME"
+		                TextChanged="AssumeNameChanged"
+		                KeyDown="AssumeNameFinished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="假设定理名称"
+                        Margin="8"
+                        Width="108"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID"
+                        TextChanged="AssumeTheoremNameChanged"
+                        KeyDown="AssumeTheoremNameFinished"/>
+                    <TextBox
+                        Grid.Column="2"
+                        x:Name="假设定理"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="p"
+                        TextChanged="AssumeTheoremChanged"
+                        KeyDown="AssumeTheoremFinished"/>
+                    <Button
+		                Grid.Column="3"
+		                x:Name="假设确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="AssumeConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipAssume/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="任意物体" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+	                    x:Name="任意物体范围名称"
+	                    Margin="8"
+	                    Width="108"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="NAME"
+	                    TextChanged="ArbitraryObjectScopeNameChanged"
+	                    KeyDown="ArbitraryObjectScopeNameFinished"/>
+                    <TextBox
+	                    Grid.Column="1"
+	                    x:Name="任意物体名称"
+	                    Margin="8"
+	                    Width="108"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="name"
+	                    TextChanged="ArbitraryObjectNameChanged"
+	                    KeyDown="ArbitraryObjectNameFinished"/>
+                    <TextBox
+	                    Grid.Column="2"
+	                    x:Name="任意物体类型"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="t"
+	                    TextChanged="ArbitraryObjectTypeChanged"
+	                    KeyDown="ArbitraryObjectTypeFinished"/>
+                    <Button
+	                    Grid.Column="3"
+	                    x:Name="任意物体确认"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    x:Uid="确认按钮"
+	                    IsEnabled="False"
+	                    Click="ArbitraryObjectConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipArbitraryObject/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="任意类型" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+	                    x:Name="任意类型范围名称"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="NAME"
+	                    TextChanged="ArbitraryTypeScopeNameChanged"
+	                    KeyDown="ArbitraryTypeScopeNameFinished"/>
+                    <TextBox
+	                    Grid.Column="1"
+	                    x:Name="任意类型名称"
+	                    Margin="8"
+	                    HorizontalAlignment="Stretch"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="name"
+	                    TextChanged="ArbitraryTypeNameChanged"
+	                    KeyDown="ArbitraryTypeNameFinished"/>
+                    <Button
+	                    Grid.Column="2"
+	                    x:Name="任意类型确认"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    x:Uid="确认按钮"
+	                    IsEnabled="False"
+	                    Click="ArbitraryTypeConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipArbitraryType/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="导出" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="导出定理"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID"
+		                TextChanged="ExportTheoremChanged"
+		                KeyDown="ExportTheoremFinished"/>
+                    <Button
+		                Grid.Column="1"
+		                x:Name="导出确认"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                IsEnabled="False"
+		                Click="ExportConfirm">
+                        <ToolTipService.ToolTip>
+                            <local:TipExport/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </Grid>
+                <Button
+                    Grid.Column="1"
+                    x:Name="确认离开"
+                    Visibility="Collapsed"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    x:Uid="确认按钮"
+                    Click="ExitConfirm"/>
+            </Grid>
+            <Button
+                Grid.Column="2"
+                x:Name="导入操作"
+                Visibility="Collapsed"
+		        Margin="8"
+		        VerticalAlignment="Center"
+		        x:Uid="选择文件"
+		        Click="ImportClick"/>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,14 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass LinkedMap 
+    {
+        LinkedMap();
+        LinkedMap Parent;
+        void Insert(String key, Microsoft.UI.Xaml.UIElement value);
+        void Remove(String key);
+        Microsoft.UI.Xaml.UIElement Lookup(String key);
+        IVectorView<Microsoft.UI.Xaml.UIElement> WithPrefix(String prefix);
+        Boolean InCurrent(String key);
+    }
+}

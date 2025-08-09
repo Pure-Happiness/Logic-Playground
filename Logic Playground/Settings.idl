@@ -1,0 +1,9 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Settings : Microsoft.UI.Xaml.Controls.Page
+    {
+        Settings();
+        void Position(Microsoft.UI.Xaml.Controls.TabViewItem position);
+    }
+}

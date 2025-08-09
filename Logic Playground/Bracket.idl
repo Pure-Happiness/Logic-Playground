@@ -1,0 +1,13 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Bracket : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        Bracket();
+        Microsoft.UI.Xaml.Controls.Primitives.ToggleButton Child{ get; };
+        Boolean ChainClick;
+        void ChainCheck();
+        void ChainUncheck();
+        static void Link(Bracket left, Bracket right);
+    }
+}

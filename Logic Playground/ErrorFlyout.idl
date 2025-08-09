@@ -1,0 +1,8 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass ErrorFlyout : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        ErrorFlyout(IVectorView<Microsoft.UI.Xaml.Documents.Inline> message, UInt32 position, String context);
+    }
+}

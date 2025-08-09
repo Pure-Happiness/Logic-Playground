@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Logic_Playground.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Logic Playground"
+    Activated="ActivatedEvent"
+    Closed="ClosedEvent">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+
+    <TabView
+		x:Name="tabView"
+		VerticalAlignment="Stretch"
+		CanTearOutTabs="True"
+		AddTabButtonClick="AddTabButton"
+		TabCloseRequested="TabClose"
+		TabTearOutWindowRequested="TearOutWindow"
+		TabTearOutRequested="TearOut"
+		ExternalTornOutTabsDropping="Dropping"
+		ExternalTornOutTabsDropped="Dropped">
+        <TabView.TabStripFooter>
+            <Grid x:Name="titleBar" MinWidth="188"/>
+        </TabView.TabStripFooter>
+    </TabView>
+</Window>

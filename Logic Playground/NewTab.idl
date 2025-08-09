@@ -1,0 +1,12 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass NewTab : Microsoft.UI.Xaml.Controls.Page
+    {
+        NewTab();
+        void Self(NewTab self);
+        Microsoft.UI.Xaml.Controls.TabViewItem Position;
+        void RemoveItem(Microsoft.UI.Xaml.UIElement item);
+        void OpenFile(Windows.Storage.StorageFile file);
+    }
+}

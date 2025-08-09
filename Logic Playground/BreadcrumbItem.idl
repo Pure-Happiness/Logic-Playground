@@ -1,0 +1,10 @@
+import "MainPage.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass BreadcrumbItem : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        BreadcrumbItem(MainPage target, MainPage position);
+        BreadcrumbItem Clone(MainPage position);
+    }
+}

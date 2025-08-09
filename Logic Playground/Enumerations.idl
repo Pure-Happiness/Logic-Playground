@@ -1,0 +1,25 @@
+namespace Logic_Playground
+{
+	enum TypeCategory
+	{
+		Bool, Parameter, Function, Template, Alias
+	};
+	enum ObjectCategory
+	{
+		True, False, Parameter, Type, DeclareF, DeclareT, ApplyF, ApplyT, ForallF, ForallT, Equal, Options, Choose, Alias
+	};
+	enum OperationCategory
+	{
+		Object, Type,
+		Copy,
+		Function, Template,
+		EI, EIB, EIF, EIT, EE, EEB, ET, ER,
+		C0, C1, C2, C3,
+		UF, UT,
+		Scope, Assume, ArbitraryO, ArbitraryT, Export, Exit
+	};
+	enum ScopeCategory
+	{
+		Normal, Assume, Object, Type
+	};
+}

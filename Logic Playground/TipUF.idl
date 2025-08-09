@@ -1,0 +1,8 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass TipUF : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        TipUF();
+    }
+}

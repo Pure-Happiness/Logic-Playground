@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Logic_Playground.TipC2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <TextBlock>
+		<Run Text="C2 ID idA idB" FontFamily="{StaticResource CascadiaCode}"/>
+        <LineBreak/>
+        <Run Text="where "/>
+        <Run Text="idA" FontFamily="{StaticResource CascadiaCode}"/>
+        <Run Text=" and "/>
+        <Run Text="idB" FontFamily="{StaticResource CascadiaCode}"/>
+        <Run Text=" are the names of"/>
+        <LineBreak/>
+        <Run Text="the theorems "/>
+        <Run Text="p?a?x" FontFamily="{StaticResource CascadiaCode}"/>
+        <Run Text=" and "/>
+        <Run Text="p=false?a?y" FontFamily="{StaticResource CascadiaCode}"/>
+        <Run Text=", separately,"/>
+		<LineBreak/>
+		<Run Text="produces a theorem "/>
+		<Run Text="a" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text=" named "/>
+		<Run Text="ID" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text="."/>
+    </TextBlock>
+</UserControl>

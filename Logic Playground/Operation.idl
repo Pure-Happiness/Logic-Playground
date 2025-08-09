@@ -1,0 +1,11 @@
+import "Enumerations.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Operation 
+    {
+        Operation(OperationCategory category);
+        OperationCategory Category{ get; };
+        IVector<String> Contents{ get; };
+    }
+}

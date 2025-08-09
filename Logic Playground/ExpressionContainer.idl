@@ -1,0 +1,10 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass ExpressionContainer : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        ExpressionContainer();
+        void Text(String text);
+        Microsoft.UI.Xaml.Controls.UIElementCollection Items{ get; };
+    }
+}

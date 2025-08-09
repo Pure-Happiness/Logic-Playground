@@ -1,0 +1,10 @@
+import "Theorem.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass TheoremPanel : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        TheoremPanel();
+        void Name(Theorem name);
+    }
+}

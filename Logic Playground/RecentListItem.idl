@@ -1,0 +1,10 @@
+import "NewTab.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass RecentListItem : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        RecentListItem(String token, NewTab position);
+        void Self(RecentListItem self);
+    }
+}

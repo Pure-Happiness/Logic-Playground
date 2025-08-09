@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Logic_Playground.RecentListItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="LoadedEvent">
+
+	<SwipeControl
+		Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+		Padding="16"
+		CornerRadius="8">
+		<SwipeControl.LeftItems>
+			<SwipeItems>
+				<SwipeItem x:Uid="Open" Invoked="OpenFile">
+					<SwipeItem.IconSource>
+						<SymbolIconSource Symbol="OpenFile"/>
+					</SwipeItem.IconSource>
+				</SwipeItem>
+				<SwipeItem x:Uid="Remove" Invoked="RemoveItem">
+					<SwipeItem.IconSource>
+						<SymbolIconSource Symbol="Delete"/>
+					</SwipeItem.IconSource>
+				</SwipeItem>
+			</SwipeItems>
+		</SwipeControl.LeftItems>
+		<StackPanel
+			Spacing="12"
+			Tapped="OpenFilePanel"
+			RightTapped="RemoveItemList">
+			<TextBlock x:Name="name" FontSize="16" FontWeight="Bold"/>
+			<TextBlock x:Name="path"/>
+		</StackPanel>
+	</SwipeControl>
+</UserControl>

@@ -1,0 +1,22 @@
+import "MainPage.idl";
+import "Obj.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Theorem : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        Theorem();
+        Theorem(Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+        void Self(Theorem self);
+        MainPage PagePosition{ get; };
+        String Label{ get; };
+        Theorem Declaration{ get; };
+        Obj Definition{ get; };
+        IVector<Theorem> Sames{ get; };
+        void ChainCheck();
+        void ChainUncheck();
+        void Display();
+        void Init(Obj definition, String label);
+        void Init2(Theorem declaration);
+    }
+}

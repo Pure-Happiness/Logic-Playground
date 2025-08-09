@@ -1,0 +1,33 @@
+import "MainPage.idl";
+import "Enumerations.idl";
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass Type : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        Type();
+        Type(Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+        void Self(Type self);
+        MainPage PagePosition{ get; };
+        TypeCategory Category{ get; };
+        String Label{ get; };
+        Type Left{ get; };
+        Type Right{ get; };
+        IVector<Type> Sames{ get; };
+        void ChainCheck();
+        void ChainUncheck();
+        void Display();
+        void InitAsBool();
+        void InitAsParameter(String label);
+        void InitAsParameter2(Type declaration);
+        void InitAsFunction(Type left, Type right);
+        void InitAsTemplate(Type left, Type right);
+        void InitAsAlias(Type definition, String label);
+        void InitAsAlias2(Type declaration);
+        static IVectorView<Microsoft.UI.Xaml.UIElement> Generate(Type type);
+        static String GenerateText(Type type);
+        static Boolean Equal(Type x, Type y);
+        static Type ApplyTemplate(Type temp, Type arg);
+        static Type Clone(Type original, Microsoft.UI.Xaml.UIElement position, MainPage page_position);
+    }
+}

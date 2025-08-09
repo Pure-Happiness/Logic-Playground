@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Logic_Playground.TheoremPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollView VerticalScrollMode="Disabled" CornerRadius="0">
+        <StackPanel
+            Orientation="Horizontal"
+            Margin="0,0,0,12"
+            Padding="16,0">
+            <Border
+                x:Name="定理名称"
+                Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}"
+                Padding="4"
+                CornerRadius="4"
+                RightTapped="ShowCopyName"/>
+            <TextBlock
+                Margin="4"
+                Text="&lt;&lt;&lt;"
+                FontFamily="{StaticResource CascadiaCode}"
+                Foreground="{ThemeResource ThemeGreenYellow}"/>
+            <StackPanel
+                x:Name="定理内容"
+	            Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}"
+	            Padding="4"
+	            CornerRadius="4"
+                Orientation="Horizontal"
+                RightTapped="ShowCopyContent"/>
+        </StackPanel>
+    </ScrollView>
+</UserControl>

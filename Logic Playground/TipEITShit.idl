@@ -1,0 +1,8 @@
+namespace Logic_Playground
+{
+    [default_interface]
+    runtimeclass TipEITShit : Microsoft.UI.Xaml.Controls.UserControl
+    {
+        TipEITShit();
+    }
+}
