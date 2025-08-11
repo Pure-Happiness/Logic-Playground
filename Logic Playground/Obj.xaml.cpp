@@ -287,8 +287,14 @@ namespace winrt::Logic_Playground::implementation
 								break;
 							}
 					if (need_bracket.contains(current))
-						return hstring(L"(") + generate_text(current.Left()) + current.Label() + generate_text(current.Right()) + L')';
-					return generate_text(current.Left()) + current.Label() + generate_text(current.Right());
+					{
+						if (current.Left())
+							return hstring(L"(") + generate_text(current.Left()) + current.Label() + generate_text(current.Right()) + L')';
+						return hstring(L"(") + current.Label() + generate_text(current.Right()) + L')';
+					}
+					if (current.Left())
+						return generate_text(current.Left()) + current.Label() + generate_text(current.Right());
+					return current.Label() + generate_text(current.Right());
 				}
 				if (cat != ObjectCategory::Type)
 				{
@@ -320,7 +326,14 @@ namespace winrt::Logic_Playground::implementation
 						if (x_cat == TypeCategory::Bool)
 							return true;
 						if (x_cat == TypeCategory::Parameter)
-							return XCodeT[x.Left()] == YCodeT[y.Left()];
+							if (const TypeP xL = x.Left(); XCodeT.contains(xL))
+							{
+								if (const TypeP yL = y.Left(); YCodeT.contains(yL))
+									return XCodeT[xL] == YCodeT[yL];
+								return false;
+							}
+							else
+								return xL == y.Left();
 						return et(x.Left(), y.Left(), code <<= 1) && et(x.Right(), y.Right(), code |= 1);
 					};
 				ObjectCategory x_cat;
@@ -339,8 +352,19 @@ namespace winrt::Logic_Playground::implementation
 				if (x_cat == ObjectCategory::Parameter)
 				{
 					if (x.Left() == x)
-						return et(x.MyType(), y.MyType(), code);
-					return XCodeO[x.Left()] == YCodeO[y.Left()];
+					{
+						if (y.Left() == y)
+							return et(x.MyType(), y.MyType(), code);
+						return false;
+					}
+					if (const ObjP xL = x.Left(); XCodeO.contains(xL))
+					{
+						if (const ObjP yL = y.Left(); YCodeO.contains(yL))
+							return XCodeO[xL] == YCodeO[yL];
+						return false;
+					}
+					else
+						return xL == y.Left();
 				}
 				bool result = true;
 				code <<= 1;
@@ -352,13 +376,78 @@ namespace winrt::Logic_Playground::implementation
 
 	ObjP Obj::ApplyFunction(ObjP CR func, ObjP CR arg, UIElement CR _position, MainPageP CR _page_position)
 	{
+		unordered_set<hstring> chO, chT;
+		{
+			unordered_set<ObjP> mO;
+			unordered_set<TypeP> mT;
+			[&chO, &chT, &mO, &mT](this auto&& ch, ObjP CR current)->void
+				{
+					auto ct = [&chT, &mT](this auto&& ct, TypeP CR current)->void
+						{
+							switch (current.Category())
+							{
+							case TypeCategory::Function:
+								ct(current.Left()), ct(current.Right());
+								break;
+							case TypeCategory::Template:
+								mT.insert(current.Left());
+								ct(current.Right());
+								mT.erase(current.Left());
+								break;
+							case TypeCategory::Alias:
+								chT.insert(current.Label());
+								break;
+							case TypeCategory::Parameter:
+								if (!mT.contains(current.Left()))
+									chT.insert(current.Label());
+								break;
+							default:;
+							}
+						};
+					switch (current.Category())
+					{
+					case ObjectCategory::Type:
+						ct(current.MyType());
+						break;
+					case ObjectCategory::DeclareF:
+						mO.insert(current.Left());
+						ch(current.Right());
+						mO.erase(current.Left());
+						break;
+					case ObjectCategory::DeclareT:
+						mT.insert(current.Left().MyType());
+						ch(current.Right());
+						mT.erase(current.Left().MyType());
+						break;
+					case ObjectCategory::ApplyF:
+					case ObjectCategory::ApplyT:
+					case ObjectCategory::Equal:
+					case ObjectCategory::Options:
+					case ObjectCategory::Choose:
+						ch(current.Left());
+						[[fallthrough]];
+					case ObjectCategory::ForallF:
+					case ObjectCategory::ForallT:
+						ch(current.Right());
+						break;
+					case ObjectCategory::Alias:
+						chO.insert(current.Label());
+						break;
+					case ObjectCategory::Parameter:
+						if (!mO.contains(current.Left()))
+							chO.insert(current.Label());
+						break;
+					default:;
+					}
+				}(arg);
+		}
 		unordered_map<ObjP, ObjP> mapO;
 		unordered_map<TypeP, TypeP> mapT;
-		return [target = func.Left(), &arg, &mapO, &mapT, &_position, &_page_position](this auto&& apply, ObjP CR original)->ObjP
+		return [target = func.Left(), &arg, &mapO, &mapT, &_position, &_page_position, &chO, &chT](this auto&& apply, ObjP CR original)->ObjP
 			{
-				auto ct = [&mapT, &_position, &_page_position](this auto&& ct, TypeP CR original)->TypeP
+				auto at = [&mapT, &_position, &_page_position](this auto&& at, TypeP CR original)->TypeP
 					{
-						const TypeP result(_position, _page_position);
+						TypeP result(_position, _page_position);
 						result.Self(result);
 						switch (original.Category())
 						{
@@ -366,25 +455,33 @@ namespace winrt::Logic_Playground::implementation
 							result.InitAsBool();
 							break;
 						case TypeCategory::Function:
-							result.InitAsFunction(ct(original.Left()), ct(original.Right()));
+							if (const TypeP ooL = at(original.Left()))
+								if (const TypeP ooR = at(original.Right()))
+									result.InitAsFunction(ooL, ooR);
+								else
+									return nullptr;
+							else
+								return nullptr;
 							break;
 						case TypeCategory::Template:
 						{
-							const TypeP sb = ct(original.Left());
-							result.InitAsTemplate(sb, ct(original.Right()));
+							const TypeP oL = original.Left(), ooL(_position, _page_position);
+							ooL.Self(ooL);
+							ooL.InitAsParameter(oL.Label());
+							mapT.emplace(oL, ooL);
+							if (const TypeP ooR = at(original.Right()))
+								result.InitAsTemplate(ooL, ooR);
+							else
+								return nullptr;
+							mapT.erase(oL);
 						}
 						break;
 						case TypeCategory::Alias:
 							result.InitAsAlias2(original.Left());
 							break;
 						case TypeCategory::Parameter:
-							if (const TypeP oL = original.Left(); original != oL)
-								result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
-							else
-							{
-								result.InitAsParameter(original.Label());
-								mapT[original] = result;
-							}
+							const TypeP oL = original.Left();
+							result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
 						}
 						return result;
 					};
@@ -393,7 +490,10 @@ namespace winrt::Logic_Playground::implementation
 				switch (original.Category())
 				{
 				case ObjectCategory::Type:
-					result.InitAsType(ct(original.MyType()));
+					if (const TypeP th = at(original.MyType()))
+						result.InitAsType(th);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::True:
 					result.InitAsTrue();
@@ -403,50 +503,108 @@ namespace winrt::Logic_Playground::implementation
 					break;
 				case ObjectCategory::DeclareF:
 				{
-					const ObjP sb = apply(original.Left());
-					result.InitAsDeclareF(sb, apply(original.Right()));
+					const ObjP oL = original.Left(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					if (const TypeP th = at(oL.MyType()))
+						ooL.InitAsParameter(th, oL.Label());
+					else
+						return nullptr;
+					mapO.emplace(oL, ooL);
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsDeclareF(ooL, ooR);
+					else
+						return nullptr;
+					mapO.erase(oL);
 				}
 				break;
 				case ObjectCategory::DeclareT:
 				{
-					const ObjP sb = apply(original.Left());
-					result.InitAsDeclareT(sb, apply(original.Right()));
+					const TypeP oL = original.Left().MyType(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					ooL.InitAsParameter(oL.Label());
+					mapT.emplace(oL, ooL);
+					const ObjP oooL(_position, _page_position);
+					oooL.Self(oooL);
+					oooL.InitAsType(ooL);
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsDeclareT(oooL, ooR);
+					else
+						return nullptr;
+					mapT.erase(oL);
 				}
 				break;
 				case ObjectCategory::ApplyF:
-					result.InitAsApplyF(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsApplyF(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ApplyT:
-					result.InitAsApplyT(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsApplyT(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallF:
-					result.InitAsForallF(apply(original.Right()));
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsForallF(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallT:
-					result.InitAsForallT(apply(original.Right()));
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsForallT(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Equal:
-					result.InitAsEqual(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsEqual(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Options:
-					result.InitAsOptions(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsOptions(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Choose:
-					result.InitAsChoose(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsChoose(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Alias:
 					result.InitAsAlias2(original.Left());
 					break;
 				case ObjectCategory::Parameter:
-					if (const ObjP oL = original.Left(); original != oL)
-						if (oL != target)
-							result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
-						else
-							result = Clone(arg, _position, _page_position);
+					if (const ObjP oL = original.Left(); oL != target)
+						result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
 					else
 					{
-						result.InitAsParameter(ct(original.MyType()), original.Label());
-						mapO[original] = result;
+						for (ObjP CR o : mapO | views::keys)
+							if (chO.contains(o.Label()))
+								return nullptr;
+						for (TypeP CR t : mapT | views::keys)
+							if (chT.contains(t.Label()))
+								return nullptr;
+						result = Clone(arg, _position, _page_position);
 					}
 				}
 				return result;
@@ -455,11 +613,37 @@ namespace winrt::Logic_Playground::implementation
 
 	ObjP Obj::ApplyTemplate(ObjP CR temp, TypeP CR arg, UIElement CR _position, MainPageP CR _page_position)
 	{
+		unordered_set<hstring> chT;
+		{
+			unordered_set<TypeP> mT;
+			[&chT, &mT](this auto&& ch, TypeP CR current)->void
+				{
+					switch (current.Category())
+					{
+					case TypeCategory::Function:
+						ch(current.Left()), ch(current.Right());
+						break;
+					case TypeCategory::Template:
+						mT.insert(current.Left());
+						ch(current.Right());
+						mT.erase(current.Left());
+						break;
+					case TypeCategory::Alias:
+						chT.insert(current.Label());
+						break;
+					case TypeCategory::Parameter:
+						if (!mT.contains(current.Left()))
+							chT.insert(current.Label());
+						break;
+					default:;
+					}
+				}(arg);
+		}
 		unordered_map<ObjP, ObjP> mapO;
 		unordered_map<TypeP, TypeP> mapT;
-		/*return [target = temp.Left().MyType(), &arg, &mapO, &mapT, &_position, &_page_position](this auto&& apply, ObjP CR original)->ObjP
+		/*return [target = temp.Left(), &arg, &mapO, &mapT, &_position, &_page_position, &chT](this auto&& apply, ObjP CR original)->ObjP
 			{
-				auto ct = [&target, &arg, &mapT, &_position, &_page_position](this auto&& ct, TypeP CR original)->TypeP
+				auto at = [&target, &arg, &mapT, &_position, &_page_position, &chT](this auto&& at, TypeP CR original)->TypeP
 					{
 						TypeP result(_position, _page_position);
 						result.Self(result);
@@ -469,27 +653,39 @@ namespace winrt::Logic_Playground::implementation
 							result.InitAsBool();
 							break;
 						case TypeCategory::Function:
-							result.InitAsFunction(ct(original.Left()), ct(original.Right()));
+							if (const TypeP ooL = at(original.Left()))
+								if (const TypeP ooR = at(original.Right()))
+									result.InitAsFunction(ooL, ooR);
+								else
+									return nullptr;
+							else
+								return nullptr;
 							break;
 						case TypeCategory::Template:
 						{
-							const TypeP sb = ct(original.Left());
-							result.InitAsTemplate(sb, ct(original.Right()));
+							const TypeP oL = original.Left(), ooL(_position, _page_position);
+							ooL.Self(ooL);
+							ooL.InitAsParameter(oL.Label());
+							mapT.emplace(oL, ooL);
+							if (const TypeP ooR = at(original.Right()))
+								result.InitAsTemplate(ooL, ooR);
+							else
+								return nullptr;
+							mapT.erase(oL);
 						}
 						break;
 						case TypeCategory::Alias:
 							result.InitAsAlias2(original.Left());
 							break;
 						case TypeCategory::Parameter:
-							if (const TypeP oL = original.Left(); original != oL)
-								if (oL != target)
-									result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
-								else
-									result = Type::Clone(arg, _position, _page_position);
+							if (const TypeP oL = original.Left(); oL != target)
+								result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
 							else
 							{
-								result.InitAsParameter(original.Label());
-								mapT[original] = result;
+								for (TypeP CR t : mapT | views::keys)
+									if (chT.contains(t.Label()))
+										return nullptr;
+								result = Type::Clone(arg, _position, _page_position);
 							}
 						}
 						return result;
@@ -499,7 +695,10 @@ namespace winrt::Logic_Playground::implementation
 				switch (original.Category())
 				{
 				case ObjectCategory::Type:
-					result.InitAsType(ct(original.MyType()));
+					if (const TypeP th = at(original.MyType()))
+						result.InitAsType(th);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::True:
 					result.InitAsTrue();
@@ -509,54 +708,105 @@ namespace winrt::Logic_Playground::implementation
 					break;
 				case ObjectCategory::DeclareF:
 				{
-					const ObjP sb = apply(original.Left());
-					result.InitAsDeclareF(sb, apply(original.Right()));
+					const ObjP oL = original.Left(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					if (const TypeP th = at(oL.MyType()))
+						ooL.InitAsParameter(th, oL.Label());
+					else
+						return nullptr;
+					mapO.emplace(oL, ooL);
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsDeclareF(ooL, ooR);
+					else
+						return nullptr;
+					mapO.erase(oL);
 				}
 				break;
 				case ObjectCategory::DeclareT:
 				{
-					const ObjP sb = apply(original.Left());
-					result.InitAsDeclareT(sb, apply(original.Right()));
+					const TypeP oL = original.Left().MyType(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					ooL.InitAsParameter(oL.Label());
+					mapT.emplace(oL, ooL);
+					const ObjP oooL(_position, _page_position);
+					oooL.Self(oooL);
+					oooL.InitAsType(ooL);
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsDeclareT(oooL, ooR);
+					else
+						return nullptr;
+					mapT.erase(oL);
 				}
 				break;
 				case ObjectCategory::ApplyF:
-					result.InitAsApplyF(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsApplyF(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ApplyT:
-					result.InitAsApplyT(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsApplyT(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallF:
-					result.InitAsForallF(apply(original.Right()));
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsForallF(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallT:
-					result.InitAsForallT(apply(original.Right()));
+					if (const ObjP ooR = apply(original.Right()))
+						result.InitAsForallT(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Equal:
-					result.InitAsEqual(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsEqual(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Options:
-					result.InitAsOptions(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsOptions(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Choose:
-					result.InitAsChoose(apply(original.Left()), apply(original.Right()));
+					if (const ObjP ooL = apply(original.Left()))
+						if (const ObjP ooR = apply(original.Right()))
+							result.InitAsChoose(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Alias:
 					result.InitAsAlias2(original.Left());
 					break;
 				case ObjectCategory::Parameter:
-					if (const ObjP oL = original.Left(); original != oL)
-						result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
-					else
-					{
-						result.InitAsParameter(ct(original.MyType()), original.Label());
-						mapO[original] = result;
-					}
+					const ObjP oL = original.Left();
+					result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
 				}
 				return result;
-			}(temp.Right());*/
-		auto shit = [target = temp.Left().MyType(), &arg, &mapO, &mapT, &_position, &_page_position](auto&& apply, ObjP CR original)->ObjP
+			}(temp.Right());*/ // Why cannot I use the code here?
+		auto shit = [target = temp.Left().MyType(), &arg, &mapO, &mapT, &_position, &_page_position, &chT](auto&& apply, ObjP CR original)->ObjP
 			{
-				auto ct = [&target, &arg, &mapT, &_position, &_page_position](this auto&& ct, TypeP CR original)->TypeP
+				auto at = [&target, &arg, &mapT, &_position, &_page_position, &chT](this auto&& at, TypeP CR original)->TypeP
 					{
 						TypeP result(_position, _page_position);
 						result.Self(result);
@@ -566,27 +816,39 @@ namespace winrt::Logic_Playground::implementation
 							result.InitAsBool();
 							break;
 						case TypeCategory::Function:
-							result.InitAsFunction(ct(original.Left()), ct(original.Right()));
+							if (const TypeP ooL = at(original.Left()))
+								if (const TypeP ooR = at(original.Right()))
+									result.InitAsFunction(ooL, ooR);
+								else
+									return nullptr;
+							else
+								return nullptr;
 							break;
 						case TypeCategory::Template:
 						{
-							const TypeP sb = ct(original.Left());
-							result.InitAsTemplate(sb, ct(original.Right()));
+							const TypeP oL = original.Left(), ooL(_position, _page_position);
+							ooL.Self(ooL);
+							ooL.InitAsParameter(oL.Label());
+							mapT.emplace(oL, ooL);
+							if (const TypeP ooR = at(original.Right()))
+								result.InitAsTemplate(ooL, ooR);
+							else
+								return nullptr;
+							mapT.erase(oL);
 						}
 						break;
 						case TypeCategory::Alias:
 							result.InitAsAlias2(original.Left());
 							break;
 						case TypeCategory::Parameter:
-							if (const TypeP oL = original.Left(); original != oL)
-								if (oL != target)
-									result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
-								else
-									result = Type::Clone(arg, _position, _page_position);
+							if (const TypeP oL = original.Left(); oL != target)
+								result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
 							else
 							{
-								result.InitAsParameter(original.Label());
-								mapT[original] = result;
+								for (TypeP CR t : mapT | views::keys)
+									if (chT.contains(t.Label()))
+										return nullptr;
+								result = Type::Clone(arg, _position, _page_position);
 							}
 						}
 						return result;
@@ -596,7 +858,10 @@ namespace winrt::Logic_Playground::implementation
 				switch (original.Category())
 				{
 				case ObjectCategory::Type:
-					result.InitAsType(ct(original.MyType()));
+					if (const TypeP th = at(original.MyType()))
+						result.InitAsType(th);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::True:
 					result.InitAsTrue();
@@ -606,48 +871,99 @@ namespace winrt::Logic_Playground::implementation
 					break;
 				case ObjectCategory::DeclareF:
 				{
-					const ObjP sb = apply(apply, original.Left());
-					result.InitAsDeclareF(sb, apply(apply, original.Right()));
+					const ObjP oL = original.Left(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					if (const TypeP th = at(oL.MyType()))
+						ooL.InitAsParameter(th, oL.Label());
+					else
+						return nullptr;
+					mapO.emplace(oL, ooL);
+					if (const ObjP ooR = apply(apply, original.Right()))
+						result.InitAsDeclareF(ooL, ooR);
+					else
+						return nullptr;
+					mapO.erase(oL);
 				}
 				break;
 				case ObjectCategory::DeclareT:
 				{
-					const ObjP sb = apply(apply, original.Left());
-					result.InitAsDeclareT(sb, apply(apply, original.Right()));
+					const TypeP oL = original.Left().MyType(), ooL(_position, _page_position);
+					ooL.Self(ooL);
+					ooL.InitAsParameter(oL.Label());
+					mapT.emplace(oL, ooL);
+					const ObjP oooL(_position, _page_position);
+					oooL.Self(oooL);
+					oooL.InitAsType(ooL);
+					if (const ObjP ooR = apply(apply, original.Right()))
+						result.InitAsDeclareT(oooL, ooR);
+					else
+						return nullptr;
+					mapT.erase(oL);
 				}
 				break;
 				case ObjectCategory::ApplyF:
-					result.InitAsApplyF(apply(apply, original.Left()), apply(apply, original.Right()));
+					if (const ObjP ooL = apply(apply, original.Left()))
+						if (const ObjP ooR = apply(apply, original.Right()))
+							result.InitAsApplyF(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ApplyT:
-					result.InitAsApplyT(apply(apply, original.Left()), apply(apply, original.Right()));
+					if (const ObjP ooL = apply(apply, original.Left()))
+						if (const ObjP ooR = apply(apply, original.Right()))
+							result.InitAsApplyT(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallF:
-					result.InitAsForallF(apply(apply, original.Right()));
+					if (const ObjP ooR = apply(apply, original.Right()))
+						result.InitAsForallF(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::ForallT:
-					result.InitAsForallT(apply(apply, original.Right()));
+					if (const ObjP ooR = apply(apply, original.Right()))
+						result.InitAsForallT(ooR);
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Equal:
-					result.InitAsEqual(apply(apply, original.Left()), apply(apply, original.Right()));
+					if (const ObjP ooL = apply(apply, original.Left()))
+						if (const ObjP ooR = apply(apply, original.Right()))
+							result.InitAsEqual(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Options:
-					result.InitAsOptions(apply(apply, original.Left()), apply(apply, original.Right()));
+					if (const ObjP ooL = apply(apply, original.Left()))
+						if (const ObjP ooR = apply(apply, original.Right()))
+							result.InitAsOptions(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Choose:
-					result.InitAsChoose(apply(apply, original.Left()), apply(apply, original.Right()));
+					if (const ObjP ooL = apply(apply, original.Left()))
+						if (const ObjP ooR = apply(apply, original.Right()))
+							result.InitAsChoose(ooL, ooR);
+						else
+							return nullptr;
+					else
+						return nullptr;
 					break;
 				case ObjectCategory::Alias:
 					result.InitAsAlias2(original.Left());
 					break;
 				case ObjectCategory::Parameter:
-					if (const ObjP oL = original.Left(); original != oL)
-						result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
-					else
-					{
-						result.InitAsParameter(ct(original.MyType()), original.Label());
-						mapO[original] = result;
-					}
+					const ObjP oL = original.Left();
+					result.InitAsParameter2(mapO.contains(oL) ? mapO[oL] : oL);
 				}
 				return result;
 			};

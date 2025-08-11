@@ -144,7 +144,7 @@ namespace winrt::Logic_Playground::implementation
 			items.SetAt(index, item);
 		}
 		tabView().SelectedItem(item);
-		return false;
+		return true;
 	}
 
 	void MainWindow::AddTabItem(TabViewItem CR _item)

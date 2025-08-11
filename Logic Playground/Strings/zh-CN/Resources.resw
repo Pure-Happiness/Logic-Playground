@@ -488,4 +488,10 @@
     <value>导航到 </value>
     <comment>BreadcrumbItem</comment>
   </data>
+  <data name="未知错误" xml:space="preserve">
+    <value>出现未知错误。</value>
+  </data>
+  <data name="冲突" xml:space="preserve">
+    <value>名称冲突。</value>
+  </data>
 </root>

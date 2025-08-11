@@ -4,14 +4,14 @@
 
 namespace winrt::Logic_Playground::implementation
 {
-    struct TipExport : TipExportT<TipExport>
-    {
-    };
+	struct TipExport : TipExportT<TipExport>
+	{
+	};
 }
 
 namespace winrt::Logic_Playground::factory_implementation
 {
-    struct TipExport : TipExportT<TipExport, implementation::TipExport>
-    {
-    };
+	struct TipExport : TipExportT<TipExport, implementation::TipExport>
+	{
+	};
 }

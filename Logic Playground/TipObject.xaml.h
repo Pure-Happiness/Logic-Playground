@@ -4,14 +4,14 @@
 
 namespace winrt::Logic_Playground::implementation
 {
-    struct TipObject : TipObjectT<TipObject>
-    {
-    };
+	struct TipObject : TipObjectT<TipObject>
+	{
+	};
 }
 
 namespace winrt::Logic_Playground::factory_implementation
 {
-    struct TipObject : TipObjectT<TipObject, implementation::TipObject>
-    {
-    };
+	struct TipObject : TipObjectT<TipObject, implementation::TipObject>
+	{
+	};
 }

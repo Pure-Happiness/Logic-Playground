@@ -4,14 +4,14 @@
 
 namespace winrt::Logic_Playground::implementation
 {
-    struct TipEIF : TipEIFT<TipEIF>
-    {
-    };
+	struct TipEIF : TipEIFT<TipEIF>
+	{
+	};
 }
 
 namespace winrt::Logic_Playground::factory_implementation
 {
-    struct TipEIF : TipEIFT<TipEIF, implementation::TipEIF>
-    {
-    };
+	struct TipEIF : TipEIFT<TipEIF, implementation::TipEIF>
+	{
+	};
 }

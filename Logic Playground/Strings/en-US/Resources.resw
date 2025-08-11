@@ -396,4 +396,10 @@
   <data name="导航到" xml:space="preserve">
     <value>Navigate to </value>
   </data>
+  <data name="未知错误" xml:space="preserve">
+    <value>An unknown error has occurred.</value>
+  </data>
+  <data name="冲突" xml:space="preserve">
+    <value>Name collision.</value>
+  </data>
 </root>

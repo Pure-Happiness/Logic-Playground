@@ -29,13 +29,22 @@ namespace winrt::Logic_Playground::implementation
 		items.RemoveAt(index);
 	}
 
-	fire_and_forget NewTab::OpenFile(StorageFile CR _file) const
+	fire_and_forget NewTab::OpenFile(StorageFile CR _file)
 	{
 		const FileRoot root;
 		root.Self(root);
-		const hstring content = co_await root.InitAsFile(_file);
-		GetMainWindow[position.get()].get().ChangePage(position.get(), root.PageRoot(), box_value(root.PageRoot().Header()));
-		root.ReadContent(content);
+		try
+		{
+			const hstring content = co_await root.InitAsFile(_file);
+			GetMainWindow[position.get()].get().ChangePage(position.get(), root.PageRoot(), box_value(root.PageRoot().Header()));
+			root.ReadContent(content);
+		}
+		catch (...)
+		{
+			const Flyout flyout;
+			flyout.Content(RegularText(ResourceLoader().GetString(L"OpenFileFailure")));
+			flyout.ShowAt(top());
+		}
 	}
 
 	void NewTab::LoadedEvent(IInspectable CR, RoutedEventArgs CR)

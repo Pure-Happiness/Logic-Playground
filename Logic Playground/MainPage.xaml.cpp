@@ -206,6 +206,9 @@ namespace winrt::Logic_Playground::implementation
 				const LinkedMapP current;
 				current.Parent(objects);
 				(objects = current).Insert(_param, param);
+				const LinkedMapP ph;
+				ph.Parent(types);
+				types = ph;
 			}
 			if (const ObjP image = MakeObject(_image, container))
 			{
@@ -222,11 +225,19 @@ namespace winrt::Logic_Playground::implementation
 							const ObjP pparam = ObjP::Clone(param, panel, self.get());
 							func.InitAsDeclareF(pparam, RemoveCurrent(image, panel, self.get(), pparam, nullptr));
 						}
-						objects = objects.Parent();
+						objects = objects.Parent(), types = types.Parent();
 						const ObjP apply(panel, self.get());
 						apply.Self(apply);
 						apply.InitAsApplyF(func, ObjP::Clone(argument, panel, self.get()));
-						equal.InitAsEqual(apply, ObjP::ApplyFunction(func, argument, panel, self.get()));
+						if (const ObjP ooo = ObjP::ApplyFunction(func, argument, panel, self.get()))
+							equal.InitAsEqual(apply, ooo);
+						else
+						{
+							const Flyout flyout;
+							flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
+							flyout.ShowAt(操作面板());
+							co_return false;
+						}
 					}
 					th.Init(equal, ID);
 				}
@@ -283,9 +294,14 @@ namespace winrt::Logic_Playground::implementation
 			const ObjP param(container, self.get());
 			param.Self(param);
 			param.InitAsType(tp);
-			const LinkedMapP current;
-			current.Parent(types);
-			(types = current).Insert(_param, tp);
+			{
+				const LinkedMapP current;
+				current.Parent(types);
+				(types = current).Insert(_param, tp);
+				const LinkedMapP ph;
+				ph.Parent(objects);
+				objects = ph;
+			}
 			if (const ObjP image = MakeObject(_image, container))
 			{
 				const TheoremPanelP panel;
@@ -304,11 +320,19 @@ namespace winrt::Logic_Playground::implementation
 							pparam.InitAsType(ttp);
 							temp.InitAsDeclareT(pparam, RemoveCurrent(image, panel, self.get(), nullptr, ttp));
 						}
-						types = types.Parent();
+						types = types.Parent(), objects = objects.Parent();
 						const ObjP apply(panel, self.get());
 						apply.Self(apply);
 						apply.InitAsApplyT(temp, ObjP::Clone(argument, panel, self.get()));
-						equal.InitAsEqual(apply, ObjP::ApplyTemplate(temp, aaa, panel, self.get()));
+						if (const ObjP ooo = ObjP::ApplyTemplate(temp, aaa, panel, self.get()))
+							equal.InitAsEqual(apply, ooo);
+						else
+						{
+							const Flyout flyout;
+							flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
+							flyout.ShowAt(操作面板());
+							co_return false;
+						}
 					}
 					th.Init(equal, ID);
 				}
@@ -852,7 +876,7 @@ namespace winrt::Logic_Playground::implementation
 		co_return true;
 	}
 
-	IAsyncOperation<bool> MainPage::OperationC0(param::hstring const& ID, param::hstring const& id, param::hstring const& a, param::hstring const& b, bool const& redo)
+	IAsyncOperation<bool> MainPage::OperationC0(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b, bool CR redo)
 	{
 		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
 			co_return false;
@@ -893,9 +917,11 @@ namespace winrt::Logic_Playground::implementation
 					items.Append(RegularText(L" \u200B"));
 					items.Append(original);
 					items.Append(RegularText(L" \u200B"));
-					items.Append(oa);
+					for (UIElement CR item : ObjP::Generate(oa))
+						items.Append(item);
 					items.Append(RegularText(L" \u200B"));
-					items.Append(ob);
+					for (UIElement CR item : ObjP::Generate(ob))
+						items.Append(item);
 				}
 				container.Text(wstring(L"C0 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
 				主面板().Children().Append(container);
@@ -920,7 +946,7 @@ namespace winrt::Logic_Playground::implementation
 		co_return false;
 	}
 
-	IAsyncOperation<bool> MainPage::OperationC1(param::hstring const& ID, param::hstring const& id, param::hstring const& a, param::hstring const& b, bool const& redo)
+	IAsyncOperation<bool> MainPage::OperationC1(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b, bool CR redo)
 	{
 		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
 			co_return false;
@@ -970,9 +996,11 @@ namespace winrt::Logic_Playground::implementation
 					items.Append(RegularText(L" \u200B"));
 					items.Append(original);
 					items.Append(RegularText(L" \u200B"));
-					items.Append(oa);
+					for (UIElement CR item : ObjP::Generate(oa))
+						items.Append(item);
 					items.Append(RegularText(L" \u200B"));
-					items.Append(ob);
+					for (UIElement CR item : ObjP::Generate(ob))
+						items.Append(item);
 				}
 				container.Text(wstring(L"C1 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
 				主面板().Children().Append(container);
@@ -1000,7 +1028,7 @@ namespace winrt::Logic_Playground::implementation
 		co_return false;
 	}
 
-	IAsyncOperation<bool> MainPage::OperationC2(param::hstring const& ID, param::hstring const& idA, param::hstring const& idB, bool const& redo)
+	IAsyncOperation<bool> MainPage::OperationC2(param::hstring CR ID, param::hstring CR idA, param::hstring CR idB, bool CR redo)
 	{
 		if (!CheckTheoremName(ID) || !theorems.Lookup(idA) || !theorems.Lookup(idB))
 			co_return false;
@@ -1332,6 +1360,7 @@ namespace winrt::Logic_Playground::implementation
 						flyout.Content(block);
 					}
 					flyout.ShowAt(操作面板());
+					co_return false;
 				}
 			}
 			const MainPageP child;
@@ -1704,9 +1733,14 @@ namespace winrt::Logic_Playground::implementation
 		GetMainWindow[position.get()].get().Display(position.get());
 	}
 
-	void MainPage::Display(UIElement CR _item)
+	fire_and_forget MainPage::Display(UIElement _item)
 	{
 		GetMainWindow[position.get()].get().Display(position.get());
+		{
+			const apartment_context ui;
+			co_await resume_after(114514us);
+			co_await ui;
+		}
 		auto CR[x, y] = _item.TransformToVisual(主面板()).TransformPoint({ 0, 0 });
 		滚().ScrollTo(x, y - 16);
 	}
@@ -2570,23 +2604,23 @@ namespace winrt::Logic_Playground::implementation
 			C0a().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C0aChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C0aChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		RemoveIllegal(C0a());
 	}
 
-	void MainPage::C0aFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C0aFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			C0b().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C0bChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C0bChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		RemoveIllegal(C0b());
 	}
 
-	void MainPage::C0bFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C0bFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			if (!CheckTheoremName(C0ID().Text()))
@@ -2625,23 +2659,23 @@ namespace winrt::Logic_Playground::implementation
 			C1a().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C1aChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C1aChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		RemoveIllegal(C1a());
 	}
 
-	void MainPage::C1aFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C1aFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			C1b().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C1bChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C1bChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		RemoveIllegal(C1b());
 	}
 
-	void MainPage::C1bFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C1bFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			if (!CheckTheoremName(C1ID().Text()))
@@ -2669,23 +2703,23 @@ namespace winrt::Logic_Playground::implementation
 			C2idA().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C2idAChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C2idAChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		C2确认().IsEnabled(CheckTheoremName(C2ID().Text()) && theorems.Lookup(RemoveIllegal(C2idA())) && theorems.Lookup(C2idB().Text()));
 	}
 
-	void MainPage::C2idAFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C2idAFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			C2idB().Focus(FocusState::Programmatic);
 	}
 
-	void MainPage::C2idBChanged(IInspectable const&, TextChangedEventArgs const&)
+	void MainPage::C2idBChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
 		C2确认().IsEnabled(CheckTheoremName(C2ID().Text()) && theorems.Lookup(C2idA().Text()) && theorems.Lookup(RemoveIllegal(C2idB())));
 	}
 
-	void MainPage::C2idBFinished(IInspectable const&, KeyRoutedEventArgs const& args)
+	void MainPage::C2idBFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
 			if (!CheckTheoremName(C2ID().Text()))

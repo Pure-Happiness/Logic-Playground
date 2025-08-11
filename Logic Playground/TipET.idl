@@ -4,6 +4,5 @@ namespace Logic_Playground
     runtimeclass TipET : Microsoft.UI.Xaml.Controls.UserControl
     {
         TipET();
-        Int32 MyProperty;
     }
 }

@@ -52,333 +52,340 @@ namespace winrt::Logic_Playground::implementation
 				}
 				co_return;
 			}
-			if (op == L"Object")
+			try
 			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					goto Error;
-				wstring expression;
-				input >> expression;
-				if (input.fail() || !CheckIllegal(expression) || !co_await focus.OperationObject(ID, name, expression, false))
+				if (op == L"Object")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring name;
+					input >> name;
+					if (input.fail() || !CheckIllegal(name, IsValidName))
+						goto Error;
+					wstring expression;
+					input >> expression;
+					if (input.fail() || !CheckIllegal(expression) || !co_await focus.OperationObject(ID, name, expression, false))
+						goto Error;
+				}
+				else if (op == L"Type")
+				{
+					wstring name;
+					input >> name;
+					if (input.fail() || !CheckIllegal(name, IsValidName))
+						goto Error;
+					wstring expression;
+					input >> expression;
+					if (input.fail() || !CheckIllegal(expression, IsValidTypeExpression) || !co_await focus.OperationType(name, expression, false))
+						goto Error;
+				}
+				else if (op == L"Copy")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationCopy(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"Function")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring param;
+					input >> param;
+					if (input.fail() || !CheckIllegal(param, IsValidName))
+						goto Error;
+					wstring image;
+					input >> image;
+					if (input.fail() || !CheckIllegal(image))
+						goto Error;
+					wstring arg;
+					input >> arg;
+					if (input.fail() || !CheckIllegal(arg) || !co_await focus.OperationFunction(ID, param, image, arg, false))
+						goto Error;
+				}
+				else if (op == L"Template")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring param;
+					input >> param;
+					if (input.fail() || !CheckIllegal(param, IsValidName))
+						goto Error;
+					wstring image;
+					input >> image;
+					if (input.fail() || !CheckIllegal(image))
+						goto Error;
+					wstring arg;
+					input >> arg;
+					if (input.fail() || !CheckIllegal(arg, IsValidTypeExpression) || !co_await focus.OperationTemplate(ID, param, image, arg, false))
+						goto Error;
+				}
+				else if (op == L"EI")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring a;
+					input >> a;
+					if (input.fail() || !CheckIllegal(a) || !co_await focus.OperationEI(ID, a, false))
+						goto Error;
+				}
+				else if (op == L"EIB")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIB(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"EIF")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIF(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"EIT")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIT(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"EE")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id))
+						goto Error;
+					wstring f;
+					input >> f;
+					if (input.fail() || !CheckIllegal(f) || !co_await focus.OperationEE(ID, id, f, false))
+						goto Error;
+				}
+				else if (op == L"EEB")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEEB(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"ET")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring idA;
+					input >> idA;
+					if (input.fail() || !CheckIllegal(idA))
+						goto Error;
+					wstring idB;
+					input >> idB;
+					if (input.fail() || !CheckIllegal(idB) || !co_await focus.OperationET(ID, idA, idB, false))
+						goto Error;
+				}
+				else if (op == L"ER")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationER(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"C0")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id))
+						goto Error;
+					wstring a;
+					input >> a;
+					if (input.fail() || !CheckIllegal(a))
+						goto Error;
+					wstring b;
+					input >> b;
+					if (input.fail() || !CheckIllegal(b) || !co_await focus.OperationC0(ID, id, a, b, false))
+						goto Error;
+				}
+				else if (op == L"C1")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id))
+						goto Error;
+					wstring a;
+					input >> a;
+					if (input.fail() || !CheckIllegal(a))
+						goto Error;
+					wstring b;
+					input >> b;
+					if (input.fail() || !CheckIllegal(b) || !co_await focus.OperationC1(ID, id, a, b, false))
+						goto Error;
+				}
+				else if (op == L"C2")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring idA;
+					input >> idA;
+					if (input.fail() || !CheckIllegal(idA))
+						goto Error;
+					wstring idB;
+					input >> idB;
+					if (input.fail() || !CheckIllegal(idB) || !co_await focus.OperationC2(ID, idA, idB, false))
+						goto Error;
+				}
+				else if (op == L"C3")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationC3(ID, id, false))
+						goto Error;
+				}
+				else if (op == L"UF")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id))
+						goto Error;
+					wstring a;
+					input >> a;
+					if (input.fail() || !CheckIllegal(a) || !co_await focus.OperationUF(ID, id, a, false))
+						goto Error;
+				}
+				else if (op == L"UT")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring id;
+					input >> id;
+					if (input.fail() || !CheckIllegal(id))
+						goto Error;
+					wstring t;
+					input >> t;
+					if (input.fail() || !CheckIllegal(t, IsValidTypeExpression) || !co_await focus.OperationUT(ID, id, t, false))
+						goto Error;
+				}
+				else if (op == L"Scope")
+				{
+					wstring NAME;
+					input >> NAME;
+					if (input.fail() || !CheckIllegal(NAME) || !co_await focus.OperationScope(NAME, false))
+						goto Error;
+				}
+				else if (op == L"Assume")
+				{
+					wstring NAME;
+					input >> NAME;
+					if (input.fail() || !CheckIllegal(NAME))
+						goto Error;
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID))
+						goto Error;
+					wstring p;
+					input >> p;
+					if (input.fail() || !CheckIllegal(p) || !co_await focus.OperationAssume(NAME, ID, p, false))
+						goto Error;
+				}
+				else if (op == L"ArbitraryObject")
+				{
+					wstring NAME;
+					input >> NAME;
+					if (input.fail() || !CheckIllegal(NAME))
+						goto Error;
+					wstring name;
+					input >> name;
+					if (input.fail() || !CheckIllegal(name, IsValidName))
+						goto Error;
+					wstring t;
+					input >> t;
+					if (input.fail() || !CheckIllegal(t, IsValidTypeExpression) || !co_await focus.OperationArbitraryObject(NAME, name, t, false))
+						goto Error;
+				}
+				else if (op == L"ArbitraryType")
+				{
+					wstring NAME;
+					input >> NAME;
+					if (input.fail() || !CheckIllegal(NAME))
+						goto Error;
+					wstring name;
+					input >> name;
+					if (input.fail() || !CheckIllegal(name, IsValidName) || !co_await focus.OperationArbitraryType(NAME, name, false))
+						goto Error;
+				}
+				else if (op == L"Export")
+				{
+					wstring ID;
+					input >> ID;
+					if (input.fail() || !CheckIllegal(ID) || !co_await focus.OperationExport(ID, false))
+						goto Error;
+				}
+				else if (op == L"Exit")
+				{
+					if (!co_await focus.OperationExit(false))
+						goto Error;
+				}
+				else
 					goto Error;
 			}
-			else if (op == L"Type")
+			catch (...)
 			{
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					goto Error;
-				wstring expression;
-				input >> expression;
-				if (input.fail() || !CheckIllegal(expression, IsValidTypeExpression) || !co_await focus.OperationType(name, expression, false))
-					goto Error;
+				AppNotificationManager::Default().Show(AppNotificationBuilder().AddText(ResourceLoader().GetString(L"未知错误")).BuildNotification());
 			}
-			else if (op == L"Copy")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationCopy(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"Function")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring param;
-				input >> param;
-				if (input.fail() || !CheckIllegal(param, IsValidName))
-					goto Error;
-				wstring image;
-				input >> image;
-				if (input.fail() || !CheckIllegal(image))
-					goto Error;
-				wstring arg;
-				input >> arg;
-				if (input.fail() || !CheckIllegal(arg) || !co_await focus.OperationFunction(ID, param, image, arg, false))
-					goto Error;
-			}
-			else if (op == L"Template")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring param;
-				input >> param;
-				if (input.fail() || !CheckIllegal(param, IsValidName))
-					goto Error;
-				wstring image;
-				input >> image;
-				if (input.fail() || !CheckIllegal(image))
-					goto Error;
-				wstring arg;
-				input >> arg;
-				if (input.fail() || !CheckIllegal(arg, IsValidTypeExpression) || !co_await focus.OperationTemplate(ID, param, image, arg, false))
-					goto Error;
-			}
-			else if (op == L"EI")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a) || !co_await focus.OperationEI(ID, a, false))
-					goto Error;
-			}
-			else if (op == L"EIB")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIB(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"EIF")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIF(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"EIT")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEIT(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"EE")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					goto Error;
-				wstring f;
-				input >> f;
-				if (input.fail() || !CheckIllegal(f) || !co_await focus.OperationEE(ID, id, f, false))
-					goto Error;
-			}
-			else if (op == L"EEB")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationEEB(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"ET")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring idA;
-				input >> idA;
-				if (input.fail() || !CheckIllegal(idA))
-					goto Error;
-				wstring idB;
-				input >> idB;
-				if (input.fail() || !CheckIllegal(idB) || !co_await focus.OperationET(ID, idA, idB, false))
-					goto Error;
-			}
-			else if (op == L"ER")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationER(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"C0")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					goto Error;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					goto Error;
-				wstring b;
-				input >> b;
-				if (input.fail() || !CheckIllegal(b) || !co_await focus.OperationC0(ID, id, a, b, false))
-					goto Error;
-			}
-			else if (op == L"C1")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					goto Error;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					goto Error;
-				wstring b;
-				input >> b;
-				if (input.fail() || !CheckIllegal(b) || !co_await focus.OperationC1(ID, id, a, b, false))
-					goto Error;
-			}
-			else if (op == L"C2")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring idA;
-				input >> idA;
-				if (input.fail() || !CheckIllegal(idA))
-					goto Error;
-				wstring idB;
-				input >> idB;
-				if (input.fail() || !CheckIllegal(idB) || !co_await focus.OperationC2(ID, idA, idB, false))
-					goto Error;
-			}
-			else if (op == L"C3")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id) || !co_await focus.OperationC3(ID, id, false))
-					goto Error;
-			}
-			else if (op == L"UF")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					goto Error;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a) || !co_await focus.OperationUF(ID, id, a, false))
-					goto Error;
-			}
-			else if (op == L"UT")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					goto Error;
-				wstring t;
-				input >> t;
-				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression) || !co_await focus.OperationUT(ID, id, t, false))
-					goto Error;
-			}
-			else if (op == L"Scope")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME) || !co_await focus.OperationScope(NAME, false))
-					goto Error;
-			}
-			else if (op == L"Assume")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					goto Error;
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					goto Error;
-				wstring p;
-				input >> p;
-				if (input.fail() || !CheckIllegal(p) || !co_await focus.OperationAssume(NAME, ID, p, false))
-					goto Error;
-			}
-			else if (op == L"ArbitraryObject")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					goto Error;
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					goto Error;
-				wstring t;
-				input >> t;
-				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression) || !co_await focus.OperationArbitraryObject(NAME, name, t, false))
-					goto Error;
-			}
-			else if (op == L"ArbitraryType")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					goto Error;
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName) || !co_await focus.OperationArbitraryType(NAME, name, false))
-					goto Error;
-			}
-			else if (op == L"Export")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID) || !co_await focus.OperationExport(ID, false))
-					goto Error;
-			}
-			else if (op == L"Exit")
-			{
-				if (!co_await focus.OperationExit(false))
-					goto Error;
-			}
-			else
-				goto Error;
 		}
 	Error:
 		AppNotificationManager::Default().Show(AppNotificationBuilder().AddText(ResourceLoader().GetString(L"文件读取错误")).BuildNotification());

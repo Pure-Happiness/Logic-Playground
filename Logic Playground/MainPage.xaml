@@ -919,7 +919,7 @@
 	                    TextChanged="C1bChanged"
 	                    KeyDown="C1bFinished"/>
                     <Button
-                        Grid.Column="2"
+                        Grid.Column="4"
                         x:Name="C1确认"
                         Margin="8"
                         VerticalAlignment="Center"

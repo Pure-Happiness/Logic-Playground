@@ -179,7 +179,15 @@ namespace winrt::Logic_Playground::implementation
 				if (x_cat == TypeCategory::Bool)
 					return true;
 				if (x_cat == TypeCategory::Parameter)
-					return XCode[x.Left()] == YCode[y.Left()];
+					if (x_cat == TypeCategory::Parameter)
+						if (const TypeP xL = x.Left(); XCode.contains(xL))
+						{
+							if (const TypeP yL = y.Left(); YCode.contains(yL))
+								return XCode[xL] == YCode[yL];
+							return false;
+						}
+						else
+							return xL == y.Left();
 				return equal(x.Left(), y.Left(), code <<= 1) && equal(x.Right(), y.Right(), code |= 1);
 			}(x, y);
 	}
@@ -229,8 +237,8 @@ namespace winrt::Logic_Playground::implementation
 					result.InitAsAlias2(original.Left());
 					break;
 				case TypeCategory::Parameter:
-					if (original != original.Left())
-						result.InitAsParameter2(mapT[original.Left()]);
+					if (const TypeP oL = original.Left(); original != oL)
+						result.InitAsParameter2(mapT.contains(oL) ? mapT[oL] : oL);
 					else
 					{
 						result.InitAsParameter(original.Label());

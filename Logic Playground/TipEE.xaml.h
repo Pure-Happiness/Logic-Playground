@@ -4,14 +4,14 @@
 
 namespace winrt::Logic_Playground::implementation
 {
-    struct TipEE : TipEET<TipEE>
-    {
-    };
+	struct TipEE : TipEET<TipEE>
+	{
+	};
 }
 
 namespace winrt::Logic_Playground::factory_implementation
 {
-    struct TipEE : TipEET<TipEE, implementation::TipEE>
-    {
-    };
+	struct TipEE : TipEET<TipEE, implementation::TipEE>
+	{
+	};
 }
