@@ -328,11 +328,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="EnigmaCert.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
+    <None Include="Logic Playground_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\CascadiaCode-Bold.ttf">
