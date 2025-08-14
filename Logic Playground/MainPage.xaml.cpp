@@ -69,9 +69,9 @@ namespace winrt::Logic_Playground::implementation
 		types.Insert(_aT.Label(), aT = _aT);
 	}
 
-	IAsyncOperation<bool> MainPage::OperationObject(param::hstring CR ID, param::hstring CR _name, param::hstring CR _expression, bool CR redo)
+	IAsyncOperation<bool> MainPage::OperationObject(param::hstring CR _name, param::hstring CR _expression, bool CR redo)
 	{
-		if (!CheckTheoremName(ID) || !CheckObjectName(_name))
+		if (!CheckObjectName(_name))
 			co_return false;
 		const ExpressionContainerP container;
 		if (const ObjP value = MakeObject(_expression, container))
@@ -87,33 +87,11 @@ namespace winrt::Logic_Playground::implementation
 				for (UIElement CR item : ObjP::Generate(value))
 					items.Append(item);
 			}
-			container.Text(wstring(L"Object ").append(hstring(ID)).append(L" ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
+			container.Text(wstring(L"Object ").append(L" ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
 			主面板().Children().Append(container);
-			{
-				const TheoremPanelP panel;
-				{
-					const TheoremP th(panel, self.get());
-					th.Self(th);
-					{
-						const ObjP equal(panel, self.get());
-						equal.Self(equal);
-						{
-							const ObjP th_d(panel, self.get());
-							th_d.Self(th_d);
-							th_d.InitAsAlias2(declaration);
-							equal.InitAsEqual(th_d, ObjP::Clone(value, panel, self.get()));
-						}
-						th.Init(equal, ID);
-					}
-					theorems.Insert(ID, th);
-					panel.Name(th);
-				}
-				主面板().Children().Append(panel);
-			}
 			const OperationP operation(OperationCategory::Object);
 			{
 				const IVector contents = operation.Contents();
-				contents.Append(ID);
 				contents.Append(_name);
 				contents.Append(_expression);
 			}
@@ -1628,12 +1606,10 @@ namespace winrt::Logic_Playground::implementation
 		co_return true;
 	}
 
-	void MainPage::RemoveObject(param::hstring CR _id, param::hstring CR _name)
+	void MainPage::RemoveObject(param::hstring CR _name)
 	{
-		theorems.Remove(_id);
 		objects.Remove(_name);
-		const UIElementCollection items = 主面板().Children();
-		items.RemoveAtEnd(), items.RemoveAtEnd();
+		主面板().Children().RemoveAtEnd();
 	}
 
 	void MainPage::RemoveType(param::hstring CR _name)
@@ -1926,7 +1902,7 @@ namespace winrt::Logic_Playground::implementation
 			case 0:
 				物体别名().Visibility(Visibility::Visible);
 				类型别名().Visibility(Visibility::Collapsed);
-				物体定理名称().Focus(FocusState::Programmatic);
+				物体名称().Focus(FocusState::Programmatic);
 				break;
 			case 1:
 				物体别名().Visibility(Visibility::Collapsed);
@@ -1937,20 +1913,9 @@ namespace winrt::Logic_Playground::implementation
 			}
 	}
 
-	void MainPage::ObjectTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
-	{
-		物体确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(物体定理名称()))) && CheckObjectName(物体名称().Text()));
-	}
-
-	void MainPage::ObjectTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
-	{
-		if (args.Key() == VirtualKey::Enter)
-			物体名称().Focus(FocusState::Programmatic);
-	}
-
 	void MainPage::ObjectNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		物体确认().IsEnabled(CheckTheoremName(物体定理名称().Text()) && CheckObjectName(hstring(RemoveIllegal(物体名称(), IsValidName))));
+		物体确认().IsEnabled(CheckObjectName(hstring(RemoveIllegal(物体名称(), IsValidName))));
 	}
 
 	void MainPage::ObjectNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -1967,9 +1932,7 @@ namespace winrt::Logic_Playground::implementation
 	void MainPage::ObjectExpressionFinished(IInspectable CR, KeyRoutedEventArgs CR args)
 	{
 		if (args.Key() == VirtualKey::Enter)
-			if (!CheckTheoremName(物体定理名称().Text()))
-				物体定理名称().Focus(FocusState::Programmatic);
-			else if (!CheckObjectName(物体名称().Text()))
+			if (!CheckObjectName(物体名称().Text()))
 				物体名称().Focus(FocusState::Programmatic);
 			else
 				ObjectConfirm(nullptr, nullptr);
@@ -1977,7 +1940,7 @@ namespace winrt::Logic_Playground::implementation
 
 	fire_and_forget MainPage::ObjectConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationObject(物体定理名称().Text(), 物体名称().Text(), 物体表达式().Text(), false))
+		if (CheckStatus() && co_await OperationObject(物体名称().Text(), 物体表达式().Text(), false))
 			物体确认().IsEnabled(false);
 	}
 

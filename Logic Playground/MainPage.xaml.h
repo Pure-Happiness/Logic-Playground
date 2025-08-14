@@ -17,7 +17,7 @@ namespace winrt::Logic_Playground::implementation
 		void InitAsAssume(TheoremP CR _assumption, TheoremPanelP CR _panel);
 		void InitAsArbitraryO(ObjP CR _aO);
 		void InitAsArbitraryT(TypeP CR _aT);
-		IAsyncOperation<bool> OperationObject(param::hstring CR ID, param::hstring CR _name, param::hstring CR _expression, bool CR redo);
+		IAsyncOperation<bool> OperationObject(param::hstring CR _name, param::hstring CR _expression, bool CR redo);
 		IAsyncOperation<bool> OperationType(param::hstring CR _name, param::hstring CR _expression, bool CR redo);
 		IAsyncOperation<bool> OperationCopy(param::hstring CR ID, param::hstring CR id, bool CR redo);
 		IAsyncOperation<bool> OperationFunction(param::hstring CR ID, param::hstring CR _param, param::hstring CR _image, param::hstring CR _arg, bool CR redo);
@@ -42,7 +42,7 @@ namespace winrt::Logic_Playground::implementation
 		IAsyncOperation<bool> OperationArbitraryType(param::hstring CR NAME, param::hstring CR name, bool CR redo);
 		IAsyncOperation<bool> OperationExport(param::hstring CR ID, bool CR redo);
 		IAsyncOperation<bool> OperationExit(bool CR redo);
-		void RemoveObject(param::hstring CR _id, param::hstring CR _name);
+		void RemoveObject(param::hstring CR _name);
 		void RemoveType(param::hstring CR _name);
 		void RemoveTheorem(param::hstring CR _name);
 		void RemoveScope() const;
@@ -68,8 +68,6 @@ namespace winrt::Logic_Playground::implementation
 		void RedoClick(IInspectable CR, RoutedEventArgs CR) const;
 		void OperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR);
 		void AliasesOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR);
-		void ObjectTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR);
-		void ObjectTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args);
 		void ObjectNameChanged(IInspectable CR, TextChangedEventArgs CR);
 		void ObjectNameFinished(IInspectable CR, KeyRoutedEventArgs CR args);
 		void ObjectExpressionChanged(IInspectable CR, TextChangedEventArgs CR);

@@ -19,7 +19,7 @@ namespace Logic_Playground
         void InitAsAssume(Theorem assumption, TheoremPanel panel);
         void InitAsArbitraryO(Obj aO);
         void InitAsArbitraryT(Type aT);
-        Windows.Foundation.IAsyncOperation<Boolean> OperationObject(String ID, String name, String expression, Boolean redo);
+        Windows.Foundation.IAsyncOperation<Boolean> OperationObject(String name, String expression, Boolean redo);
         Windows.Foundation.IAsyncOperation<Boolean> OperationType(String name, String expression, Boolean redo);
         Windows.Foundation.IAsyncOperation<Boolean> OperationCopy(String ID, String id, Boolean redo);
         Windows.Foundation.IAsyncOperation<Boolean> OperationFunction(String ID, String param, String image, String arg, Boolean redo);
@@ -44,7 +44,7 @@ namespace Logic_Playground
         Windows.Foundation.IAsyncOperation<Boolean> OperationArbitraryType(String NAME, String name, Boolean redo);
         Windows.Foundation.IAsyncOperation<Boolean> OperationExport(String ID, Boolean redo);
         Windows.Foundation.IAsyncOperation<Boolean> OperationExit(Boolean redo);
-        void RemoveObject(String ID, String name);
+        void RemoveObject(String name);
         void RemoveType(String name);
         void RemoveTheorem(String name);
         void RemoveScope();

@@ -56,17 +56,13 @@ namespace winrt::Logic_Playground::implementation
 			{
 				if (op == L"Object")
 				{
-					wstring ID;
-					input >> ID;
-					if (input.fail() || !CheckIllegal(ID))
-						goto Error;
 					wstring name;
 					input >> name;
 					if (input.fail() || !CheckIllegal(name, IsValidName))
 						goto Error;
 					wstring expression;
 					input >> expression;
-					if (input.fail() || !CheckIllegal(expression) || !co_await focus.OperationObject(ID, name, expression, false))
+					if (input.fail() || !CheckIllegal(expression) || !co_await focus.OperationObject(name, expression, false))
 						goto Error;
 				}
 				else if (op == L"Type")
@@ -476,7 +472,7 @@ namespace winrt::Logic_Playground::implementation
 			switch (const IVector contents = operation.Contents(); operation.Category())
 			{
 			case OperationCategory::Object:
-				focus.RemoveObject(contents.GetAt(0), contents.GetAt(1));
+				focus.RemoveObject(*contents.First());
 				break;
 			case OperationCategory::Type:
 				focus.RemoveType(*contents.First());
@@ -508,7 +504,7 @@ namespace winrt::Logic_Playground::implementation
 			switch (const IVector contents = operation.Contents(); operation.Category())
 			{
 			case OperationCategory::Object:
-				focus.OperationObject(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2), true);
+				focus.OperationObject(contents.GetAt(0), contents.GetAt(1), true);
 				break;
 			case OperationCategory::Type:
 				focus.OperationType(contents.GetAt(0), contents.GetAt(1), true);

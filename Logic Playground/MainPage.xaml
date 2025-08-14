@@ -134,21 +134,10 @@
                 <Grid Grid.Column="1" x:Name="物体别名">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox
-                        x:Name="物体定理名称"
-                        Margin="8"
-                        Width="108"
-                        VerticalAlignment="Center"
-                        FontFamily="{StaticResource CascadiaCode}"
-                        PlaceholderText="ID"
-                        TextChanged="ObjectTheoremNameChanged"
-                        KeyDown="ObjectTheoremNameFinished"/>
-                    <TextBox
-                        Grid.Column="1"
 		                x:Name="物体名称"
 		                Margin="8"
 		                Width="108"
@@ -158,7 +147,7 @@
 		                TextChanged="ObjectNameChanged"
                         KeyDown="ObjectNameFinished"/>
                     <TextBox
-		                Grid.Column="2"
+		                Grid.Column="1"
 		                x:Name="物体表达式"
 		                Margin="8"
 		                HorizontalAlignment="Stretch"
@@ -168,7 +157,7 @@
 		                TextChanged="ObjectExpressionChanged"
                         KeyDown="ObjectExpressionFinished"/>
                     <Button
-		                Grid.Column="3"
+		                Grid.Column="2"
 		                x:Name="物体确认"
 		                Margin="8"
 		                VerticalAlignment="Center"

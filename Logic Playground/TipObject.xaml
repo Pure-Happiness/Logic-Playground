@@ -8,18 +8,12 @@
     mc:Ignorable="d">
 
     <TextBlock>
-		<Run Text="Object ID name a" FontFamily="{StaticResource CascadiaCode}"/>
+		<Run Text="Object name a" FontFamily="{StaticResource CascadiaCode}"/>
 		<LineBreak/>
 		<Run Text="defines an alias "/>
 		<Run Text="name" FontFamily="{StaticResource CascadiaCode}"/>
 		<Run Text=" for the object "/>
 		<Run Text="a" FontFamily="{StaticResource CascadiaCode}"/>
-        <Run Text=","/>
-        <LineBreak/>
-		<Run Text="and produces a theorem "/>
-		<Run Text="name=a" FontFamily="{StaticResource CascadiaCode}"/>
-		<Run Text=" named "/>
-		<Run Text="ID" FontFamily="{StaticResource CascadiaCode}"/>
 		<Run Text="."/>
     </TextBlock>
 </UserControl>
