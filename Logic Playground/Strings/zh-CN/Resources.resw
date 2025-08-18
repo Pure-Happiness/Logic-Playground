@@ -300,10 +300,6 @@
     <value>物体</value>
     <comment>MainPage Aliases</comment>
   </data>
-  <data name="类型.Content" xml:space="preserve">
-    <value>类型</value>
-    <comment>MainPage Aliases</comment>
-  </data>
   <data name="非物体名称" xml:space="preserve">
     <value> 非物体名称。</value>
     <comment>MainPage Error</comment>
@@ -493,5 +489,52 @@
   </data>
   <data name="冲突" xml:space="preserve">
     <value>名称冲突。</value>
+  </data>
+  <data name="TheoremNameExist" xml:space="preserve">
+    <value> 已定义为定理。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="ObjectNameExist" xml:space="preserve">
+    <value> 已定义为物体。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="TypeNameExist" xml:space="preserve">
+    <value> 已定义为类型。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="ScopeNameExist" xml:space="preserve">
+    <value> 已定义为范围。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="NotATheoremName" xml:space="preserve">
+    <value> 非类型名称。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="EmptyParameterName" xml:space="preserve">
+    <value> 参数名称不可为空。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="类型.Content" xml:space="preserve">
+    <value>类型</value>
+    <comment>MainPage Aliases</comment>
+  </data>
+  <data name="不属于当前范围" xml:space="preserve">
+    <value> 不属于当前范围。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="已导出" xml:space="preserve">
+    <value> 已导出。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="代码.Content" xml:space="preserve">
+    <value>代码</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="未知操作" xml:space="preserve">
+    <value>未知操作。</value>
+    <comment>MainPage Error Basic</comment>
+  </data>
+  <data name="请稍候……" xml:space="preserve">
+    <value>请稍候……</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <initializer_list>
 #include <random>
 #include <ranges>
 #include <stack>
@@ -195,14 +196,4 @@ inline Button NakedButton(IInspectable CR content, RoutedEventHandler CR handler
 	result.Content(content);
 	result.Click(handler);
 	return result;
-}
-
-constexpr bool IsValidName(wchar_t CR ch)
-{
-	return ch > L' ' && ch != L'~' && ch != L'`' && ch != L'!' && ch != L'@' && ch != L'#' && ch != L'=' && ch != L'?' && ch != L':' && ch != L'(' && ch != L')';
-}
-
-constexpr bool IsValidTypeExpression(wchar_t CR ch)
-{
-	return ch > L' ' && ch != L'!' && ch != L'@' && ch != L'#' && ch != L'=' && ch != L'?' && ch != L':';
 }

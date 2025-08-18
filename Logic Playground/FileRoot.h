@@ -9,11 +9,11 @@ namespace winrt::Logic_Playground::implementation
 		void Self(FileRootP CR _self);
 		void InitAsNewFile() const;
 		[[nodiscard]] IAsyncOperation<hstring> InitAsFile(StorageFile CR _file);
-		fire_and_forget ReadContent(hstring _content);
+		fire_and_forget ReadContent(hstring CR _content);
 		[[nodiscard]] MainPageP PageRoot() const;
 		[[nodiscard]] MainPageP Focus() const;
 		void Focus(MainPageP CR _focus);
-		IAsyncAction AddOperation(OperationP _operation, bool redo);
+		void AddOperationS(OperationP CR _operation);
 		IAsyncAction Save(TabViewItem CR _position);
 		fire_and_forget SaveAs(TabViewItem CR _position);
 		void Undo();
@@ -34,8 +34,6 @@ namespace winrt::Logic_Playground::implementation
 		IAsyncOperation<bool> FetchFile(TabViewItem CR _position);
 		void SaveFile();
 		IAsyncAction CreateTempFile();
-		static bool CheckIllegal(wstring CR s);
-		static bool CheckIllegal(wstring CR s, auto CR check);
 	};
 }
 

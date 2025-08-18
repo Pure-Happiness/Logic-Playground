@@ -69,1541 +69,421 @@ namespace winrt::Logic_Playground::implementation
 		types.Insert(_aT.Label(), aT = _aT);
 	}
 
-	IAsyncOperation<bool> MainPage::OperationObject(param::hstring CR _name, param::hstring CR _expression, bool CR redo)
+	OperationP MainPage::ParseOperation(param::hstring CR str)
 	{
-		if (!CheckObjectName(_name))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const ObjP value = MakeObject(_expression, container))
+		wistringstream input{ wstring(hstring(str)) };
+		wstring op;
+		input >> op;
+		if (input.fail())
+			return nullptr;
+		try
 		{
-			const ObjP declaration(container, self.get());
-			declaration.Self(declaration);
-			declaration.InitAsAlias(value, _name);
-			objects.Insert(_name, declaration);
+			if (op == L"Object")
 			{
-				const UIElementCollection items = container.Items();
-				items.Append(declaration);
-				items.Append(ObjectDefinition());
-				for (UIElement CR item : ObjP::Generate(value))
-					items.Append(item);
+				wstring name;
+				input >> name;
+				if (input.fail() || !CheckIllegal(name, IsValidName))
+					return nullptr;
+				wstring expression;
+				input >> expression;
+				if (input.fail() || !CheckIllegal(expression))
+					return nullptr;
+				return OperationObject(name, expression);
 			}
-			container.Text(wstring(L"Object ").append(L" ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
-			主面板().Children().Append(container);
-			const OperationP operation(OperationCategory::Object);
+			if (op == L"Type")
 			{
-				const IVector contents = operation.Contents();
-				contents.Append(_name);
-				contents.Append(_expression);
+				wstring name;
+				input >> name;
+				if (input.fail() || !CheckIllegal(name, IsValidName))
+					return nullptr;
+				wstring expression;
+				input >> expression;
+				if (input.fail() || !CheckIllegal(expression, IsValidTypeExpression))
+					return nullptr;
+				return OperationType(name, expression);
 			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
+			if (op == L"Copy")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationCopy(ID, id);
+			}
+			if (op == L"Function")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring param;
+				input >> param;
+				if (input.fail() || !CheckIllegal(param, IsValidName))
+					return nullptr;
+				wstring image;
+				input >> image;
+				if (input.fail() || !CheckIllegal(image))
+					return nullptr;
+				wstring arg;
+				input >> arg;
+				if (input.fail() || !CheckIllegal(arg))
+					return nullptr;
+				return OperationFunction(ID, param, image, arg);
+			}
+			if (op == L"Template")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring param;
+				input >> param;
+				if (input.fail() || !CheckIllegal(param, IsValidName))
+					return nullptr;
+				wstring image;
+				input >> image;
+				if (input.fail() || !CheckIllegal(image))
+					return nullptr;
+				wstring arg;
+				input >> arg;
+				if (input.fail() || !CheckIllegal(arg, IsValidTypeExpression))
+					return nullptr;
+				return OperationTemplate(ID, param, image, arg);
+			}
+			if (op == L"EI")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring a;
+				input >> a;
+				if (input.fail() || !CheckIllegal(a))
+					return nullptr;
+				return OperationEI(ID, a);
+			}
+			if (op == L"EIB")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationEIB(ID, id);
+			}
+			if (op == L"EIF")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationEIF(ID, id);
+			}
+			if (op == L"EIT")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationEIT(ID, id);
+			}
+			if (op == L"EE")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				wstring f;
+				input >> f;
+				if (input.fail() || !CheckIllegal(f))
+					return nullptr;
+				return OperationEE(ID, id, f);
+			}
+			if (op == L"EEB")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationEEB(ID, id);
+			}
+			if (op == L"ET")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring idA;
+				input >> idA;
+				if (input.fail() || !CheckIllegal(idA))
+					return nullptr;
+				wstring idB;
+				input >> idB;
+				if (input.fail() || !CheckIllegal(idB))
+					return nullptr;
+				return OperationET(ID, idA, idB);
+			}
+			if (op == L"ER")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationER(ID, id);
+			}
+			if (op == L"C0")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				wstring a;
+				input >> a;
+				if (input.fail() || !CheckIllegal(a))
+					return nullptr;
+				wstring b;
+				input >> b;
+				if (input.fail() || !CheckIllegal(b))
+					return nullptr;
+				return OperationC0(ID, id, a, b);
+			}
+			if (op == L"C1")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				wstring a;
+				input >> a;
+				if (input.fail() || !CheckIllegal(a))
+					return nullptr;
+				wstring b;
+				input >> b;
+				if (input.fail() || !CheckIllegal(b))
+					return nullptr;
+				return OperationC1(ID, id, a, b);
+			}
+			if (op == L"C2")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring idA;
+				input >> idA;
+				if (input.fail() || !CheckIllegal(idA))
+					return nullptr;
+				wstring idB;
+				input >> idB;
+				if (input.fail() || !CheckIllegal(idB))
+					return nullptr;
+				return OperationC2(ID, idA, idB);
+			}
+			if (op == L"C3")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				return OperationC3(ID, id);
+			}
+			if (op == L"UF")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				wstring a;
+				input >> a;
+				if (input.fail() || !CheckIllegal(a))
+					return nullptr;
+				return OperationUF(ID, id, a);
+			}
+			if (op == L"UT")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring id;
+				input >> id;
+				if (input.fail() || !CheckIllegal(id))
+					return nullptr;
+				wstring t;
+				input >> t;
+				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
+					return nullptr;
+				return OperationUT(ID, id, t);
+			}
+			if (op == L"Scope")
+			{
+				wstring NAME;
+				input >> NAME;
+				if (input.fail() || !CheckIllegal(NAME))
+					return nullptr;
+				return OperationScope(NAME);
+			}
+			if (op == L"Assume")
+			{
+				wstring NAME;
+				input >> NAME;
+				if (input.fail() || !CheckIllegal(NAME))
+					return nullptr;
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				wstring p;
+				input >> p;
+				if (input.fail() || !CheckIllegal(p))
+					return nullptr;
+				return OperationAssume(NAME, ID, p);
+			}
+			if (op == L"ArbitraryObject")
+			{
+				wstring NAME;
+				input >> NAME;
+				if (input.fail() || !CheckIllegal(NAME))
+					return nullptr;
+				wstring name;
+				input >> name;
+				if (input.fail() || !CheckIllegal(name, IsValidName))
+					return nullptr;
+				wstring t;
+				input >> t;
+				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
+					return nullptr;
+				return OperationArbitraryObject(NAME, name, t);
+			}
+			if (op == L"ArbitraryType")
+			{
+				wstring NAME;
+				input >> NAME;
+				if (input.fail() || !CheckIllegal(NAME))
+					return nullptr;
+				wstring name;
+				input >> name;
+				if (input.fail() || !CheckIllegal(name, IsValidName))
+					return nullptr;
+				return OperationArbitraryType(NAME, name);
+			}
+			if (op == L"Export")
+			{
+				wstring ID;
+				input >> ID;
+				if (input.fail() || !CheckIllegal(ID))
+					return nullptr;
+				return OperationExport(ID);
+			}
+			if (op == L"Exit")
+				return OperationExit();
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"未知操作")));
+			return nullptr;
 		}
-		co_return false;
+		catch (...)
+		{
+			return nullptr;
+		}
 	}
 
-	IAsyncOperation<bool> MainPage::OperationType(param::hstring CR _name, param::hstring CR _expression, bool CR redo)
+	OperationP MainPage::RedoOperation(OperationP CR operation)
 	{
-		if (!CheckTypeName(_name))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const TypeP value = MakeType(_expression, container))
+		switch (const IVector contents = operation.Contents(); operation.Category())
 		{
-			const TypeP declaration(container, self.get());
-			declaration.Self(declaration);
-			declaration.InitAsAlias(value, _name);
-			types.Insert(_name, declaration);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(declaration);
-				items.Append(TypeDefinition());
-				for (UIElement CR item : TypeP::Generate(value))
-					items.Append(item);
-			}
-			container.Text(wstring(L"Type ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
-			主面板().Children().Append(container);
-			const OperationP operation(OperationCategory::Type);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(_name);
-				contents.Append(_expression);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
+		case OperationCategory::Object:
+			return OperationObject(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::Type:
+			return OperationType(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::Copy:
+			return OperationCopy(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::Function:
+			return OperationFunction(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2), contents.GetAt(3));
+		case OperationCategory::Template:
+			return OperationTemplate(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2), contents.GetAt(3));
+		case OperationCategory::EI:
+			return OperationEI(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::EIB:
+			return OperationEIB(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::EIF:
+			return OperationEIF(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::EIT:
+			return OperationEIT(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::EE:
+			return OperationEE(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::EEB:
+			return OperationEEB(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::ET:
+			return OperationET(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::ER:
+			return OperationER(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::C0:
+			return OperationC0(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2), contents.GetAt(3));
+		case OperationCategory::C1:
+			return OperationC1(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2), contents.GetAt(3));
+		case OperationCategory::C2:
+			return OperationC2(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::C3:
+			return OperationC3(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::UF:
+			return OperationUF(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::UT:
+			return OperationUT(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::Scope:
+			return OperationScope(contents.GetAt(0));
+		case OperationCategory::Assume:
+			return OperationAssume(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::ArbitraryO:
+			return OperationArbitraryObject(contents.GetAt(0), contents.GetAt(1), contents.GetAt(2));
+		case OperationCategory::ArbitraryT:
+			return OperationArbitraryType(contents.GetAt(0), contents.GetAt(1));
+		case OperationCategory::Export:
+			return OperationExport(contents.GetAt(0));
+		case OperationCategory::Exit:
+			return OperationExit();
 		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationCopy(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		const ExpressionContainerP container;
-		const TheoremP original = FetchTheorem(id, container);
-		const TheoremPanelP panel;
-		const TheoremP th(container, self.get());
-		th.Self(th);
-		th.Init(ObjP::Clone(original.Definition(), panel, self.get()), ID);
-		theorems.Insert(ID, th);
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"Copy \u200B"));
-			items.Append(th);
-			items.Append(RegularText(L" \u200B"));
-			items.Append(original);
-		}
-		container.Text(wstring(L"Copy ").append(hstring(id)).append(L" ").append(hstring(id)));
-		主面板().Children().Append(container);
-		{
-			const TheoremP tth(panel, self.get());
-			tth.Self(tth);
-			tth.Init2(th);
-			panel.Name(tth);
-		}
-		主面板().Children().Append(panel);
-		const OperationP operation(OperationCategory::Copy);
-		{
-			const IVector contents = operation.Contents();
-			contents.Append(ID);
-			contents.Append(id);
-		}
-		co_await root.get().AddOperation(operation, redo);
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationFunction(param::hstring CR ID, param::hstring CR _param, param::hstring CR _image, param::hstring CR _arg, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !hstring(_param).size())
-			co_return false;
-		const ExpressionContainer container;
-		if (const ObjP argument = MakeObject(_arg, container))
-		{
-			const ObjP param(container, self.get());
-			param.Self(param);
-			param.InitAsParameter(Type::Clone(argument.MyType(), container, self.get()), _param);
-			{
-				const LinkedMapP current;
-				current.Parent(objects);
-				(objects = current).Insert(_param, param);
-				const LinkedMapP ph;
-				ph.Parent(types);
-				types = ph;
-			}
-			if (const ObjP image = MakeObject(_image, container))
-			{
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP equal(panel, self.get());
-					equal.Self(equal);
-					{
-						const ObjP func(panel, self.get());
-						func.Self(func);
-						{
-							const ObjP pparam = ObjP::Clone(param, panel, self.get());
-							func.InitAsDeclareF(pparam, RemoveCurrent(image, panel, self.get(), pparam, nullptr));
-						}
-						objects = objects.Parent(), types = types.Parent();
-						const ObjP apply(panel, self.get());
-						apply.Self(apply);
-						apply.InitAsApplyF(func, ObjP::Clone(argument, panel, self.get()));
-						if (const ObjP ooo = ObjP::ApplyFunction(func, argument, panel, self.get()))
-							equal.InitAsEqual(apply, ooo);
-						else
-						{
-							const Flyout flyout;
-							flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
-							flyout.ShowAt(操作面板());
-							co_return false;
-						}
-					}
-					th.Init(equal, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"Function \u200B"));
-					items.Append(param);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(image))
-						items.Append(item);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(argument))
-						items.Append(item);
-				}
-				container.Text(wstring(L"Function ").append(hstring(_param)).append(L" ").append(hstring(_image)).append(L" ").append(hstring(_arg)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::Function);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(_param);
-					contents.Append(_image);
-					contents.Append(_arg);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-			objects = objects.Parent();
-		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationTemplate(param::hstring CR ID, param::hstring CR _param, param::hstring CR _image, param::hstring CR _arg, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !hstring(_param).size())
-			co_return false;
-		const ExpressionContainer container;
-		if (const TypeP aaa = MakeType(_arg, container))
-		{
-			const ObjP argument(container, self.get());
-			argument.Self(argument);
-			argument.InitAsType(aaa);
-			const TypeP tp(container, self.get());
-			tp.Self(tp);
-			tp.InitAsParameter(_param);
-			const ObjP param(container, self.get());
-			param.Self(param);
-			param.InitAsType(tp);
-			{
-				const LinkedMapP current;
-				current.Parent(types);
-				(types = current).Insert(_param, tp);
-				const LinkedMapP ph;
-				ph.Parent(objects);
-				objects = ph;
-			}
-			if (const ObjP image = MakeObject(_image, container))
-			{
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP equal(panel, self.get());
-					equal.Self(equal);
-					{
-						const ObjP temp(panel, self.get());
-						temp.Self(temp);
-						{
-							const TypeP ttp = TypeP::Clone(tp, panel, self.get());
-							const ObjP pparam(panel, self.get());
-							pparam.Self(pparam);
-							pparam.InitAsType(ttp);
-							temp.InitAsDeclareT(pparam, RemoveCurrent(image, panel, self.get(), nullptr, ttp));
-						}
-						types = types.Parent(), objects = objects.Parent();
-						const ObjP apply(panel, self.get());
-						apply.Self(apply);
-						apply.InitAsApplyT(temp, ObjP::Clone(argument, panel, self.get()));
-						if (const ObjP ooo = ObjP::ApplyTemplate(temp, aaa, panel, self.get()))
-							equal.InitAsEqual(apply, ooo);
-						else
-						{
-							const Flyout flyout;
-							flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
-							flyout.ShowAt(操作面板());
-							co_return false;
-						}
-					}
-					th.Init(equal, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"Template \u200B"));
-					items.Append(tp);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(image))
-						items.Append(item);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : TypeP::Generate(aaa))
-						items.Append(item);
-				}
-				container.Text(wstring(L"Template ").append(hstring(_param)).append(L" ").append(hstring(_image)).append(L" ").append(hstring(_arg)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::Template);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(_param);
-					contents.Append(_image);
-					contents.Append(_arg);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-			types = types.Parent();
-		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEI(param::hstring CR ID, param::hstring CR a, bool CR redo)
-	{
-		if (!CheckTheoremName(ID))
-			co_return false;
-		const ExpressionContainer container;
-		if (const ObjP obj = MakeObject(a, container))
-		{
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			{
-				const ObjP equal(panel, self.get());
-				equal.Self(equal);
-				equal.InitAsEqual(ObjP::Clone(obj, panel, self.get()), ObjP::Clone(obj, panel, self.get()));
-				th.Init(equal, ID);
-			}
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"EI \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				for (UIElement CR item : ObjP::Generate(obj))
-					items.Append(item);
-			}
-			container.Text(wstring(L"EI ").append(hstring(ID)).append(L" ").append(hstring(a)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::EI);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(a);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEIB(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		const ExpressionContainerP container;
-		const TheoremP original = FetchTheorem(id, container);
-		const TheoremPanelP panel;
-		const TheoremP th(container, self.get());
-		th.Self(th);
-		{
-			const ObjP equal(panel, self.get());
-			equal.Self(equal);
-			{
-				const ObjP tr(panel, self.get());
-				tr.Self(tr);
-				tr.InitAsTrue();
-				equal.InitAsEqual(ObjP::Clone(original.Definition(), panel, self.get()), tr);
-			}
-			th.Init(equal, ID);
-		}
-		theorems.Insert(ID, th);
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"EIB \u200B"));
-			items.Append(th);
-			items.Append(RegularText(L" \u200B"));
-			items.Append(original);
-		}
-		container.Text(wstring(L"EIB ").append(hstring(ID)).append(L" ").append(hstring(id)));
-		主面板().Children().Append(container);
-		{
-			const TheoremP tth(panel, self.get());
-			tth.Self(tth);
-			tth.Init2(th);
-			panel.Name(tth);
-		}
-		主面板().Children().Append(panel);
-		const OperationP operation(OperationCategory::EIB);
-		{
-			const IVector contents = operation.Contents();
-			contents.Append(ID);
-			contents.Append(id);
-		}
-		co_await root.get().AddOperation(operation, redo);
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEIF(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::ForallF)
-				goto Error;
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::DeclareF)
-				goto Error;
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			ObjP now = current.Left();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::ApplyF)
-				goto Error;
-			const ObjP a = now.Left();
-			now = now.Right();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::Parameter)
-				goto Error;
-			now = current.Right();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::ApplyF)
-				goto Error;
-			const ObjP b = now.Left();
-			now = now.Right();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::Parameter)
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			{
-				const ObjP equal(panel, self.get());
-				equal.Self(equal);
-				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(b, panel, self.get()));
-				th.Init(equal, ID);
-			}
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"EIF \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(original);
-			}
-			container.Text(wstring(L"EIF ").append(hstring(ID)).append(L" ").append(hstring(id)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::EIF);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(id);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEIT(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::ForallT)
-				goto Error;
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::DeclareT)
-				goto Error;
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			ObjP now = current.Left();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::ApplyT)
-				goto Error;
-			const ObjP a = now.Left();
-			now = now.Right();
-			if (now.Category() != ObjectCategory::Type || now.MyType().Category() != TypeCategory::Parameter)
-				goto Error;
-			now = current.Right();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::ApplyT)
-				goto Error;
-			const ObjP b = now.Left();
-			now = now.Right();
-			if (now.Category() != ObjectCategory::Type || now.MyType().Category() != TypeCategory::Parameter)
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			{
-				const ObjP equal(panel, self.get());
-				equal.Self(equal);
-				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(b, panel, self.get()));
-				th.Init(equal, ID);
-			}
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"EIT \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(original);
-			}
-			container.Text(wstring(L"EIT ").append(hstring(ID)).append(L" ").append(hstring(id)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::EIT);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(id);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEE(param::hstring CR ID, param::hstring CR id, param::hstring CR f, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			const ObjP a = current.Left(), b = current.Right();
-			if (const ObjP func = MakeObject(f, container))
-			{
-				current = func;
-				while ((cat = current.Category()) == ObjectCategory::Alias)
-					current = current.Right();
-				if (cat != ObjectCategory::DeclareF)
-					goto Error;
-				if (!Type::Equal(a.MyType(), current.Left().MyType()))
-					goto Error;
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP equal(panel, self.get());
-					equal.Self(equal);
-					{
-						const ObjP lf(panel, self.get());
-						lf.Self(lf);
-						lf.InitAsApplyF(ObjP::Clone(func, panel, self.get()), ObjP::Clone(a, panel, self.get()));
-						const ObjP rt(panel, self.get());
-						rt.Self(rt);
-						rt.InitAsApplyF(ObjP::Clone(func, panel, self.get()), ObjP::Clone(b, panel, self.get()));
-						equal.InitAsEqual(lf, rt);
-					}
-					th.Init(equal, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"EE \u200B"));
-					items.Append(th);
-					items.Append(RegularText(L" \u200B"));
-					items.Append(original);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(func))
-						items.Append(item);
-				}
-				container.Text(wstring(L"EE ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(f)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::EE);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(id);
-					contents.Append(f);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-			co_return false;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationEEB(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			const ObjP a = current.Left();
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::True)
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			th.Init(ObjP::Clone(a, panel, self.get()), ID);
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"EEB \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(original);
-			}
-			container.Text(wstring(L"EEB ").append(hstring(ID)).append(L" ").append(hstring(id)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::EEB);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(id);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationET(param::hstring CR ID, param::hstring CR idA, param::hstring CR idB, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(idA) || !theorems.Lookup(idB))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP originalA = FetchTheorem(idA, container), originalB = FetchTheorem(idB, container);
-			ObjP current = originalA.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			const ObjP a = current.Left(), b = current.Right();
-			current = originalB.Definition();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal || !ObjP::Equal(b, current.Left()))
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			{
-				const ObjP equal;
-				equal.Self(equal);
-				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(current.Right(), panel, self.get()));
-				th.Init(equal, ID);
-			}
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"ET \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(originalA);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(originalB);
-			}
-			container.Text(wstring(L"ET ").append(hstring(ID)).append(L" ").append(hstring(idA)).append(L" ").append(hstring(idB)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::ET);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(idA);
-				contents.Append(idB);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationER(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		const ExpressionContainerP container;
-		const TheoremP original = FetchTheorem(id, container);
-		ObjP current = original.Definition();
-		ObjectCategory cat;
-		while ((cat = current.Category()) == ObjectCategory::Alias)
-			current = current.Right();
-		if (cat != ObjectCategory::Equal)
-		{
-			InValidReason();
-			co_return false;
-		}
-		const TheoremPanelP panel;
-		const TheoremP th(container, self.get());
-		th.Self(th);
-		{
-			const ObjP equal;
-			equal.Self(equal);
-			equal.InitAsEqual(ObjP::Clone(current.Right(), panel, self.get()), ObjP::Clone(current.Left(), panel, self.get()));
-			th.Init(equal, ID);
-		}
-		theorems.Insert(ID, th);
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"ER \u200B"));
-			items.Append(th);
-			items.Append(RegularText(L" \u200B"));
-			items.Append(original);
-		}
-		container.Text(wstring(L"ER ").append(hstring(ID)).append(L" ").append(hstring(id)));
-		主面板().Children().Append(container);
-		{
-			const TheoremP tth(panel, self.get());
-			tth.Self(tth);
-			tth.Init2(th);
-			panel.Name(tth);
-		}
-		主面板().Children().Append(panel);
-		const OperationP operation(OperationCategory::ER);
-		{
-			const IVector contents = operation.Contents();
-			contents.Append(ID);
-			contents.Append(id);
-		}
-		co_await root.get().AddOperation(operation, redo);
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationC0(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const ObjP oa = MakeObject(a, container))
-			if (const ObjP ob = MakeObject(b, container))
-			{
-				if (!TypeP::Equal(oa.MyType(), ob.MyType()))
-				{
-					InValidReason();
-					co_return false;
-				}
-				const TheoremP original = FetchTheorem(id, container);
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP equal(panel, self.get());
-					equal.Self(equal);
-					{
-						const ObjP choose(panel, self.get());
-						choose.Self(choose);
-						{
-							const ObjP options(panel, self.get());
-							options.Self(options);
-							options.InitAsOptions(ObjP::Clone(oa, panel, self.get()), ObjP::Clone(ob, panel, self.get()));
-							choose.InitAsChoose(ObjP::Clone(original.Definition(), panel, self.get()), options);
-						}
-						equal.InitAsEqual(choose, ObjP::Clone(oa, panel, self.get()));
-					}
-					th.Init(equal, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"C0 \u200B"));
-					items.Append(th);
-					items.Append(RegularText(L" \u200B"));
-					items.Append(original);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(oa))
-						items.Append(item);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(ob))
-						items.Append(item);
-				}
-				container.Text(wstring(L"C0 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::C0);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(id);
-					contents.Append(a);
-					contents.Append(b);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationC1(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const ObjP oa = MakeObject(a, container))
-			if (const ObjP ob = MakeObject(b, container))
-			{
-				if (!TypeP::Equal(oa.MyType(), ob.MyType()))
-					goto Error;
-				const TheoremP original = FetchTheorem(id, container);
-				ObjP current = original.Definition();
-				ObjectCategory cat;
-				while ((cat = current.Category()) == ObjectCategory::Alias)
-					current = current.Right();
-				if (cat != ObjectCategory::Equal)
-					goto Error;
-				const ObjP pp = current.Left();
-				current = current.Right();
-				while ((cat = current.Category()) == ObjectCategory::Alias)
-					current = current.Right();
-				if (cat != ObjectCategory::False)
-					goto Error;
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP equal(panel, self.get());
-					equal.Self(equal);
-					{
-						const ObjP choose(panel, self.get());
-						choose.Self(choose);
-						{
-							const ObjP options(panel, self.get());
-							options.Self(options);
-							options.InitAsOptions(ObjP::Clone(oa, panel, self.get()), ObjP::Clone(ob, panel, self.get()));
-							choose.InitAsChoose(ObjP::Clone(pp, panel, self.get()), options);
-						}
-						equal.InitAsEqual(choose, ObjP::Clone(ob, panel, self.get()));
-					}
-					th.Init(equal, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"C1 \u200B"));
-					items.Append(th);
-					items.Append(RegularText(L" \u200B"));
-					items.Append(original);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(oa))
-						items.Append(item);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(ob))
-						items.Append(item);
-				}
-				container.Text(wstring(L"C1 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::C1);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(id);
-					contents.Append(a);
-					contents.Append(b);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-		co_return false;
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationC2(param::hstring CR ID, param::hstring CR idA, param::hstring CR idB, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(idA) || !theorems.Lookup(idB))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP originalA = FetchTheorem(idA, container), originalB = FetchTheorem(idB, container);
-			ObjP current = originalA.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Choose)
-				goto Error;
-			const ObjP pp = current.Left(), aa = current.Right().Left();
-			current = originalB.Definition();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Choose || !ObjP::Equal(current.Right().Left(), aa))
-				goto Error;
-			current = current.Left();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal || !ObjP::Equal(current.Left(), pp))
-				goto Error;
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::False)
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Init(ObjP::Clone(aa, panel, self.get()), ID);
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"C2 \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(originalA);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(originalB);
-			}
-			container.Text(wstring(L"C2 ").append(hstring(ID)).append(L" ").append(hstring(idA)).append(L" ").append(hstring(idB)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::C2);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(idA);
-				contents.Append(idB);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationC3(param::hstring CR ID, param::hstring CR id, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Choose)
-				goto Error;
-			ObjP now = current.Right().Left();
-			while ((cat = now.Category()) == ObjectCategory::Alias)
-				now = now.Right();
-			if (cat != ObjectCategory::False)
-				goto Error;
-			current = current.Left();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::Equal)
-				goto Error;
-			const ObjP p = current.Left();
-			current = current.Right();
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::False)
-				goto Error;
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			th.Init(ObjP::Clone(p, panel, self.get()), ID);
-			theorems.Insert(ID, th);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"C3 \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				items.Append(original);
-			}
-			container.Text(wstring(L"C3 ").append(hstring(ID)).append(L" ").append(hstring(id)));
-			主面板().Children().Append(container);
-			{
-				const TheoremP tth(panel, self.get());
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-			}
-			主面板().Children().Append(panel);
-			const OperationP operation(OperationCategory::C3);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(ID);
-				contents.Append(id);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			co_return true;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationUF(param::hstring CR ID, param::hstring CR id, param::hstring CR a, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::ForallF)
-				goto Error;
-			if (const ObjP obj = MakeObject(a, container))
-			{
-				const ObjP f = current.Right();
-				{
-					TypeP cc = f.MyType();
-					while (cc.Category() == TypeCategory::Alias)
-						cc = cc.Right();
-					if (!Type::Equal(cc.Left(), obj.MyType()))
-						goto Error;
-				}
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP apply(panel, self.get());
-					apply.Self(apply);
-					apply.InitAsApplyF(ObjP::Clone(f, panel, self.get()), ObjP::Clone(obj, panel, self.get()));
-					th.Init(apply, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"UF \u200B"));
-					items.Append(th);
-					items.Append(RegularText(L" \u200B"));
-					items.Append(original);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : ObjP::Generate(obj))
-						items.Append(item);
-				}
-				container.Text(wstring(L"UF ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::UF);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(id);
-					contents.Append(a);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-			co_return false;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationUT(param::hstring CR ID, param::hstring CR id, param::hstring CR t, bool CR redo)
-	{
-		if (!CheckTheoremName(ID) || !theorems.Lookup(id))
-			co_return false;
-		{
-			const ExpressionContainerP container;
-			const TheoremP original = FetchTheorem(id, container);
-			ObjP current = original.Definition();
-			ObjectCategory cat;
-			while ((cat = current.Category()) == ObjectCategory::Alias)
-				current = current.Right();
-			if (cat != ObjectCategory::ForallT)
-				goto Error;
-			if (const TypeP tp = MakeType(t, container))
-			{
-				const TheoremPanelP panel;
-				const TheoremP th(container, self.get());
-				th.Self(th);
-				{
-					const ObjP apply(panel, self.get());
-					apply.Self(apply);
-					{
-						const ObjP obj(panel, self.get());
-						obj.Self(obj);
-						obj.InitAsType(TypeP::Clone(tp, panel, self.get()));
-						apply.InitAsApplyT(ObjP::Clone(current.Right(), panel, self.get()), obj);
-					}
-					th.Init(apply, ID);
-				}
-				theorems.Insert(ID, th);
-				{
-					const UIElementCollection items = container.Items();
-					items.Append(RegularText(L"UT \u200B"));
-					items.Append(th);
-					items.Append(RegularText(L" \u200B"));
-					items.Append(original);
-					items.Append(RegularText(L" \u200B"));
-					for (UIElement CR item : TypeP::Generate(tp))
-						items.Append(item);
-				}
-				container.Text(wstring(L"UT ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(t)));
-				主面板().Children().Append(container);
-				{
-					const TheoremP tth(panel, self.get());
-					tth.Self(tth);
-					tth.Init2(th);
-					panel.Name(tth);
-				}
-				主面板().Children().Append(panel);
-				const OperationP operation(OperationCategory::UT);
-				{
-					const IVector contents = operation.Contents();
-					contents.Append(ID);
-					contents.Append(id);
-					contents.Append(t);
-				}
-				co_await root.get().AddOperation(operation, redo);
-				co_return true;
-			}
-			co_return false;
-		}
-	Error:
-		InValidReason();
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationScope(param::hstring CR NAME, bool CR redo)
-	{
-		if (!CheckScopeName(NAME))
-			co_return false;
-		const MainPageP child;
-		child.Self(child);
-		child.Parent(self.get());
-		child.Root(root.get());
-		child.Header(NAME);
-		const UIElementCollection path = child.Path();
-		for (UIElement CR item : 路径().Children())
-			path.Append(item.as<BreadcrumbItem>().Clone(child));
-		path.Append(BreadcrumbItemP(child, child));
-		children.emplace(NAME, child);
-		const ExpressionContainerP container;
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"Scope \u200B"));
-			items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
-				{
-					if (child.Position())
-						child.Display();
-					else
-						GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-				}));
-		}
-		container.Text(wstring(L"Scope ").append(hstring(NAME)));
-		主面板().Children().Append(container);
-		root.get().Focus(child);
-		const OperationP operation(OperationCategory::Scope);
-		operation.Contents().Append(NAME);
-		co_await root.get().AddOperation(operation, redo);
-		GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationAssume(param::hstring CR NAME, param::hstring CR ID, param::hstring CR p, bool CR redo)
-	{
-		if (!CheckScopeName(NAME) || !CheckTheoremName(ID))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const ObjP obj = MakeObject(p, container))
-		{
-			{
-				auto current = obj.MyType();
-				TypeCategory cat;
-				while ((cat = current.Category()) == TypeCategory::Alias)
-					current = current.Right();
-				if (cat != TypeCategory::Bool)
-				{
-					const Flyout flyout;
-					{
-						const TextBlock block;
-						{
-							const Run run;
-							run.Text(ID);
-							run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-LightItalic.ttf#Cascadia Code"));
-							block.Inlines().Append(run);
-						}
-						{
-							const Run run;
-							run.Text(ResourceLoader().GetString(L"NotATheorem"));
-							block.Inlines().Append(run);
-						}
-						flyout.Content(block);
-					}
-					flyout.ShowAt(操作面板());
-					co_return false;
-				}
-			}
-			const MainPageP child;
-			child.Self(child);
-			child.Parent(self.get());
-			child.Root(root.get());
-			child.Header(NAME);
-			const UIElementCollection path = child.Path();
-			for (UIElement CR item : 路径().Children())
-				path.Append(item.as<BreadcrumbItem>().Clone(child));
-			path.Append(BreadcrumbItemP(child, child));
-			children.emplace(NAME, child);
-			const TheoremPanelP panel;
-			const TheoremP th(container, self.get());
-			th.Self(th);
-			th.Init(ObjP::Clone(obj, panel, child), ID);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"Assume \u200B"));
-				items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
-					{
-						if (child.Position())
-							child.Display();
-						else
-							GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-					}));
-				items.Append(RegularText(L" \u200B"));
-				items.Append(th);
-				items.Append(RegularText(L" \u200B"));
-				for (UIElement CR item : ObjP::Generate(obj))
-					items.Append(item);
-			}
-			container.Text(wstring(L"Assume ").append(hstring(NAME)).append(L" ").append(hstring(ID)).append(L" ").append(hstring(p)));
-			主面板().Children().Append(container);
-			root.get().Focus(child);
-			{
-				const TheoremP tth(panel, child);
-				tth.Self(tth);
-				tth.Init2(th);
-				panel.Name(tth);
-				child.InitAsAssume(tth, panel);
-			}
-			const OperationP operation(OperationCategory::Assume);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(NAME);
-				contents.Append(ID);
-				contents.Append(p);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-			co_return true;
-		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationArbitraryObject(param::hstring CR NAME, param::hstring CR name, param::hstring CR t, bool CR redo)
-	{
-		if (!CheckScopeName(NAME) || !CheckObjectName(name))
-			co_return false;
-		const ExpressionContainerP container;
-		if (const TypeP tp = MakeType(t, container))
-		{
-			const MainPageP child;
-			child.Self(child);
-			child.Parent(self.get());
-			child.Root(root.get());
-			child.Header(NAME);
-			const UIElementCollection path = child.Path();
-			for (UIElement CR item : 路径().Children())
-				path.Append(item.as<BreadcrumbItem>().Clone(child));
-			path.Append(BreadcrumbItemP(child, child));
-			children.emplace(NAME, child);
-			const ObjP param(container, self.get());
-			param.Self(param);
-			param.InitAsParameter(tp, name);
-			child.InitAsArbitraryO(param);
-			{
-				const UIElementCollection items = container.Items();
-				items.Append(RegularText(L"ArbitraryObject \u200B"));
-				items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
-					{
-						if (child.Position())
-							child.Display();
-						else
-							GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-					}));
-				items.Append(RegularText(L" \u200B"));
-				items.Append(param);
-				items.Append(RegularText(L" \u200B"));
-				for (UIElement CR item : TypeP::Generate(tp))
-					items.Append(item);
-			}
-			container.Text(wstring(L"ArbitraryObject ").append(hstring(NAME)).append(L" ").append(hstring(name)).append(L" ").append(hstring(t)));
-			主面板().Children().Append(container);
-			root.get().Focus(child);
-			const OperationP operation(OperationCategory::ArbitraryO);
-			{
-				const IVector contents = operation.Contents();
-				contents.Append(NAME);
-				contents.Append(name);
-				contents.Append(t);
-			}
-			co_await root.get().AddOperation(operation, redo);
-			GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-			co_return true;
-		}
-		co_return false;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationArbitraryType(param::hstring CR NAME, param::hstring CR name, bool CR redo)
-	{
-		if (!CheckScopeName(NAME) || !CheckTypeName(name))
-			co_return false;
-		const MainPageP child;
-		child.Self(child);
-		child.Parent(self.get());
-		child.Root(root.get());
-		child.Header(NAME);
-		const UIElementCollection path = child.Path();
-		for (UIElement CR item : 路径().Children())
-			path.Append(item.as<BreadcrumbItem>().Clone(child));
-		path.Append(BreadcrumbItemP(child, child));
-		children.emplace(NAME, child);
-		const ExpressionContainerP container;
-		const TypeP tp(container, self.get());
-		tp.Self(tp);
-		tp.InitAsParameter(name);
-		child.InitAsArbitraryT(tp);
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"ArbitraryType \u200B"));
-			items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
-				{
-					if (child.Position())
-						child.Display();
-					else
-						GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-				}));
-			items.Append(RegularText(L" \u200B"));
-			items.Append(tp);
-		}
-		container.Text(wstring(L"ArbitraryType ").append(hstring(NAME)).append(L" ").append(hstring(name)));
-		主面板().Children().Append(container);
-		root.get().Focus(child);
-		const OperationP operation(OperationCategory::ArbitraryT);
-		{
-			const IVector contents = operation.Contents();
-			contents.Append(NAME);
-			contents.Append(name);
-		}
-		co_await root.get().AddOperation(operation, redo);
-		GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationExport(param::hstring CR ID, bool CR redo)
-	{
-		if (!theorems.InCurrent(ID) || exported.contains(ID))
-			co_return false;
-		if (!parent)
-		{
-			const Flyout flyout;
-			flyout.Content(RegularText(ResourceLoader().GetString(L"无母")));
-			flyout.ShowAt(操作面板());
-			co_return false;
-		}
-		exported.insert(ID);
-		const ExpressionContainerP container;
-		const TheoremP original = FetchTheorem(ID, container);
-		{
-			const UIElementCollection items = container.Items();
-			items.Append(RegularText(L"Export \u200B"));
-			items.Append(original);
-		}
-		container.Text(wstring(L"Export ").append(hstring(ID)));
-		主面板().Children().Append(container);
-		const TheoremPanelP panel;
-		const TheoremP th(panel, parent.get());
-		th.Self(th);
-		switch (category)
-		{
-		case ScopeCategory::Normal:
-			th.Init(RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, nullptr), ID);
-			break;
-		case ScopeCategory::Assume:
-		{
-			const ObjP choose(panel, parent.get());
-			choose.Self(choose);
-			{
-				const ObjP options(panel, parent.get());
-				options.Self(options);
-				{
-					const ObjP tr(panel, parent.get());
-					tr.Self(tr);
-					tr.InitAsTrue();
-					options.InitAsOptions(RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, nullptr), tr);
-				}
-				choose.InitAsChoose(ObjP::Clone(assumption.Definition(), panel, parent.get()), options);
-			}
-			th.Init(choose, ID);
-		}
-		break;
-		case ScopeCategory::Object:
-		{
-			const ObjP faf(panel, parent.get());
-			faf.Self(faf);
-			{
-				const ObjP df(panel, parent.get());
-				df.Self(df);
-				{
-					const ObjP param = ObjP::Clone(aO, panel, parent.get());
-					df.InitAsDeclareF(param, RemoveCurrent(original.Definition(), panel, parent.get(), param, nullptr));
-				}
-				faf.InitAsForallF(df);
-			}
-			th.Init(faf, ID);
-		}
-		break;
-		case ScopeCategory::Type:
-		{
-			const ObjP fat(panel, parent.get());
-			fat.Self(fat);
-			{
-				const ObjP dt(panel, parent.get());
-				dt.Self(dt);
-				{
-					const ObjP param(panel, parent.get());
-					param.Self(param);
-					const TypeP tp = TypeP::Clone(aT, panel, parent.get());
-					param.InitAsType(tp);
-					dt.InitAsDeclareT(param, RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, tp));
-				}
-				fat.InitAsForallT(dt);
-			}
-			th.Init(fat, ID);
-		}
-		}
-		panel.Name(th);
-		to_export.emplace_back(th, panel);
-		const OperationP operation(OperationCategory::Export);
-		operation.Contents().Append(ID);
-		co_await root.get().AddOperation(operation, redo);
-		co_return true;
-	}
-
-	IAsyncOperation<bool> MainPage::OperationExit(bool CR redo)
-	{
-		if (!parent)
-		{
-			const Flyout flyout;
-			flyout.Content(RegularText(ResourceLoader().GetString(L"无母")));
-			flyout.ShowAt(操作面板());
-			co_return false;
-		}
-		const MainPageP pa = parent.get();
-		for (auto CR[th, panel] : to_export)
-			pa.AddTheorem(th, panel);
-		root.get().Focus(pa);
-		co_await root.get().AddOperation(OperationP(OperationCategory::Exit), redo);
-		if (pa.Position())
-			pa.Display();
-		else
-			GetMainWindow[position.get()].get().ChangePage(position.get(), pa, box_value(pa.Header()));
-		co_return true;
 	}
 
 	void MainPage::RemoveObject(param::hstring CR _name)
@@ -1818,6 +698,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 1:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1828,6 +709,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				新定理名称().Focus(FocusState::Programmatic);
 				break;
 			case 2:
@@ -1839,6 +721,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 3:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1849,6 +732,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 4:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1859,6 +743,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 5:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1869,6 +754,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Visible);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 6:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1879,6 +765,7 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Visible);
 				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
 			case 7:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -1889,7 +776,18 @@ namespace winrt::Logic_Playground::implementation
 				量词操作().Visibility(Visibility::Collapsed);
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Visible);
+				直接代码().Visibility(Visibility::Collapsed);
 				break;
+			case 8:
+				别名操作().Visibility(Visibility::Collapsed);
+				复制操作().Visibility(Visibility::Collapsed);
+				函数操作().Visibility(Visibility::Collapsed);
+				等于操作().Visibility(Visibility::Collapsed);
+				选择操作().Visibility(Visibility::Collapsed);
+				量词操作().Visibility(Visibility::Collapsed);
+				范围操作().Visibility(Visibility::Collapsed);
+				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Visible);
 			default:;
 			}
 	}
@@ -1915,7 +813,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ObjectNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		物体确认().IsEnabled(CheckObjectName(hstring(RemoveIllegal(物体名称(), IsValidName))));
+		RemoveIllegal(物体名称(), IsValidName);
 	}
 
 	void MainPage::ObjectNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -1938,15 +836,20 @@ namespace winrt::Logic_Playground::implementation
 				ObjectConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ObjectConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ObjectConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationObject(物体名称().Text(), 物体表达式().Text(), false))
-			物体确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationObject(物体名称().Text(), 物体表达式().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::TypeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		类型确认().IsEnabled(CheckTypeName(hstring(RemoveIllegal(类型名称(), IsValidName))));
+		RemoveIllegal(类型名称(), IsValidName);
 	}
 
 	void MainPage::TypeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -1969,15 +872,20 @@ namespace winrt::Logic_Playground::implementation
 				TypeConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::TypeConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::TypeConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationType(类型名称().Text(), 类型表达式().Text(), false))
-			类型确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationType(类型名称().Text(), 类型表达式().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::CopyNewChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		复制确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(新定理名称()))) && theorems.Lookup(原定理名称().Text()));
+		RemoveIllegal(新定理名称());
 	}
 
 	void MainPage::CopyNewFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -1988,7 +896,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::CopyOriginalChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		复制确认().IsEnabled(CheckTheoremName(新定理名称().Text()) && theorems.Lookup(RemoveIllegal(原定理名称())));
+		RemoveIllegal(原定理名称());
 	}
 
 	void MainPage::CopyOriginalFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2000,10 +908,15 @@ namespace winrt::Logic_Playground::implementation
 				CopyConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::CopyConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::CopyConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationCopy(新定理名称().Text(), 原定理名称().Text(), false))
-			复制确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationCopy(新定理名称().Text(), 原定理名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::FTOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2027,7 +940,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::FunctionTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		函数确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(函数定理名称()))) && 函数参数名称().Text().size());
+		RemoveIllegal(函数定理名称());
 	}
 
 	void MainPage::FunctionTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2038,7 +951,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::FunctionParameterNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		函数确认().IsEnabled(CheckTheoremName(函数定理名称().Text()) && RemoveIllegal(函数参数名称(), IsValidName).size());
+		RemoveIllegal(函数参数名称(), IsValidName);
 	}
 
 	void MainPage::FunctionParameterNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2068,21 +981,26 @@ namespace winrt::Logic_Playground::implementation
 		if (args.Key() == VirtualKey::Enter)
 			if (!CheckTheoremName(函数定理名称().Text()))
 				函数定理名称().Focus(FocusState::Programmatic);
-			else if (!函数参数名称().Text().size())
+			else if (函数参数名称().Text().empty())
 				函数参数名称().Focus(FocusState::Programmatic);
 			else
 				FunctionConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::FunctionConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::FunctionConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationFunction(函数定理名称().Text(), 函数参数名称().Text(), 函数像表达式().Text(), 函数实参表达式().Text(), false))
-			函数确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationFunction(函数定理名称().Text(), 函数参数名称().Text(), 函数像表达式().Text(), 函数实参表达式().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::TemplateTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		模板确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(模板定理名称()))) && 模板参数名称().Text().size());
+		RemoveIllegal(模板定理名称());
 	}
 
 	void MainPage::TemplateTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2093,7 +1011,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::TemplateParameterNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		模板确认().IsEnabled(CheckTheoremName(模板定理名称().Text()) && RemoveIllegal(模板参数名称(), IsValidName).size());
+		RemoveIllegal(模板参数名称(), IsValidName);
 	}
 
 	void MainPage::TemplateParameterNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2123,16 +1041,21 @@ namespace winrt::Logic_Playground::implementation
 		if (args.Key() == VirtualKey::Enter)
 			if (!CheckTheoremName(模板定理名称().Text()))
 				模板定理名称().Focus(FocusState::Programmatic);
-			else if (!模板参数名称().Text().size())
+			else if (模板参数名称().Text().empty())
 				模板参数名称().Focus(FocusState::Programmatic);
 			else
 				TemplateConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::TemplateConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::TemplateConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationTemplate(模板定理名称().Text(), 模板参数名称().Text(), 模板像表达式().Text(), 模板实参表达式().Text(), false))
-			模板确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationTemplate(模板定理名称().Text(), 模板参数名称().Text(), 模板像表达式().Text(), 模板实参表达式().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EqualityOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2234,7 +1157,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EITheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EI确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EI定理名称()))));
+		RemoveIllegal(EI定理名称());
 	}
 
 	void MainPage::EITheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2257,15 +1180,20 @@ namespace winrt::Logic_Playground::implementation
 				EIConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EIConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EIConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEI(EI定理名称().Text(), EI对象名称().Text(), false))
-			EI确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEI(EI定理名称().Text(), EI对象名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EIBTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIB确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EIB定理名称()))) && theorems.Lookup(EIB依据名称().Text()));
+		RemoveIllegal(EIB定理名称());
 	}
 
 	void MainPage::EIBTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2276,7 +1204,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EIBReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIB确认().IsEnabled(CheckTheoremName(EIB定理名称().Text()) && theorems.Lookup(RemoveIllegal(EIB依据名称())));
+		RemoveIllegal(EIB依据名称());
 	}
 
 	void MainPage::EIBReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2288,15 +1216,20 @@ namespace winrt::Logic_Playground::implementation
 				EIBConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EIBConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EIBConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEIB(EIB定理名称().Text(), EIB依据名称().Text(), false))
-			EIB确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEIB(EIB定理名称().Text(), EIB依据名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EIFTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIF确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EIF定理名称()))) && theorems.Lookup(EIF依据名称().Text()));
+		RemoveIllegal(EIF定理名称());
 	}
 
 	void MainPage::EIFTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2307,7 +1240,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EIFReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIF确认().IsEnabled(CheckTheoremName(EIF定理名称().Text()) && theorems.Lookup(RemoveIllegal(EIF依据名称())));
+		RemoveIllegal(EIF依据名称());
 	}
 
 	void MainPage::EIFReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2319,15 +1252,20 @@ namespace winrt::Logic_Playground::implementation
 				EIFConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EIFConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EIFConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEIF(EIF定理名称().Text(), EIF依据名称().Text(), false))
-			EIF确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEIF(EIF定理名称().Text(), EIF依据名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EITTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIT确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EIT定理名称()))) && theorems.Lookup(EIT依据名称().Text()));
+		RemoveIllegal(EIT定理名称());
 	}
 
 	void MainPage::EITTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2338,7 +1276,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EITReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EIT确认().IsEnabled(CheckTheoremName(EIT定理名称().Text()) && theorems.Lookup(RemoveIllegal(EIT依据名称())));
+		RemoveIllegal(EIT依据名称());
 	}
 
 	void MainPage::EITReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2350,15 +1288,20 @@ namespace winrt::Logic_Playground::implementation
 				EITConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EITConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EITConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEIT(EIT定理名称().Text(), EIT依据名称().Text(), false))
-			EIT确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEIT(EIT定理名称().Text(), EIT依据名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EETheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EE确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EE定理名称()))) && theorems.Lookup(EE依据名称().Text()));
+		RemoveIllegal(EE定理名称());
 	}
 
 	void MainPage::EETheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2369,7 +1312,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EEReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EE确认().IsEnabled(CheckTheoremName(EE定理名称().Text()) && theorems.Lookup(RemoveIllegal(EE依据名称())));
+		RemoveIllegal(EE依据名称());
 	}
 
 	void MainPage::EEReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2394,15 +1337,20 @@ namespace winrt::Logic_Playground::implementation
 				EEConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EEConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EEConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEE(EE定理名称().Text(), EE依据名称().Text(), EE函数().Text(), false))
-			EE确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEE(EE定理名称().Text(), EE依据名称().Text(), EE函数().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::EEBTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EEB确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(EEB定理名称()))) && theorems.Lookup(EEB依据名称().Text()));
+		RemoveIllegal(EEB定理名称());
 	}
 
 	void MainPage::EEBTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2413,7 +1361,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::EEBReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		EEB确认().IsEnabled(CheckTheoremName(EEB定理名称().Text()) && theorems.Lookup(RemoveIllegal(EEB依据名称())));
+		RemoveIllegal(EEB依据名称());
 	}
 
 	void MainPage::EEBReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2425,15 +1373,20 @@ namespace winrt::Logic_Playground::implementation
 				EEBConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::EEBConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::EEBConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationEEB(EEB定理名称().Text(), EEB依据名称().Text(), false))
-			EEB确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationEEB(EEB定理名称().Text(), EEB依据名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ETTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		ET确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(ET定理名称()))) && theorems.Lookup(ETidA().Text()) && theorems.Lookup(ETidB().Text()));
+		RemoveIllegal(ET定理名称());
 	}
 
 	void MainPage::ETTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2444,7 +1397,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ETidAChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		ET确认().IsEnabled(CheckTheoremName(ET定理名称().Text()) && theorems.Lookup(RemoveIllegal(ETidA())) && theorems.Lookup(ETidB().Text()));
+		RemoveIllegal(ETidA());
 	}
 
 	void MainPage::ETidAFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2455,7 +1408,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ETidBChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		ET确认().IsEnabled(CheckTheoremName(ET定理名称().Text()) && theorems.Lookup(ETidA().Text()) && theorems.Lookup(RemoveIllegal(ETidB())));
+		RemoveIllegal(ETidB());
 	}
 
 	void MainPage::ETidBFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2471,15 +1424,20 @@ namespace winrt::Logic_Playground::implementation
 				ETConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ETConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ETConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationET(ET定理名称().Text(), ETidA().Text(), ETidB().Text(), false))
-			ET确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationET(ET定理名称().Text(), ETidA().Text(), ETidB().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ERTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		ER确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(ER定理名称()))) && theorems.Lookup(ER依据名称().Text()));
+		RemoveIllegal(ER定理名称());
 	}
 
 	void MainPage::ERTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2490,7 +1448,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ERReasonNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		ER确认().IsEnabled(CheckTheoremName(ER定理名称().Text()) && theorems.Lookup(RemoveIllegal(ER依据名称())));
+		RemoveIllegal(ER依据名称());
 	}
 
 	void MainPage::ERReasonNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2502,10 +1460,15 @@ namespace winrt::Logic_Playground::implementation
 				ERConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ERConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ERConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationER(ER定理名称().Text(), ER依据名称().Text(), false))
-			ER确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationER(ER定理名称().Text(), ER依据名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ChoicesOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2547,7 +1510,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C0IDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C0确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(C0ID()))) && theorems.Lookup(C0id().Text()));
+		RemoveIllegal(C0ID());
 	}
 
 	void MainPage::C0IDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2558,7 +1521,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C0idChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C0确认().IsEnabled(CheckTheoremName(C0ID().Text()) && theorems.Lookup(RemoveIllegal(C0id())));
+		RemoveIllegal(C0id());
 	}
 
 	void MainPage::C0idFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2594,15 +1557,20 @@ namespace winrt::Logic_Playground::implementation
 				C0Confirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::C0Confirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::C0Confirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationC0(C0ID().Text(), C0id().Text(), C0a().Text(), C0b().Text(), false))
-			C0确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationC0(C0ID().Text(), C0id().Text(), C0a().Text(), C0b().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::C1IDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C1确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(C1ID()))) && theorems.Lookup(C1id().Text()));
+		RemoveIllegal(C1ID());
 	}
 
 	void MainPage::C1IDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2613,7 +1581,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C1idChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C1确认().IsEnabled(CheckTheoremName(C1ID().Text()) && theorems.Lookup(RemoveIllegal(C1id())));
+		RemoveIllegal(C1id());
 	}
 
 	void MainPage::C1idFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2649,15 +1617,20 @@ namespace winrt::Logic_Playground::implementation
 				C1Confirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::C1Confirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::C1Confirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationC1(C1ID().Text(), C1id().Text(), C1a().Text(), C1b().Text(), false))
-			C1确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationC1(C1ID().Text(), C1id().Text(), C1a().Text(), C1b().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::C2IDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C2确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(C2ID()))) && theorems.Lookup(C2idA().Text()) && theorems.Lookup(C2idB().Text()));
+		RemoveIllegal(C2ID());
 	}
 
 	void MainPage::C2IDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2668,7 +1641,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C2idAChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C2确认().IsEnabled(CheckTheoremName(C2ID().Text()) && theorems.Lookup(RemoveIllegal(C2idA())) && theorems.Lookup(C2idB().Text()));
+		RemoveIllegal(C2idA());
 	}
 
 	void MainPage::C2idAFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2679,7 +1652,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C2idBChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C2确认().IsEnabled(CheckTheoremName(C2ID().Text()) && theorems.Lookup(C2idA().Text()) && theorems.Lookup(RemoveIllegal(C2idB())));
+		RemoveIllegal(C2idB());
 	}
 
 	void MainPage::C2idBFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2693,15 +1666,20 @@ namespace winrt::Logic_Playground::implementation
 				C2Confirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::C2Confirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::C2Confirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationC2(C2ID().Text(), C2idA().Text(), C2idB().Text(), false))
-			C2确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationC2(C2ID().Text(), C2idA().Text(), C2idB().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::C3IDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C3确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(C3ID()))) && theorems.Lookup(C3id().Text()));
+		RemoveIllegal(C3ID());
 	}
 
 	void MainPage::C3IDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2712,7 +1690,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::C3idChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		C3确认().IsEnabled(CheckTheoremName(C3ID().Text()) && theorems.Lookup(RemoveIllegal(C3id())));
+		RemoveIllegal(C3id());
 	}
 
 	void MainPage::C3idFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2724,10 +1702,15 @@ namespace winrt::Logic_Playground::implementation
 				C3Confirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::C3Confirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::C3Confirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationC3(C3ID().Text(), C3id().Text(), false))
-			C3确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationC3(C3ID().Text(), C3id().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::UQOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2751,7 +1734,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::UFIDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		UF确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(UFID()))) && theorems.Lookup(UFid().Text()));
+		RemoveIllegal(UFID());
 	}
 
 	void MainPage::UFIDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2762,7 +1745,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::UFidChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		UF确认().IsEnabled(CheckTheoremName(UFID().Text()) && theorems.Lookup(RemoveIllegal(UFid())));
+		RemoveIllegal(UFid());
 	}
 
 	void MainPage::UFidFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2787,15 +1770,20 @@ namespace winrt::Logic_Playground::implementation
 				UFConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::UFConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::UFConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationUF(UFID().Text(), UFid().Text(), UFa().Text(), false))
-			UF确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationUF(UFID().Text(), UFid().Text(), UFa().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::UTIDChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		UT确认().IsEnabled(CheckTheoremName(hstring(RemoveIllegal(UTID()))) && theorems.Lookup(UTid().Text()));
+		RemoveIllegal(UTID());
 	}
 
 	void MainPage::UTIDFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2806,7 +1794,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::UTidChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		UT确认().IsEnabled(CheckTheoremName(UTID().Text()) && theorems.Lookup(RemoveIllegal(UTid())));
+		RemoveIllegal(UTid());
 	}
 
 	void MainPage::UTidFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2831,10 +1819,15 @@ namespace winrt::Logic_Playground::implementation
 				UTConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::UTConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::UTConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationUT(UTID().Text(), UTid().Text(), UTt().Text(), false))
-			UT确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationUT(UTID().Text(), UTid().Text(), UTt().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ScopeOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2901,7 +1894,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ScopeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		范围确认().IsEnabled(CheckScopeName(hstring(RemoveIllegal(范围名称()))));
+		RemoveIllegal(范围名称());
 	}
 
 	void MainPage::ScopeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2910,15 +1903,20 @@ namespace winrt::Logic_Playground::implementation
 			ScopeConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ScopeConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ScopeConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationScope(范围名称().Text(), false))
-			范围确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationScope(范围名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::AssumeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		假设确认().IsEnabled(CheckScopeName(hstring(RemoveIllegal(假设名称()))) && CheckTheoremName(假设定理名称().Text()));
+		RemoveIllegal(假设名称());
 	}
 
 	void MainPage::AssumeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2929,7 +1927,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::AssumeTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		假设确认().IsEnabled(CheckScopeName(假设名称().Text()) && CheckTheoremName(hstring(RemoveIllegal(假设定理名称()))));
+		RemoveIllegal(假设定理名称());
 	}
 
 	void MainPage::AssumeTheoremNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2954,15 +1952,20 @@ namespace winrt::Logic_Playground::implementation
 				AssumeConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::AssumeConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::AssumeConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationAssume(假设名称().Text(), 假设定理名称().Text(), 假设定理().Text(), false))
-			假设确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationAssume(假设名称().Text(), 假设定理名称().Text(), 假设定理().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ArbitraryObjectScopeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		任意物体确认().IsEnabled(CheckScopeName(hstring(RemoveIllegal(任意物体范围名称()))) && CheckObjectName(任意物体名称().Text()));
+		RemoveIllegal(任意物体范围名称());
 	}
 
 	void MainPage::ArbitraryObjectScopeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2973,7 +1976,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ArbitraryObjectNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		任意物体确认().IsEnabled(CheckScopeName(任意物体范围名称().Text()) && CheckObjectName(hstring(RemoveIllegal(任意物体名称(), IsValidName))));
+		RemoveIllegal(任意物体名称(), IsValidName);
 	}
 
 	void MainPage::ArbitraryObjectNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -2998,15 +2001,20 @@ namespace winrt::Logic_Playground::implementation
 				ArbitraryObjectConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ArbitraryObjectConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ArbitraryObjectConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationArbitraryObject(任意物体范围名称().Text(), 任意物体名称().Text(), 任意物体类型().Text(), false))
-			任意物体确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationArbitraryObject(任意物体范围名称().Text(), 任意物体名称().Text(), 任意物体类型().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ArbitraryTypeScopeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		任意类型确认().IsEnabled(CheckScopeName(hstring(RemoveIllegal(任意类型范围名称()))) && CheckTypeName(任意类型名称().Text()));
+		RemoveIllegal(任意类型范围名称());
 	}
 
 	void MainPage::ArbitraryTypeScopeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -3017,7 +2025,7 @@ namespace winrt::Logic_Playground::implementation
 
 	void MainPage::ArbitraryTypeNameChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		任意类型确认().IsEnabled(CheckScopeName(任意类型范围名称().Text()) && CheckTypeName(hstring(RemoveIllegal(任意类型名称(), IsValidName))));
+		RemoveIllegal(任意类型名称(), IsValidName);
 	}
 
 	void MainPage::ArbitraryTypeNameFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -3029,16 +2037,20 @@ namespace winrt::Logic_Playground::implementation
 				ArbitraryTypeConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ArbitraryTypeConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ArbitraryTypeConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationArbitraryType(任意类型范围名称().Text(), 任意类型名称().Text(), false))
-			任意类型确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationArbitraryType(任意类型范围名称().Text(), 任意类型名称().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ExportTheoremChanged(IInspectable CR, TextChangedEventArgs CR)
 	{
-		const hstring text(RemoveIllegal(导出定理()));
-		导出确认().IsEnabled(theorems.InCurrent(text) && !exported.contains(text));
+		RemoveIllegal(导出定理());
 	}
 
 	void MainPage::ExportTheoremFinished(IInspectable CR, KeyRoutedEventArgs CR args)
@@ -3047,16 +2059,26 @@ namespace winrt::Logic_Playground::implementation
 			ExportConfirm(nullptr, nullptr);
 	}
 
-	fire_and_forget MainPage::ExportConfirm(IInspectable CR, RoutedEventArgs CR)
+	void MainPage::ExportConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
-		if (CheckStatus() && co_await OperationExport(导出定理().Text(), false))
-			导出确认().IsEnabled(false);
+		if (CheckStatus())
+			if (const OperationP operation = OperationExport(导出定理().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::ExitConfirm(IInspectable CR, RoutedEventArgs CR)
 	{
 		if (CheckStatus())
-			OperationExit(false);
+			if (const OperationP operation = OperationExit())
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
 	}
 
 	fire_and_forget MainPage::ImportClick(IInspectable CR, RoutedEventArgs CR)
@@ -3069,7 +2091,17 @@ namespace winrt::Logic_Playground::implementation
 			for (PickFileResult CR result : co_await picker.PickMultipleFilesAsync())
 				try
 			{
+				const ContentDialog dialog;
+				dialog.XamlRoot(XamlRoot());
+				dialog.Title(box_value(ResourceLoader().GetString(L"请稍候……")));
+				dialog.ShowAsync();
+				{
+					const apartment_context ui;
+					co_await resume_after(114514us);
+					co_await ui;
+				}
 				root.get().ReadContent(co_await FileIO::ReadTextAsync(co_await StorageFile::GetFileFromPathAsync(result.Path())));
+				dialog.Hide();
 			}
 			catch (...)
 			{
@@ -3086,39 +2118,64 @@ namespace winrt::Logic_Playground::implementation
 		}
 	}
 
+	void MainPage::CodeKeyDown(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CodeConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::CodeConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+			if (OperationP CR operation = ParseOperation(代码().Text()))
+			{
+				root.get().AddOperationS(operation);
+				return;
+			}
+		error_flyout.ShowAt(操作面板());
+	}
+
 	bool MainPage::CheckObjectName(hstring CR s) const
 	{
-		return s.size() && !objects.Lookup(s);
+		return !s.empty() && !objects.Lookup(s);
 	}
 
 	bool MainPage::CheckTypeName(hstring CR s) const
 	{
-		return s.size() && !types.Lookup(s);
+		return !s.empty() && !types.Lookup(s);
 	}
 
 	bool MainPage::CheckTheoremName(hstring CR s) const
 	{
-		return s.size() && !theorems.Lookup(s);
+		return !s.empty() && !theorems.Lookup(s);
 	}
 
 	bool MainPage::CheckScopeName(hstring CR s) const
 	{
-		return s.size() && !children.contains(s);
+		return !s.empty() && !children.contains(s);
 	}
 
-	bool MainPage::CheckStatus()
+	bool MainPage::CheckStatus() const
 	{
 		if (root.get().Focus() != self.get())
 		{
-			const Flyout flyout;
-			flyout.Content(RegularText(ResourceLoader().GetString(L"非焦点")));
-			flyout.ShowAt(操作面板());
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"非焦点")));
 			return false;
 		}
 		return true;
 	}
 
-	wstring MainPage::RemoveIllegal(TextBox CR box)
+	bool MainPage::IsValidName(wchar_t CR ch)
+	{
+		return ch > L' ' && ch != L'~' && ch != L'`' && ch != L'!' && ch != L'@' && ch != L'#' && ch != L'=' && ch != L'?' && ch != L':' && ch != L'(' && ch != L')';
+	}
+
+	bool MainPage::IsValidTypeExpression(wchar_t CR ch)
+	{
+		return ch > L' ' && ch != L'!' && ch != L'@' && ch != L'#' && ch != L'=' && ch != L'?' && ch != L':';
+	}
+
+	void MainPage::RemoveIllegal(TextBox CR box)
 	{
 		wstring s(box.Text());
 		int32_t pos(box.SelectionStart());
@@ -3133,10 +2190,9 @@ namespace winrt::Logic_Playground::implementation
 				++it;
 		box.Text(s);
 		box.SelectionStart(pos);
-		return s;
 	}
 
-	wstring MainPage::RemoveIllegal(TextBox CR box, auto CR check)
+	void MainPage::RemoveIllegal(TextBox CR box, auto CR check)
 	{
 		wstring s(box.Text());
 		int32_t pos(box.SelectionStart());
@@ -3151,7 +2207,1573 @@ namespace winrt::Logic_Playground::implementation
 				++it;
 		box.Text(s);
 		box.SelectionStart(pos);
-		return s;
+	}
+
+	OperationP MainPage::MakeOperation(OperationCategory CR _category, const initializer_list<hstring> _contents)
+	{
+		const OperationP operation(_category);
+		for (hstring CR content : _contents)
+			operation.Contents().Append(content);
+		return operation;
+	}
+
+	OperationP MainPage::OperationObject(param::hstring CR _name, param::hstring CR _expression)
+	{
+		if (!CheckObjectName(_name))
+		{
+			ObjectNameExist(_name);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const ObjP value = MakeObject(_expression, container))
+		{
+			const ObjP declaration(container, self.get());
+			declaration.Self(declaration);
+			declaration.InitAsAlias(value, _name);
+			objects.Insert(_name, declaration);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(declaration);
+				items.Append(ObjectDefinition());
+				for (UIElement CR item : ObjP::Generate(value))
+					items.Append(item);
+			}
+			container.Text(wstring(L"Object ").append(L" ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
+			主面板().Children().Append(container);
+			return MakeOperation(OperationCategory::Object, { _name, _expression });
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationType(param::hstring CR _name, param::hstring CR _expression)
+	{
+		if (!CheckTypeName(_name))
+		{
+			TypeNameExist(_name);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const TypeP value = MakeType(_expression, container))
+		{
+			const TypeP declaration(container, self.get());
+			declaration.Self(declaration);
+			declaration.InitAsAlias(value, _name);
+			types.Insert(_name, declaration);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(declaration);
+				items.Append(TypeDefinition());
+				for (UIElement CR item : TypeP::Generate(value))
+					items.Append(item);
+			}
+			container.Text(wstring(L"Type ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
+			主面板().Children().Append(container);
+			return MakeOperation(OperationCategory::Type, { _name, _expression });
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationCopy(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		const TheoremP original = FetchTheorem(id, container);
+		const TheoremPanelP panel;
+		const TheoremP th(container, self.get());
+		th.Self(th);
+		th.Init(ObjP::Clone(original.Definition(), panel, self.get()), ID);
+		theorems.Insert(ID, th);
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"Copy \u200B"));
+			items.Append(th);
+			items.Append(RegularText(L" \u200B"));
+			items.Append(original);
+		}
+		container.Text(wstring(L"Copy ").append(hstring(id)).append(L" ").append(hstring(id)));
+		主面板().Children().Append(container);
+		{
+			const TheoremP tth(panel, self.get());
+			tth.Self(tth);
+			tth.Init2(th);
+			panel.Name(tth);
+		}
+		主面板().Children().Append(panel);
+		return MakeOperation(OperationCategory::Copy, { ID, id });
+	}
+
+	OperationP MainPage::OperationFunction(param::hstring CR ID, param::hstring CR _param, param::hstring CR _image, param::hstring CR _arg)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (hstring(_param).empty())
+		{
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"EmptyParameterName")));
+			return nullptr;
+		}
+		const ExpressionContainer container;
+		if (const ObjP argument = MakeObject(_arg, container))
+		{
+			const ObjP param(container, self.get());
+			param.Self(param);
+			param.InitAsParameter(Type::Clone(argument.MyType(), container, self.get()), _param);
+			{
+				const LinkedMapP current;
+				current.Parent(objects);
+				(objects = current).Insert(_param, param);
+				const LinkedMapP ph;
+				ph.Parent(types);
+				types = ph;
+			}
+			if (const ObjP image = MakeObject(_image, container))
+			{
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP equal(panel, self.get());
+					equal.Self(equal);
+					{
+						const ObjP func(panel, self.get());
+						func.Self(func);
+						{
+							const ObjP pparam = ObjP::Clone(param, panel, self.get());
+							func.InitAsDeclareF(pparam, RemoveCurrent(image, panel, self.get(), pparam, nullptr));
+						}
+						objects = objects.Parent(), types = types.Parent();
+						const ObjP apply(panel, self.get());
+						apply.Self(apply);
+						apply.InitAsApplyF(func, ObjP::Clone(argument, panel, self.get()));
+						if (const ObjP ooo = ObjP::ApplyFunction(func, argument, panel, self.get()))
+							equal.InitAsEqual(apply, ooo);
+						else
+						{
+							error_flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
+							return nullptr;
+						}
+					}
+					th.Init(equal, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"Function \u200B"));
+					items.Append(param);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(image))
+						items.Append(item);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(argument))
+						items.Append(item);
+				}
+				container.Text(wstring(L"Function ").append(hstring(_param)).append(L" ").append(hstring(_image)).append(L" ").append(hstring(_arg)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::Function, { ID, _param, _image, _arg });
+			}
+			objects = objects.Parent(), types = types.Parent();
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationTemplate(param::hstring CR ID, param::hstring CR _param, param::hstring CR _image, param::hstring CR _arg)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (hstring(_param).empty())
+		{
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"EmptyParameterName")));
+			return nullptr;
+		}
+		const ExpressionContainer container;
+		if (const TypeP aaa = MakeType(_arg, container))
+		{
+			const ObjP argument(container, self.get());
+			argument.Self(argument);
+			argument.InitAsType(aaa);
+			const TypeP tp(container, self.get());
+			tp.Self(tp);
+			tp.InitAsParameter(_param);
+			const ObjP param(container, self.get());
+			param.Self(param);
+			param.InitAsType(tp);
+			{
+				const LinkedMapP current;
+				current.Parent(types);
+				(types = current).Insert(_param, tp);
+				const LinkedMapP ph;
+				ph.Parent(objects);
+				objects = ph;
+			}
+			if (const ObjP image = MakeObject(_image, container))
+			{
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP equal(panel, self.get());
+					equal.Self(equal);
+					{
+						const ObjP temp(panel, self.get());
+						temp.Self(temp);
+						{
+							const TypeP ttp = TypeP::Clone(tp, panel, self.get());
+							const ObjP pparam(panel, self.get());
+							pparam.Self(pparam);
+							pparam.InitAsType(ttp);
+							temp.InitAsDeclareT(pparam, RemoveCurrent(image, panel, self.get(), nullptr, ttp));
+						}
+						types = types.Parent(), objects = objects.Parent();
+						const ObjP apply(panel, self.get());
+						apply.Self(apply);
+						apply.InitAsApplyT(temp, ObjP::Clone(argument, panel, self.get()));
+						if (const ObjP ooo = ObjP::ApplyTemplate(temp, aaa, panel, self.get()))
+							equal.InitAsEqual(apply, ooo);
+						else
+						{
+							error_flyout.Content(RegularText(ResourceLoader().GetString(L"冲突")));
+							return nullptr;
+						}
+					}
+					th.Init(equal, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"Template \u200B"));
+					items.Append(tp);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(image))
+						items.Append(item);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : TypeP::Generate(aaa))
+						items.Append(item);
+				}
+				container.Text(wstring(L"Template ").append(hstring(_param)).append(L" ").append(hstring(_image)).append(L" ").append(hstring(_arg)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::Template, { ID, _param, _image, _arg });
+			}
+			types = types.Parent(), objects = objects.Parent();
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationEI(param::hstring CR ID, param::hstring CR a)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		const ExpressionContainer container;
+		if (const ObjP obj = MakeObject(a, container))
+		{
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			{
+				const ObjP equal(panel, self.get());
+				equal.Self(equal);
+				equal.InitAsEqual(ObjP::Clone(obj, panel, self.get()), ObjP::Clone(obj, panel, self.get()));
+				th.Init(equal, ID);
+			}
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"EI \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				for (UIElement CR item : ObjP::Generate(obj))
+					items.Append(item);
+			}
+			container.Text(wstring(L"EI ").append(hstring(ID)).append(L" ").append(hstring(a)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::EI, { ID, a });
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationEIB(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		const TheoremP original = FetchTheorem(id, container);
+		const TheoremPanelP panel;
+		const TheoremP th(container, self.get());
+		th.Self(th);
+		{
+			const ObjP equal(panel, self.get());
+			equal.Self(equal);
+			{
+				const ObjP tr(panel, self.get());
+				tr.Self(tr);
+				tr.InitAsTrue();
+				equal.InitAsEqual(ObjP::Clone(original.Definition(), panel, self.get()), tr);
+			}
+			th.Init(equal, ID);
+		}
+		theorems.Insert(ID, th);
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"EIB \u200B"));
+			items.Append(th);
+			items.Append(RegularText(L" \u200B"));
+			items.Append(original);
+		}
+		container.Text(wstring(L"EIB ").append(hstring(ID)).append(L" ").append(hstring(id)));
+		主面板().Children().Append(container);
+		{
+			const TheoremP tth(panel, self.get());
+			tth.Self(tth);
+			tth.Init2(th);
+			panel.Name(tth);
+		}
+		主面板().Children().Append(panel);
+		return MakeOperation(OperationCategory::EIB, { ID, id });
+	}
+
+	OperationP MainPage::OperationEIF(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallF)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::DeclareF)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			ObjP now = current.Left();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::ApplyF)
+				goto Error;
+			const ObjP a = now.Left();
+			now = now.Right();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::Parameter)
+				goto Error;
+			now = current.Right();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::ApplyF)
+				goto Error;
+			const ObjP b = now.Left();
+			now = now.Right();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::Parameter)
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			{
+				const ObjP equal(panel, self.get());
+				equal.Self(equal);
+				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(b, panel, self.get()));
+				th.Init(equal, ID);
+			}
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"EIF \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(original);
+			}
+			container.Text(wstring(L"EIF ").append(hstring(ID)).append(L" ").append(hstring(id)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::EIF, { ID, id });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationEIT(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallT)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::DeclareT)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			ObjP now = current.Left();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::ApplyT)
+				goto Error;
+			const ObjP a = now.Left();
+			now = now.Right();
+			if (now.Category() != ObjectCategory::Type || now.MyType().Category() != TypeCategory::Parameter)
+				goto Error;
+			now = current.Right();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::ApplyT)
+				goto Error;
+			const ObjP b = now.Left();
+			now = now.Right();
+			if (now.Category() != ObjectCategory::Type || now.MyType().Category() != TypeCategory::Parameter)
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			{
+				const ObjP equal(panel, self.get());
+				equal.Self(equal);
+				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(b, panel, self.get()));
+				th.Init(equal, ID);
+			}
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"EIT \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(original);
+			}
+			container.Text(wstring(L"EIT ").append(hstring(ID)).append(L" ").append(hstring(id)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::EIT, { ID, id });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationEE(param::hstring CR ID, param::hstring CR id, param::hstring CR f)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			const ObjP a = current.Left(), b = current.Right();
+			if (const ObjP func = MakeObject(f, container))
+			{
+				current = func;
+				while ((cat = current.Category()) == ObjectCategory::Alias)
+					current = current.Right();
+				if (cat != ObjectCategory::DeclareF)
+					goto Error;
+				if (!Type::Equal(a.MyType(), current.Left().MyType()))
+					goto Error;
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP equal(panel, self.get());
+					equal.Self(equal);
+					{
+						const ObjP lf(panel, self.get());
+						lf.Self(lf);
+						lf.InitAsApplyF(ObjP::Clone(func, panel, self.get()), ObjP::Clone(a, panel, self.get()));
+						const ObjP rt(panel, self.get());
+						rt.Self(rt);
+						rt.InitAsApplyF(ObjP::Clone(func, panel, self.get()), ObjP::Clone(b, panel, self.get()));
+						equal.InitAsEqual(lf, rt);
+					}
+					th.Init(equal, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"EE \u200B"));
+					items.Append(th);
+					items.Append(RegularText(L" \u200B"));
+					items.Append(original);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(func))
+						items.Append(item);
+				}
+				container.Text(wstring(L"EE ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(f)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::EE, { ID, id, f });
+			}
+			return nullptr;
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationEEB(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			const ObjP a = current.Left();
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::True)
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			th.Init(ObjP::Clone(a, panel, self.get()), ID);
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"EEB \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(original);
+			}
+			container.Text(wstring(L"EEB ").append(hstring(ID)).append(L" ").append(hstring(id)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::EEB, { ID, id });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationET(param::hstring CR ID, param::hstring CR idA, param::hstring CR idB)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(idA))
+		{
+			TheoremNotFound(idA);
+			return nullptr;
+		}
+		if (!theorems.Lookup(idB))
+		{
+			TheoremNotFound(idB);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP originalA = FetchTheorem(idA, container), originalB = FetchTheorem(idB, container);
+			ObjP current = originalA.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			const ObjP a = current.Left(), b = current.Right();
+			current = originalB.Definition();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal || !ObjP::Equal(b, current.Left()))
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			{
+				const ObjP equal;
+				equal.Self(equal);
+				equal.InitAsEqual(ObjP::Clone(a, panel, self.get()), ObjP::Clone(current.Right(), panel, self.get()));
+				th.Init(equal, ID);
+			}
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"ET \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(originalA);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(originalB);
+			}
+			container.Text(wstring(L"ET ").append(hstring(ID)).append(L" ").append(hstring(idA)).append(L" ").append(hstring(idB)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::ET, { ID, idA, idB });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationER(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		const TheoremP original = FetchTheorem(id, container);
+		ObjP current = original.Definition();
+		ObjectCategory cat;
+		while ((cat = current.Category()) == ObjectCategory::Alias)
+			current = current.Right();
+		if (cat != ObjectCategory::Equal)
+		{
+			InvalidReason();
+			return nullptr;
+		}
+		const TheoremPanelP panel;
+		const TheoremP th(container, self.get());
+		th.Self(th);
+		{
+			const ObjP equal;
+			equal.Self(equal);
+			equal.InitAsEqual(ObjP::Clone(current.Right(), panel, self.get()), ObjP::Clone(current.Left(), panel, self.get()));
+			th.Init(equal, ID);
+		}
+		theorems.Insert(ID, th);
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"ER \u200B"));
+			items.Append(th);
+			items.Append(RegularText(L" \u200B"));
+			items.Append(original);
+		}
+		container.Text(wstring(L"ER ").append(hstring(ID)).append(L" ").append(hstring(id)));
+		主面板().Children().Append(container);
+		{
+			const TheoremP tth(panel, self.get());
+			tth.Self(tth);
+			tth.Init2(th);
+			panel.Name(tth);
+		}
+		主面板().Children().Append(panel);
+		return MakeOperation(OperationCategory::ER, { ID, id });
+	}
+
+	OperationP MainPage::OperationC0(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const ObjP oa = MakeObject(a, container))
+			if (const ObjP ob = MakeObject(b, container))
+			{
+				if (!TypeP::Equal(oa.MyType(), ob.MyType()))
+				{
+					InvalidReason();
+					return nullptr;
+				}
+				const TheoremP original = FetchTheorem(id, container);
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP equal(panel, self.get());
+					equal.Self(equal);
+					{
+						const ObjP choose(panel, self.get());
+						choose.Self(choose);
+						{
+							const ObjP options(panel, self.get());
+							options.Self(options);
+							options.InitAsOptions(ObjP::Clone(oa, panel, self.get()), ObjP::Clone(ob, panel, self.get()));
+							choose.InitAsChoose(ObjP::Clone(original.Definition(), panel, self.get()), options);
+						}
+						equal.InitAsEqual(choose, ObjP::Clone(oa, panel, self.get()));
+					}
+					th.Init(equal, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"C0 \u200B"));
+					items.Append(th);
+					items.Append(RegularText(L" \u200B"));
+					items.Append(original);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(oa))
+						items.Append(item);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(ob))
+						items.Append(item);
+				}
+				container.Text(wstring(L"C0 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::C0, { ID, id, a, b });
+			}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationC1(param::hstring CR ID, param::hstring CR id, param::hstring CR a, param::hstring CR b)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const ObjP oa = MakeObject(a, container))
+			if (const ObjP ob = MakeObject(b, container))
+			{
+				if (!TypeP::Equal(oa.MyType(), ob.MyType()))
+					goto Error;
+				const TheoremP original = FetchTheorem(id, container);
+				ObjP current = original.Definition();
+				ObjectCategory cat;
+				while ((cat = current.Category()) == ObjectCategory::Alias)
+					current = current.Right();
+				if (cat != ObjectCategory::Equal)
+					goto Error;
+				const ObjP pp = current.Left();
+				current = current.Right();
+				while ((cat = current.Category()) == ObjectCategory::Alias)
+					current = current.Right();
+				if (cat != ObjectCategory::False)
+					goto Error;
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP equal(panel, self.get());
+					equal.Self(equal);
+					{
+						const ObjP choose(panel, self.get());
+						choose.Self(choose);
+						{
+							const ObjP options(panel, self.get());
+							options.Self(options);
+							options.InitAsOptions(ObjP::Clone(oa, panel, self.get()), ObjP::Clone(ob, panel, self.get()));
+							choose.InitAsChoose(ObjP::Clone(pp, panel, self.get()), options);
+						}
+						equal.InitAsEqual(choose, ObjP::Clone(ob, panel, self.get()));
+					}
+					th.Init(equal, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"C1 \u200B"));
+					items.Append(th);
+					items.Append(RegularText(L" \u200B"));
+					items.Append(original);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(oa))
+						items.Append(item);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(ob))
+						items.Append(item);
+				}
+				container.Text(wstring(L"C1 ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)).append(L" ").append(hstring(b)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::C1, { ID, id, a, b });
+			}
+		return nullptr;
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationC2(param::hstring CR ID, param::hstring CR idA, param::hstring CR idB)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(idA))
+		{
+			TheoremNotFound(idA);
+			return nullptr;
+		}
+		if (!theorems.Lookup(idB))
+		{
+			TheoremNotFound(idB);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP originalA = FetchTheorem(idA, container), originalB = FetchTheorem(idB, container);
+			ObjP current = originalA.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Choose)
+				goto Error;
+			const ObjP pp = current.Left(), aa = current.Right().Left();
+			current = originalB.Definition();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Choose || !ObjP::Equal(current.Right().Left(), aa))
+				goto Error;
+			current = current.Left();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal || !ObjP::Equal(current.Left(), pp))
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::False)
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Init(ObjP::Clone(aa, panel, self.get()), ID);
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"C2 \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(originalA);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(originalB);
+			}
+			container.Text(wstring(L"C2 ").append(hstring(ID)).append(L" ").append(hstring(idA)).append(L" ").append(hstring(idB)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::C2, { ID, idA, idB });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationC3(param::hstring CR ID, param::hstring CR id)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Choose)
+				goto Error;
+			ObjP now = current.Right().Left();
+			while ((cat = now.Category()) == ObjectCategory::Alias)
+				now = now.Right();
+			if (cat != ObjectCategory::False)
+				goto Error;
+			current = current.Left();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			const ObjP p = current.Left();
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::False)
+				goto Error;
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			th.Init(ObjP::Clone(p, panel, self.get()), ID);
+			theorems.Insert(ID, th);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"C3 \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				items.Append(original);
+			}
+			container.Text(wstring(L"C3 ").append(hstring(ID)).append(L" ").append(hstring(id)));
+			主面板().Children().Append(container);
+			{
+				const TheoremP tth(panel, self.get());
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+			}
+			主面板().Children().Append(panel);
+			return MakeOperation(OperationCategory::C3, { ID, id });
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationUF(param::hstring CR ID, param::hstring CR id, param::hstring CR a)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallF)
+				goto Error;
+			if (const ObjP obj = MakeObject(a, container))
+			{
+				const ObjP f = current.Right();
+				{
+					TypeP cc = f.MyType();
+					while (cc.Category() == TypeCategory::Alias)
+						cc = cc.Right();
+					if (!Type::Equal(cc.Left(), obj.MyType()))
+						goto Error;
+				}
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP apply(panel, self.get());
+					apply.Self(apply);
+					apply.InitAsApplyF(ObjP::Clone(f, panel, self.get()), ObjP::Clone(obj, panel, self.get()));
+					th.Init(apply, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"UF \u200B"));
+					items.Append(th);
+					items.Append(RegularText(L" \u200B"));
+					items.Append(original);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : ObjP::Generate(obj))
+						items.Append(item);
+				}
+				container.Text(wstring(L"UF ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(a)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::UF, { ID, id, a });
+			}
+			return nullptr;
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationUT(param::hstring CR ID, param::hstring CR id, param::hstring CR t)
+	{
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		if (!theorems.Lookup(id))
+		{
+			TheoremNotFound(id);
+			return nullptr;
+		}
+		{
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallT)
+				goto Error;
+			if (const TypeP tp = MakeType(t, container))
+			{
+				const TheoremPanelP panel;
+				const TheoremP th(container, self.get());
+				th.Self(th);
+				{
+					const ObjP apply(panel, self.get());
+					apply.Self(apply);
+					{
+						const ObjP obj(panel, self.get());
+						obj.Self(obj);
+						obj.InitAsType(TypeP::Clone(tp, panel, self.get()));
+						apply.InitAsApplyT(ObjP::Clone(current.Right(), panel, self.get()), obj);
+					}
+					th.Init(apply, ID);
+				}
+				theorems.Insert(ID, th);
+				{
+					const UIElementCollection items = container.Items();
+					items.Append(RegularText(L"UT \u200B"));
+					items.Append(th);
+					items.Append(RegularText(L" \u200B"));
+					items.Append(original);
+					items.Append(RegularText(L" \u200B"));
+					for (UIElement CR item : TypeP::Generate(tp))
+						items.Append(item);
+				}
+				container.Text(wstring(L"UT ").append(hstring(ID)).append(L" ").append(hstring(id)).append(L" ").append(hstring(t)));
+				主面板().Children().Append(container);
+				{
+					const TheoremP tth(panel, self.get());
+					tth.Self(tth);
+					tth.Init2(th);
+					panel.Name(tth);
+				}
+				主面板().Children().Append(panel);
+				return MakeOperation(OperationCategory::UT, { ID, id, t });
+			}
+			return nullptr;
+		}
+	Error:
+		InvalidReason();
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationScope(param::hstring CR NAME)
+	{
+		if (!CheckScopeName(NAME))
+		{
+			ScopeNameExist(NAME);
+			return nullptr;
+		}
+		const MainPageP child;
+		child.Self(child);
+		child.Parent(self.get());
+		child.Root(root.get());
+		child.Header(NAME);
+		const UIElementCollection path = child.Path();
+		for (UIElement CR item : 路径().Children())
+			path.Append(item.as<BreadcrumbItem>().Clone(child));
+		path.Append(BreadcrumbItemP(child, child));
+		children.emplace(NAME, child);
+		const ExpressionContainerP container;
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"Scope \u200B"));
+			items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
+				{
+					if (child.Position())
+						child.Display();
+					else
+						GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+				}));
+		}
+		container.Text(wstring(L"Scope ").append(hstring(NAME)));
+		主面板().Children().Append(container);
+		root.get().Focus(child);
+		GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+		return MakeOperation(OperationCategory::Scope, { NAME });
+	}
+
+	OperationP MainPage::OperationAssume(param::hstring CR NAME, param::hstring CR ID, param::hstring CR p)
+	{
+		if (!CheckScopeName(NAME))
+		{
+			ScopeNameExist(NAME);
+			return nullptr;
+		}
+		if (!CheckTheoremName(ID))
+		{
+			TheoremNameExist(ID);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const ObjP obj = MakeObject(p, container))
+		{
+			{
+				auto current = obj.MyType();
+				TypeCategory cat;
+				while ((cat = current.Category()) == TypeCategory::Alias)
+					current = current.Right();
+				if (cat != TypeCategory::Bool)
+				{
+					const Flyout flyout;
+					{
+						const TextBlock block;
+						{
+							const Run run;
+							run.Text(ID);
+							run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-LightItalic.ttf#Cascadia Code"));
+							block.Inlines().Append(run);
+						}
+						{
+							const Run run;
+							run.Text(ResourceLoader().GetString(L"NotATheorem"));
+							block.Inlines().Append(run);
+						}
+						flyout.Content(block);
+					}
+					flyout.ShowAt(操作面板());
+					return nullptr;
+				}
+			}
+			const MainPageP child;
+			child.Self(child);
+			child.Parent(self.get());
+			child.Root(root.get());
+			child.Header(NAME);
+			const UIElementCollection path = child.Path();
+			for (UIElement CR item : 路径().Children())
+				path.Append(item.as<BreadcrumbItem>().Clone(child));
+			path.Append(BreadcrumbItemP(child, child));
+			children.emplace(NAME, child);
+			const TheoremPanelP panel;
+			const TheoremP th(container, self.get());
+			th.Self(th);
+			th.Init(ObjP::Clone(obj, panel, child), ID);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"Assume \u200B"));
+				items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
+					{
+						if (child.Position())
+							child.Display();
+						else
+							GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+					}));
+				items.Append(RegularText(L" \u200B"));
+				items.Append(th);
+				items.Append(RegularText(L" \u200B"));
+				for (UIElement CR item : ObjP::Generate(obj))
+					items.Append(item);
+			}
+			container.Text(wstring(L"Assume ").append(hstring(NAME)).append(L" ").append(hstring(ID)).append(L" ").append(hstring(p)));
+			主面板().Children().Append(container);
+			root.get().Focus(child);
+			{
+				const TheoremP tth(panel, child);
+				tth.Self(tth);
+				tth.Init2(th);
+				panel.Name(tth);
+				child.InitAsAssume(tth, panel);
+			}
+			GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+			return MakeOperation(OperationCategory::Assume, { NAME, ID, p });
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationArbitraryObject(param::hstring CR NAME, param::hstring CR name, param::hstring CR t)
+	{
+		if (!CheckScopeName(NAME))
+		{
+			ScopeNameExist(NAME);
+			return nullptr;
+		}
+		if (!CheckObjectName(name))
+		{
+			ObjectNameExist(name);
+			return nullptr;
+		}
+		const ExpressionContainerP container;
+		if (const TypeP tp = MakeType(t, container))
+		{
+			const MainPageP child;
+			child.Self(child);
+			child.Parent(self.get());
+			child.Root(root.get());
+			child.Header(NAME);
+			const UIElementCollection path = child.Path();
+			for (UIElement CR item : 路径().Children())
+				path.Append(item.as<BreadcrumbItem>().Clone(child));
+			path.Append(BreadcrumbItemP(child, child));
+			children.emplace(NAME, child);
+			const ObjP param(container, self.get());
+			param.Self(param);
+			param.InitAsParameter(tp, name);
+			child.InitAsArbitraryO(param);
+			{
+				const UIElementCollection items = container.Items();
+				items.Append(RegularText(L"ArbitraryObject \u200B"));
+				items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
+					{
+						if (child.Position())
+							child.Display();
+						else
+							GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+					}));
+				items.Append(RegularText(L" \u200B"));
+				items.Append(param);
+				items.Append(RegularText(L" \u200B"));
+				for (UIElement CR item : TypeP::Generate(tp))
+					items.Append(item);
+			}
+			container.Text(wstring(L"ArbitraryObject ").append(hstring(NAME)).append(L" ").append(hstring(name)).append(L" ").append(hstring(t)));
+			主面板().Children().Append(container);
+			root.get().Focus(child);
+			GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+			return MakeOperation(OperationCategory::ArbitraryO, { NAME, name, t });
+		}
+		return nullptr;
+	}
+
+	OperationP MainPage::OperationArbitraryType(param::hstring CR NAME, param::hstring CR name)
+	{
+		if (!CheckScopeName(NAME))
+		{
+			ScopeNameExist(NAME);
+			return nullptr;
+		}
+		if (!CheckTypeName(name))
+		{
+			TypeNameExist(name);
+			return nullptr;
+		}
+		const MainPageP child;
+		child.Self(child);
+		child.Parent(self.get());
+		child.Root(root.get());
+		child.Header(NAME);
+		const UIElementCollection path = child.Path();
+		for (UIElement CR item : 路径().Children())
+			path.Append(item.as<BreadcrumbItem>().Clone(child));
+		path.Append(BreadcrumbItemP(child, child));
+		children.emplace(NAME, child);
+		const ExpressionContainerP container;
+		const TypeP tp(container, self.get());
+		tp.Self(tp);
+		tp.InitAsParameter(name);
+		child.InitAsArbitraryT(tp);
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"ArbitraryType \u200B"));
+			items.Append(NakedButton(box_value(NAME), [child, this](IInspectable CR, RoutedEventArgs CR)
+				{
+					if (child.Position())
+						child.Display();
+					else
+						GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+				}));
+			items.Append(RegularText(L" \u200B"));
+			items.Append(tp);
+		}
+		container.Text(wstring(L"ArbitraryType ").append(hstring(NAME)).append(L" ").append(hstring(name)));
+		主面板().Children().Append(container);
+		root.get().Focus(child);
+		GetMainWindow[position.get()].get().ChangePage(position.get(), child, box_value(child.Header()));
+		return MakeOperation(OperationCategory::ArbitraryT, { NAME, name });
+	}
+
+	OperationP MainPage::OperationExport(param::hstring CR ID)
+	{
+		if (!theorems.InCurrent(ID))
+		{
+			const TextBlock block;
+			{
+				const Run run;
+				run.Text(ID);
+				run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+				block.Inlines().Append(run);
+			}
+			{
+				const Run run;
+				run.Text(ResourceLoader().GetString(L"不属于当前范围"));
+				block.Inlines().Append(run);
+			}
+			error_flyout.Content(block);
+			return nullptr;
+		}
+		if (exported.contains(ID))
+		{
+			const TextBlock block;
+			{
+				const Run run;
+				run.Text(ID);
+				run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+				block.Inlines().Append(run);
+			}
+			{
+				const Run run;
+				run.Text(ResourceLoader().GetString(L"已导出"));
+				block.Inlines().Append(run);
+			}
+			error_flyout.Content(block);
+			return nullptr;
+		}
+		if (!parent)
+		{
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"无母")));
+			return nullptr;
+		}
+		exported.insert(ID);
+		const ExpressionContainerP container;
+		const TheoremP original = FetchTheorem(ID, container);
+		{
+			const UIElementCollection items = container.Items();
+			items.Append(RegularText(L"Export \u200B"));
+			items.Append(original);
+		}
+		container.Text(wstring(L"Export ").append(hstring(ID)));
+		主面板().Children().Append(container);
+		const TheoremPanelP panel;
+		const TheoremP th(panel, parent.get());
+		th.Self(th);
+		switch (category)
+		{
+		case ScopeCategory::Normal:
+			th.Init(RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, nullptr), ID);
+			break;
+		case ScopeCategory::Assume:
+		{
+			const ObjP choose(panel, parent.get());
+			choose.Self(choose);
+			{
+				const ObjP options(panel, parent.get());
+				options.Self(options);
+				{
+					const ObjP tr(panel, parent.get());
+					tr.Self(tr);
+					tr.InitAsTrue();
+					options.InitAsOptions(RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, nullptr), tr);
+				}
+				choose.InitAsChoose(ObjP::Clone(assumption.Definition(), panel, parent.get()), options);
+			}
+			th.Init(choose, ID);
+		}
+		break;
+		case ScopeCategory::Object:
+		{
+			const ObjP faf(panel, parent.get());
+			faf.Self(faf);
+			{
+				const ObjP df(panel, parent.get());
+				df.Self(df);
+				{
+					const ObjP param = ObjP::Clone(aO, panel, parent.get());
+					df.InitAsDeclareF(param, RemoveCurrent(original.Definition(), panel, parent.get(), param, nullptr));
+				}
+				faf.InitAsForallF(df);
+			}
+			th.Init(faf, ID);
+		}
+		break;
+		case ScopeCategory::Type:
+		{
+			const ObjP fat(panel, parent.get());
+			fat.Self(fat);
+			{
+				const ObjP dt(panel, parent.get());
+				dt.Self(dt);
+				{
+					const ObjP param(panel, parent.get());
+					param.Self(param);
+					const TypeP tp = TypeP::Clone(aT, panel, parent.get());
+					param.InitAsType(tp);
+					dt.InitAsDeclareT(param, RemoveCurrent(original.Definition(), panel, parent.get(), nullptr, tp));
+				}
+				fat.InitAsForallT(dt);
+			}
+			th.Init(fat, ID);
+		}
+		}
+		panel.Name(th);
+		to_export.emplace_back(th, panel);
+		return MakeOperation(OperationCategory::Export, { ID });
+	}
+
+	OperationP MainPage::OperationExit()
+	{
+		if (!parent)
+		{
+			error_flyout.Content(RegularText(ResourceLoader().GetString(L"无母")));
+			return nullptr;
+		}
+		const MainPageP pa = parent.get();
+		for (auto CR[th, panel] : to_export)
+			pa.AddTheorem(th, panel);
+		root.get().Focus(pa);
+		if (pa.Position())
+			pa.Display();
+		else
+			GetMainWindow[position.get()].get().ChangePage(position.get(), pa, box_value(pa.Header()));
+		return MakeOperation(OperationCategory::Exit, {});
 	}
 
 	ObjP MainPage::MakeObject(hstring CR s, UIElement CR _position)
@@ -4081,47 +4703,122 @@ namespace winrt::Logic_Playground::implementation
 			}(_original);
 	}
 
-	void MainPage::SimpleError(param::hstring CR _id, param::hstring CR _whole, size_t CR _position)
+	void MainPage::SimpleError(param::hstring CR _id, param::hstring CR _whole, size_t CR _position) const
 	{
-		const Flyout flyout;
+		const IVector<Inline> message = single_threaded_vector<Inline>();
 		{
-			const IVector<Inline> message = single_threaded_vector<Inline>();
-			{
-				const Run block;
-				block.Text(ResourceLoader().GetString(_id));
-				message.Append(block);
-			}
-			flyout.Content(ErrorFlyoutP(message.GetView(), _position, _whole));
+			const Run block;
+			block.Text(ResourceLoader().GetString(_id));
+			message.Append(block);
 		}
-		flyout.ShowAt(操作面板());
+		error_flyout.Content(ErrorFlyoutP(message.GetView(), _position, _whole));
 	}
 
-	void MainPage::ComplexError(param::hstring CR _id, param::hstring CR _name, param::hstring CR _whole, size_t CR _position)
+	void MainPage::ComplexError(param::hstring CR _id, param::hstring CR _name, param::hstring CR _whole, size_t CR _position) const
 	{
-		const Flyout flyout;
+		const IVector<Inline> message = single_threaded_vector<Inline>();
 		{
-			const IVector<Inline> message = single_threaded_vector<Inline>();
-			{
-				const Run run;
-				run.Text(_name);
-				run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
-				message.Append(run);
-			}
-			{
-				const Run run;
-				run.Text(ResourceLoader().GetString(_id));
-				message.Append(run);
-			}
-			flyout.Content(ErrorFlyoutP(message.GetView(), _position, _whole));
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			message.Append(run);
 		}
-		flyout.ShowAt(操作面板());
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(_id));
+			message.Append(run);
+		}
+		error_flyout.Content(ErrorFlyoutP(message.GetView(), _position, _whole));
 	}
 
-	void MainPage::InValidReason()
+	void MainPage::InvalidReason() const
 	{
-		const Flyout flyout;
-		flyout.Content(RegularText(ResourceLoader().GetString(L"依据不合要求")));
-		flyout.ShowAt(操作面板());
+		error_flyout.Content(RegularText(ResourceLoader().GetString(L"依据不合要求")));
+	}
+
+	void MainPage::ObjectNameExist(param::hstring CR _name) const
+	{
+		const TextBlock block;
+		{
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			block.Inlines().Append(run);
+		}
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(L"ObjectNameExist"));
+			block.Inlines().Append(run);
+		}
+		error_flyout.Content(block);
+	}
+
+	void MainPage::TypeNameExist(param::hstring CR _name) const
+	{
+		const TextBlock block;
+		{
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			block.Inlines().Append(run);
+		}
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(L"TypeNameExist"));
+			block.Inlines().Append(run);
+		}
+		error_flyout.Content(block);
+	}
+
+	void MainPage::TheoremNameExist(param::hstring CR _name) const
+	{
+		const TextBlock block;
+		{
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			block.Inlines().Append(run);
+		}
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(L"TheoremNameExist"));
+			block.Inlines().Append(run);
+		}
+		error_flyout.Content(block);
+	}
+
+	void MainPage::ScopeNameExist(param::hstring CR _name) const
+	{
+		const TextBlock block;
+		{
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			block.Inlines().Append(run);
+		}
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(L"ScopeNameExist"));
+			block.Inlines().Append(run);
+		}
+		error_flyout.Content(block);
+	}
+
+	void MainPage::TheoremNotFound(param::hstring CR _name) const
+	{
+		const TextBlock block;
+		{
+			const Run run;
+			run.Text(_name);
+			run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-Regular.ttf#Cascadia Code"));
+			block.Inlines().Append(run);
+		}
+		{
+			const Run run;
+			run.Text(ResourceLoader().GetString(L"NotATheoremName"));
+			block.Inlines().Append(run);
+		}
+		error_flyout.Content(block);
 	}
 
 	ObjP MainPage::FetchObject(param::hstring CR _key, UIElement CR _position) const
@@ -4167,5 +4864,21 @@ namespace winrt::Logic_Playground::implementation
 		else
 			return nullptr;
 		return result;
+	}
+
+	bool MainPage::CheckIllegal(wstring CR s)
+	{
+		for (auto CR c : s)
+			if (c <= L' ')
+				return false;
+		return true;
+	}
+
+	bool MainPage::CheckIllegal(wstring CR s, auto CR check)
+	{
+		for (auto CR c : s)
+			if (!check(c))
+				return false;
+		return true;
 	}
 }

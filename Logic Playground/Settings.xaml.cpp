@@ -64,7 +64,17 @@ namespace winrt::Logic_Playground::implementation
 											root.Self(root);
 											root.InitAsFile(original);
 											GetMainWindow[position.get()].get().ChangePage(position.get(), root.PageRoot(), box_value(root.PageRoot().Header()));
+											const ContentDialog dialog;
+											dialog.XamlRoot(XamlRoot());
+											dialog.Title(box_value(ResourceLoader().GetString(L"«Î…‘∫Ú°≠°≠")));
+											dialog.ShowAsync();
+											{
+												const apartment_context ui;
+												co_await resume_after(114514us);
+												co_await ui;
+											}
 											root.ReadContent(co_await FileIO::ReadTextAsync(save));
+											dialog.Hide();
 											pairs.Remove(t);
 											save.DeleteAsync();
 										}

@@ -255,9 +255,6 @@
   <data name="物体.Content" xml:space="preserve">
     <value>Object</value>
   </data>
-  <data name="类型.Content" xml:space="preserve">
-    <value>Type</value>
-  </data>
   <data name="非物体名称" xml:space="preserve">
     <value> does not name an object.</value>
   </data>
@@ -401,5 +398,41 @@
   </data>
   <data name="冲突" xml:space="preserve">
     <value>Name collision.</value>
+  </data>
+  <data name="TheoremNameExist" xml:space="preserve">
+    <value> has been defined as a theorem.</value>
+  </data>
+  <data name="ObjectNameExist" xml:space="preserve">
+    <value> has been defined as an object.</value>
+  </data>
+  <data name="TypeNameExist" xml:space="preserve">
+    <value> has been defined as a type.</value>
+  </data>
+  <data name="ScopeNameExist" xml:space="preserve">
+    <value> has been defined as a scope.</value>
+  </data>
+  <data name="NotATheoremName" xml:space="preserve">
+    <value> does not name a theorem.</value>
+  </data>
+  <data name="EmptyParameterName" xml:space="preserve">
+    <value> Parameter name cannot be empty.</value>
+  </data>
+  <data name="类型.Content" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="不属于当前范围" xml:space="preserve">
+    <value> does not belong to the current scope.</value>
+  </data>
+  <data name="已导出" xml:space="preserve">
+    <value> has been exported.</value>
+  </data>
+  <data name="代码.Content" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="未知操作" xml:space="preserve">
+    <value>Unknown operation.</value>
+  </data>
+  <data name="请稍候……" xml:space="preserve">
+    <value>Just a moment...</value>
   </data>
 </root>

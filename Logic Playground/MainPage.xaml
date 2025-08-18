@@ -108,6 +108,7 @@
                 <ComboBoxItem x:Uid="全称量词"/>
                 <ComboBoxItem x:Uid="范围"/>
                 <ComboBoxItem x:Uid="导入"/>
+                <ComboBoxItem x:Uid="代码"/>
             </ComboBox>
             <Grid Grid.Column="2" x:Name="别名操作">
                 <Grid.ColumnDefinitions>
@@ -158,11 +159,9 @@
                         KeyDown="ObjectExpressionFinished"/>
                     <Button
 		                Grid.Column="2"
-		                x:Name="物体确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="ObjectConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipObject/>
@@ -196,11 +195,9 @@
                         KeyDown="TypeExpressionFinished"/>
                     <Button
 		                Grid.Column="2"
-		                x:Name="类型确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="TypeConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipType/>
@@ -235,11 +232,9 @@
                     KeyDown="CopyOriginalFinished"/>
                 <Button
                     Grid.Column="2"
-                    x:Name="复制确认"
                     Margin="8"
                     VerticalAlignment="Center"
                     x:Uid="确认按钮"
-                    IsEnabled="False"
                     Click="CopyConfirm">
                     <ToolTipService.ToolTip>
                         <local:TipCopy/>
@@ -317,11 +312,9 @@
                         KeyDown="FunctionArgumentExpressionFinished"/>
                     <Button
                         Grid.Column="4"
-                        x:Name="函数确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="FunctionConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipFunction/>
@@ -377,11 +370,9 @@
 		                KeyDown="TemplateArgumentExpressionFinished"/>
                     <Button
 		                Grid.Column="4"
-		                x:Name="模板确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="TemplateConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipTemplate/>
@@ -468,11 +459,9 @@
                         KeyDown="EIObjectFinished"/>
                     <Button
                         Grid.Column="2"
-                        x:Name="EI确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="EIConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEI/>
@@ -506,11 +495,9 @@
 			            KeyDown="EIBReasonNameFinished"/>
                     <Button
 			            Grid.Column="2"
-			            x:Name="EIB确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="EIBConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEIB/>
@@ -544,11 +531,9 @@
 			            KeyDown="EIFReasonNameFinished"/>
                     <Button
 			            Grid.Column="2"
-			            x:Name="EIF确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="EIFConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEIF/>
@@ -582,11 +567,9 @@
 			            KeyDown="EITReasonNameFinished"/>
                     <Button
 			            Grid.Column="2"
-			            x:Name="EIT确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="EITConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEITShit/>
@@ -631,11 +614,9 @@
                         KeyDown="EEFunctionFinished"/>
                     <Button
 			            Grid.Column="3"
-			            x:Name="EE确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="EEConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEE/>
@@ -669,11 +650,9 @@
 			            KeyDown="EEBReasonNameFinished"/>
                     <Button
 			            Grid.Column="2"
-			            x:Name="EEB确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="EEBConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipEEB/>
@@ -718,11 +697,9 @@
 	                    KeyDown="ETidBFinished"/>
                     <Button
                         Grid.Column="3"
-                        x:Name="ET确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="ETConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipET/>
@@ -756,11 +733,9 @@
                         KeyDown="ERReasonNameFinished"/>
                     <Button
 		                Grid.Column="2"
-		                x:Name="ER确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="ERConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipER/>
@@ -849,11 +824,9 @@
 	                    KeyDown="C0bFinished"/>
                     <Button
                         Grid.Column="4"
-                        x:Name="C0确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="C0Confirm">
                         <ToolTipService.ToolTip>
                             <local:TipC0/>
@@ -909,11 +882,9 @@
 	                    KeyDown="C1bFinished"/>
                     <Button
                         Grid.Column="4"
-                        x:Name="C1确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="C1Confirm">
                         <ToolTipService.ToolTip>
                             <local:TipC1/>
@@ -958,11 +929,9 @@
 	                    KeyDown="C2idBFinished"/>
                     <Button
 			            Grid.Column="3"
-			            x:Name="C2确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="C2Confirm">
                         <ToolTipService.ToolTip>
                             <local:TipC2/>
@@ -996,11 +965,9 @@
 			            KeyDown="C3idFinished"/>
                     <Button
 			            Grid.Column="2"
-			            x:Name="C3确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="C3Confirm">
                         <ToolTipService.ToolTip>
                             <local:TipC3/>
@@ -1068,11 +1035,9 @@
 		                KeyDown="UFaFinished"/>
                     <Button
 		                Grid.Column="3"
-		                x:Name="UF确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="UFConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipUF/>
@@ -1117,11 +1082,9 @@
 			            KeyDown="UTtFinished"/>
                     <Button
 			            Grid.Column="3"
-			            x:Name="UT确认"
 			            Margin="8"
 			            VerticalAlignment="Center"
 			            x:Uid="确认按钮"
-			            IsEnabled="False"
 			            Click="UTConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipUT/>
@@ -1183,11 +1146,9 @@
                         KeyDown="ScopeNameFinished"/>
                     <Button
                         Grid.Column="1"
-                        x:Name="范围确认"
                         Margin="8"
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
-                        IsEnabled="False"
                         Click="ScopeConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipScope/>
@@ -1232,11 +1193,9 @@
                         KeyDown="AssumeTheoremFinished"/>
                     <Button
 		                Grid.Column="3"
-		                x:Name="假设确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="AssumeConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipAssume/>
@@ -1281,11 +1240,9 @@
 	                    KeyDown="ArbitraryObjectTypeFinished"/>
                     <Button
 	                    Grid.Column="3"
-	                    x:Name="任意物体确认"
 	                    Margin="8"
 	                    VerticalAlignment="Center"
 	                    x:Uid="确认按钮"
-	                    IsEnabled="False"
 	                    Click="ArbitraryObjectConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipArbitraryObject/>
@@ -1319,11 +1276,9 @@
 	                    KeyDown="ArbitraryTypeNameFinished"/>
                     <Button
 	                    Grid.Column="2"
-	                    x:Name="任意类型确认"
 	                    Margin="8"
 	                    VerticalAlignment="Center"
 	                    x:Uid="确认按钮"
-	                    IsEnabled="False"
 	                    Click="ArbitraryTypeConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipArbitraryType/>
@@ -1346,11 +1301,9 @@
 		                KeyDown="ExportTheoremFinished"/>
                     <Button
 		                Grid.Column="1"
-		                x:Name="导出确认"
 		                Margin="8"
 		                VerticalAlignment="Center"
 		                x:Uid="确认按钮"
-		                IsEnabled="False"
 		                Click="ExportConfirm">
                         <ToolTipService.ToolTip>
                             <local:TipExport/>
@@ -1374,6 +1327,26 @@
 		        VerticalAlignment="Center"
 		        x:Uid="选择文件"
 		        Click="ImportClick"/>
+            <Grid Grid.Column="2" x:Name="直接代码" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="代码"
+                    Margin="8"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource CascadiaCode}"
+                    PlaceholderText="Code"
+                    KeyDown="CodeKeyDown"/>
+                <Button
+                    Grid.Column="1"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    x:Uid="确认按钮"
+                    Click="CodeConfirm"/>
+            </Grid>
         </Grid>
     </Grid>
 </Page>
