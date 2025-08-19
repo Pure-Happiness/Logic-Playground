@@ -331,6 +331,10 @@
     <None Include="Logic Playground_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
     <Font Include="Assets\CascadiaCode-Bold.ttf">
       <Filter>Assets</Filter>
     </Font>

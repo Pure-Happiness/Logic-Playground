@@ -513,7 +513,7 @@ namespace winrt::Logic_Playground::implementation
 		if (pa.Position())
 		{
 			pa.Display();
-			if (pa.Position() != position.get())
+			if (position && pa.Position() != position.get())
 				GetMainWindow[position.get()].get().CloseTab(position.get());
 		}
 		else
@@ -699,6 +699,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 1:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -710,6 +711,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				新定理名称().Focus(FocusState::Programmatic);
 				break;
 			case 2:
@@ -722,6 +724,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 3:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -733,6 +736,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 4:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -744,6 +748,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 5:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -755,6 +760,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 6:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -766,6 +772,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Visible);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 7:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -777,6 +784,7 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Visible);
 				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Collapsed);
 				break;
 			case 8:
 				别名操作().Visibility(Visibility::Collapsed);
@@ -788,6 +796,20 @@ namespace winrt::Logic_Playground::implementation
 				范围操作().Visibility(Visibility::Collapsed);
 				导入操作().Visibility(Visibility::Collapsed);
 				直接代码().Visibility(Visibility::Visible);
+				组合操作().Visibility(Visibility::Collapsed);
+				break;
+			case 9:
+				别名操作().Visibility(Visibility::Collapsed);
+				复制操作().Visibility(Visibility::Collapsed);
+				函数操作().Visibility(Visibility::Collapsed);
+				等于操作().Visibility(Visibility::Collapsed);
+				选择操作().Visibility(Visibility::Collapsed);
+				量词操作().Visibility(Visibility::Collapsed);
+				范围操作().Visibility(Visibility::Collapsed);
+				导入操作().Visibility(Visibility::Collapsed);
+				直接代码().Visibility(Visibility::Collapsed);
+				组合操作().Visibility(Visibility::Visible);
+				break;
 			default:;
 			}
 	}
@@ -2135,6 +2157,628 @@ namespace winrt::Logic_Playground::implementation
 		error_flyout.ShowAt(操作面板());
 	}
 
+	void MainPage::CombinedOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
+	{
+		if (IsLoaded())
+			switch (组合操作类别().SelectedIndex())
+			{
+			case 0:
+				EIRTE().Visibility(Visibility::Visible);
+				CombinedUF().Visibility(Visibility::Collapsed);
+				CombinedUT().Visibility(Visibility::Collapsed);
+				CombinedEE().Visibility(Visibility::Collapsed);
+				EIRTEID0().Focus(FocusState::Programmatic);
+				break;
+			case 1:
+				EIRTE().Visibility(Visibility::Collapsed);
+				CombinedUF().Visibility(Visibility::Visible);
+				CombinedUT().Visibility(Visibility::Collapsed);
+				CombinedEE().Visibility(Visibility::Collapsed);
+				CUFID0().Focus(FocusState::Programmatic);
+				break;
+			case 2:
+				EIRTE().Visibility(Visibility::Collapsed);
+				CombinedUF().Visibility(Visibility::Collapsed);
+				CombinedUT().Visibility(Visibility::Visible);
+				CombinedEE().Visibility(Visibility::Collapsed);
+				CUTID0().Focus(FocusState::Programmatic);
+				break;
+			case 3:
+				EIRTE().Visibility(Visibility::Collapsed);
+				CombinedUF().Visibility(Visibility::Collapsed);
+				CombinedUT().Visibility(Visibility::Collapsed);
+				CombinedEE().Visibility(Visibility::Visible);
+				CEEID0().Focus(FocusState::Programmatic);
+				break;
+			default:;
+			}
+	}
+
+	void MainPage::EIRTEID0Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEID0());
+	}
+
+	void MainPage::EIRTEID0Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIRTEID1().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIRTEID1Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEID1());
+	}
+
+	void MainPage::EIRTEID1Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIRTEID2().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIRTEID2Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEID2());
+	}
+
+	void MainPage::EIRTEID2Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIRTEID3().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIRTEID3Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEID3());
+	}
+
+	void MainPage::EIRTEID3Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIRTEidA().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIRTEidAChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEidA());
+	}
+
+	void MainPage::EIRTEidAFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIRTEidB().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIRTEidBChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIRTEidB());
+	}
+
+	void MainPage::EIRTEidBFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			if (const hstring t0 = EIRTEID0().Text(); !CheckTheoremName(t0))
+				EIRTEID0().Focus(FocusState::Programmatic);
+			else if (const hstring t1 = EIRTEID1().Text(); !CheckTheoremName(t1) || t1 == t0)
+				EIRTEID1().Focus(FocusState::Programmatic);
+			else if (const hstring t2 = EIRTEID2().Text(); !CheckTheoremName(t2) || t2 == t0 || t2 == t1)
+				EIRTEID2().Focus(FocusState::Programmatic);
+			else if (const hstring t3 = EIRTEID3().Text(); !CheckTheoremName(t3) || t3 == t0 || t3 == t1 || t3 == t2)
+				EIRTEID3().Focus(FocusState::Programmatic);
+			else if (!theorems.Lookup(EIRTEidA().Text()))
+				EIRTEidA().Focus(FocusState::Programmatic);
+			else if (theorems.Lookup(EIRTEidB().Text()))
+				EIRTEConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::EIRTEConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+		{
+			if (const OperationP operation = OperationEIB(EIRTEID0().Text(), EIRTEidA().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationER(EIRTEID1().Text(), EIRTEidB().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(EIRTEID2().Text(), EIRTEID1().Text(), EIRTEID0().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEEB(EIRTEID3().Text(), EIRTEID2().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			return;
+		}
+	fail:
+		error_flyout.ShowAt(操作面板());
+	}
+
+	void MainPage::CUFID0Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID0());
+	}
+
+	void MainPage::CUFID0Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFID1().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFID1Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID1());
+	}
+
+	void MainPage::CUFID1Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFID2().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFID2Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID2());
+	}
+
+	void MainPage::CUFID2Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFID3().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFID3Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID3());
+	}
+
+	void MainPage::CUFID3Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFID4().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFID4Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID4());
+	}
+
+	void MainPage::CUFID4Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFID5().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFID5Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFID5());
+	}
+
+	void MainPage::CUFID5Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFid().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFidChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFid());
+	}
+
+	void MainPage::CUFidFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUFa().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUFaChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUFa());
+	}
+
+	void MainPage::CUFaFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			if (const hstring t0 = CUFID0().Text(); !CheckTheoremName(t0))
+				CUFID0().Focus(FocusState::Programmatic);
+			else if (const hstring t1 = CUFID1().Text(); !CheckTheoremName(t1) || t1 == t0)
+				CUFID1().Focus(FocusState::Programmatic);
+			else if (const hstring t2 = CUFID2().Text(); !CheckTheoremName(t2) || t2 == t0 || t2 == t1)
+				CUFID2().Focus(FocusState::Programmatic);
+			else if (const hstring t3 = CUFID3().Text(); !CheckTheoremName(t3) || t3 == t0 || t3 == t1 || t3 == t2)
+				CUFID3().Focus(FocusState::Programmatic);
+			else if (const hstring t4 = CUFID4().Text(); !CheckTheoremName(t4) || t4 == t0 || t4 == t1 || t4 == t2 || t4 == t3)
+				CUFID4().Focus(FocusState::Programmatic);
+			else if (const hstring t5 = CUFID5().Text(); !CheckTheoremName(t5) || t5 == t0 || t5 == t1 || t5 == t2 || t5 == t3 || t5 == t4)
+				CUFID5().Focus(FocusState::Programmatic);
+			else if (!theorems.Lookup(CUFid().Text()))
+				CUFid().Focus(FocusState::Programmatic);
+			else
+				CUFConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::CUFConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+		{
+			const hstring id = CUFid().Text();
+			if (!theorems.Lookup(id))
+			{
+				TheoremNotFound(id);
+				goto fail;
+			}
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallF)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::DeclareF)
+				goto Error;
+			if (const OperationP operation = OperationUF(CUFID0().Text(), id, CUFa().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEIB(CUFID1().Text(), CUFID0().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationFunction(CUFID2().Text(), current.Left().Label(), ObjP::GenerateText(current.Right()), CUFa().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationER(CUFID3().Text(), CUFID2().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(CUFID4().Text(), CUFID3().Text(), CUFID1().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEEB(CUFID5().Text(), CUFID4().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			return;
+		Error:
+			InvalidReason();
+		}
+	fail:
+		error_flyout.ShowAt(操作面板());
+	}
+
+	void MainPage::CUTID0Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID0());
+	}
+
+	void MainPage::CUTID0Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTID1().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTID1Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID1());
+	}
+
+	void MainPage::CUTID1Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTID2().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTID2Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID2());
+	}
+
+	void MainPage::CUTID2Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTID3().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTID3Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID3());
+	}
+
+	void MainPage::CUTID3Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTID4().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTID4Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID4());
+	}
+
+	void MainPage::CUTID4Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTID5().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTID5Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTID5());
+	}
+
+	void MainPage::CUTID5Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTid().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTidChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTid());
+	}
+
+	void MainPage::CUTidFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CUTt().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CUTtChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CUTt(), IsValidTypeExpression);
+	}
+
+	void MainPage::CUTtFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			if (const hstring t0 = CUTID0().Text(); !CheckTheoremName(t0))
+				CUTID0().Focus(FocusState::Programmatic);
+			else if (const hstring t1 = CUTID1().Text(); !CheckTheoremName(t1) || t1 == t0)
+				CUTID1().Focus(FocusState::Programmatic);
+			else if (const hstring t2 = CUTID2().Text(); !CheckTheoremName(t2) || t2 == t0 || t2 == t1)
+				CUTID2().Focus(FocusState::Programmatic);
+			else if (const hstring t3 = CUTID3().Text(); !CheckTheoremName(t3) || t3 == t0 || t3 == t1 || t3 == t2)
+				CUTID3().Focus(FocusState::Programmatic);
+			else if (const hstring t4 = CUTID4().Text(); !CheckTheoremName(t4) || t4 == t0 || t4 == t1 || t4 == t2 || t4 == t3)
+				CUTID4().Focus(FocusState::Programmatic);
+			else if (const hstring t5 = CUTID5().Text(); !CheckTheoremName(t5) || t5 == t0 || t5 == t1 || t5 == t2 || t5 == t3 || t5 == t4)
+				CUTID5().Focus(FocusState::Programmatic);
+			else if (!theorems.Lookup(CUTid().Text()))
+				CUTid().Focus(FocusState::Programmatic);
+			else
+				CUTConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::CUTConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+		{
+			const hstring id = CUTid().Text();
+			if (!theorems.Lookup(id))
+			{
+				TheoremNotFound(id);
+				goto fail;
+			}
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::ForallT)
+				goto Error;
+			current = current.Right();
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::DeclareT)
+				goto Error;
+			if (const OperationP operation = OperationUT(CUTID0().Text(), id, CUTt().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEIB(CUTID1().Text(), CUTID0().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationTemplate(CUTID2().Text(), current.Left().MyType().Label(), ObjP::GenerateText(current.Right()), CUTt().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationER(CUTID3().Text(), CUTID2().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(CUTID4().Text(), CUTID3().Text(), CUTID1().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEEB(CUTID5().Text(), CUTID4().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			return;
+		Error:
+			InvalidReason();
+		}
+	fail:
+		error_flyout.ShowAt(操作面板());
+	}
+
+	void MainPage::CEEID0Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID0());
+	}
+
+	void MainPage::CEEID0Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEID1().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEID1Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID1());
+	}
+
+	void MainPage::CEEID1Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEID2().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEID2Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID2());
+	}
+
+	void MainPage::CEEID2Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEID3().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEID3Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID3());
+	}
+
+	void MainPage::CEEID3Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEID4().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEID4Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID4());
+	}
+
+	void MainPage::CEEID4Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEID5().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEID5Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEID5());
+	}
+
+	void MainPage::CEEID5Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEid().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEidChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEid());
+	}
+
+	void MainPage::CEEidFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEp().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEpChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEp(), IsValidName);
+	}
+
+	void MainPage::CEEpFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			CEEf().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::CEEfChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(CEEf());
+	}
+
+	void MainPage::CEEfFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			if (const hstring t0 = CEEID0().Text(); !CheckTheoremName(t0))
+				CEEID0().Focus(FocusState::Programmatic);
+			else if (const hstring t1 = CEEID1().Text(); !CheckTheoremName(t1) || t1 == t0)
+				CEEID1().Focus(FocusState::Programmatic);
+			else if (const hstring t2 = CEEID2().Text(); !CheckTheoremName(t2) || t2 == t0 || t2 == t1)
+				CEEID2().Focus(FocusState::Programmatic);
+			else if (const hstring t3 = CEEID3().Text(); !CheckTheoremName(t3) || t3 == t0 || t3 == t1 || t3 == t2)
+				CEEID3().Focus(FocusState::Programmatic);
+			else if (const hstring t4 = CEEID4().Text(); !CheckTheoremName(t4) || t4 == t0 || t4 == t1 || t4 == t2 || t4 == t3)
+				CEEID4().Focus(FocusState::Programmatic);
+			else if (const hstring t5 = CEEID5().Text(); !CheckTheoremName(t5) || t5 == t0 || t5 == t1 || t5 == t2 || t5 == t3 || t5 == t4)
+				CEEID5().Focus(FocusState::Programmatic);
+			else if (!theorems.Lookup(CEEid().Text()))
+				CEEid().Focus(FocusState::Programmatic);
+			else if (CEEp().Text().empty())
+				CEEp().Focus(FocusState::Programmatic);
+			else
+				CEEConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::CEEConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+		{
+			const hstring id = CEEid().Text();
+			if (!theorems.Lookup(id))
+			{
+				TheoremNotFound(id);
+				goto fail;
+			}
+			const ExpressionContainerP container;
+			const TheoremP original = FetchTheorem(id, container);
+			ObjP current = original.Definition();
+			ObjectCategory cat;
+			while ((cat = current.Category()) == ObjectCategory::Alias)
+				current = current.Right();
+			if (cat != ObjectCategory::Equal)
+				goto Error;
+			if (const OperationP operation = OperationEE(CEEID0().Text(), id, CEEp().Text() + L':' + TypeP::GenerateText(current.Left().MyType()) + L'@' + CEEf().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationFunction(CEEID1().Text(), CEEp().Text(), CEEf().Text(), ObjP::GenerateText(current.Left())))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationER(CEEID2().Text(), CEEID1().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(CEEID3().Text(), CEEID2().Text(), CEEID0().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationFunction(CEEID4().Text(), CEEp().Text(), CEEf().Text(), ObjP::GenerateText(current.Right())))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(CEEID5().Text(), CEEID3().Text(), CEEID4().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			return;
+		Error:
+			InvalidReason();
+		}
+	fail:
+		error_flyout.ShowAt(操作面板());
+	}
+
 	bool MainPage::CheckObjectName(hstring CR s) const
 	{
 		return !s.empty() && !objects.Lookup(s);
@@ -3474,23 +4118,19 @@ namespace winrt::Logic_Playground::implementation
 					current = current.Right();
 				if (cat != TypeCategory::Bool)
 				{
-					const Flyout flyout;
+					const TextBlock block;
 					{
-						const TextBlock block;
-						{
-							const Run run;
-							run.Text(ID);
-							run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-LightItalic.ttf#Cascadia Code"));
-							block.Inlines().Append(run);
-						}
-						{
-							const Run run;
-							run.Text(ResourceLoader().GetString(L"NotATheorem"));
-							block.Inlines().Append(run);
-						}
-						flyout.Content(block);
+						const Run run;
+						run.Text(ID);
+						run.FontFamily(Media::FontFamily(L"ms-appx:///Assets/CascadiaCode-LightItalic.ttf#Cascadia Code"));
+						block.Inlines().Append(run);
 					}
-					flyout.ShowAt(操作面板());
+					{
+						const Run run;
+						run.Text(ResourceLoader().GetString(L"NotATheorem"));
+						block.Inlines().Append(run);
+					}
+					error_flyout.Content(block);
 					return nullptr;
 				}
 			}

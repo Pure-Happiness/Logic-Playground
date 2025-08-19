@@ -10,7 +10,7 @@
   <Identity
     Name="Pure-Happiness.LogicPlayground"
     Publisher="CN=Pure-Happiness"
-    Version="0.2.0.0" />
+    Version="0.3.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="2b826e90-c802-43a3-ab99-0e7e9661b0f1" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

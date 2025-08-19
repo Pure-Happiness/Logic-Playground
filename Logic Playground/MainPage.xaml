@@ -109,6 +109,7 @@
                 <ComboBoxItem x:Uid="范围"/>
                 <ComboBoxItem x:Uid="导入"/>
                 <ComboBoxItem x:Uid="代码"/>
+                <ComboBoxItem x:Uid="组合操作"/>
             </ComboBox>
             <Grid Grid.Column="2" x:Name="别名操作">
                 <Grid.ColumnDefinitions>
@@ -1346,6 +1347,382 @@
                     VerticalAlignment="Center"
                     x:Uid="确认按钮"
                     Click="CodeConfirm"/>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="组合操作" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    x:Name="组合操作类别"
+                    Margin="8"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="CombinedOperationCategoryChosen">
+                    <ComboBoxItem Content="EIRTE"/>
+                    <ComboBoxItem Content="UF"/>
+                    <ComboBoxItem Content="UT"/>
+                    <ComboBoxItem Content="EE"/>
+                </ComboBox>
+                <Grid Grid.Column="1" x:Name="EIRTE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="EIRTEID0"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID0"
+                        TextChanged="EIRTEID0Changed"
+                        KeyDown="EIRTEID0Finished"/>
+                    <TextBox
+                        Grid.Column="1"
+                        x:Name="EIRTEID1"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID1"
+                        TextChanged="EIRTEID1Changed"
+                        KeyDown="EIRTEID1Finished"/>
+                    <TextBox
+                        Grid.Column="2"
+                        x:Name="EIRTEID2"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID2"
+                        TextChanged="EIRTEID2Changed"
+                        KeyDown="EIRTEID2Finished"/>
+                    <TextBox
+                        Grid.Column="3"
+                        x:Name="EIRTEID3"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID3"
+                        TextChanged="EIRTEID3Changed"
+                        KeyDown="EIRTEID3Finished"/>
+                    <TextBox
+                        Grid.Column="4"
+                        x:Name="EIRTEidA"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="idA"
+                        TextChanged="EIRTEidAChanged"
+                        KeyDown="EIRTEidAFinished"/>
+                    <TextBox
+                        Grid.Column="5"
+                        x:Name="EIRTEidB"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="idB"
+                        TextChanged="EIRTEidBChanged"
+                        KeyDown="EIRTEidBFinished"/>
+                    <Button
+                        Grid.Column="6"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        Click="EIRTEConfirm"/>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="CombinedUF" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="CUFID0"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID0"
+                        TextChanged="CUFID0Changed"
+                        KeyDown="CUFID0Finished"/>
+                    <TextBox
+                        Grid.Column="1"
+	                    x:Name="CUFID1"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID1"
+	                    TextChanged="CUFID1Changed"
+	                    KeyDown="CUFID1Finished"/>
+                    <TextBox
+                        Grid.Column="2"
+	                    x:Name="CUFID2"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID2"
+	                    TextChanged="CUFID2Changed"
+	                    KeyDown="CUFID2Finished"/>
+                    <TextBox
+                        Grid.Column="3"
+	                    x:Name="CUFID3"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID3"
+	                    TextChanged="CUFID3Changed"
+	                    KeyDown="CUFID3Finished"/>
+                    <TextBox
+                        Grid.Column="4"
+	                    x:Name="CUFID4"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID4"
+	                    TextChanged="CUFID4Changed"
+	                    KeyDown="CUFID4Finished"/>
+                    <TextBox
+                        Grid.Column="5"
+	                    x:Name="CUFID5"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID5"
+	                    TextChanged="CUFID5Changed"
+	                    KeyDown="CUFID5Finished"/>
+                    <TextBox
+                        Grid.Column="6"
+                        x:Name="CUFid"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="CUFidChanged"
+                        KeyDown="CUFidFinished"/>
+                    <TextBox
+                        Grid.Column="7"
+                        x:Name="CUFa"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="a"
+                        TextChanged="CUFaChanged"
+                        KeyDown="CUFaFinished"/>
+                    <Button
+                        Grid.Column="8"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        Click="CUFConfirm"/>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="CombinedUT" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="CUTID0"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID0"
+                        TextChanged="CUTID0Changed"
+                        KeyDown="CUTID0Finished"/>
+                    <TextBox
+                        Grid.Column="1"
+	                    x:Name="CUTID1"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID1"
+	                    TextChanged="CUTID1Changed"
+	                    KeyDown="CUTID1Finished"/>
+                    <TextBox
+                        Grid.Column="2"
+	                    x:Name="CUTID2"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID2"
+	                    TextChanged="CUTID2Changed"
+	                    KeyDown="CUTID2Finished"/>
+                    <TextBox
+                        Grid.Column="3"
+	                    x:Name="CUTID3"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID3"
+	                    TextChanged="CUTID3Changed"
+	                    KeyDown="CUTID3Finished"/>
+                    <TextBox
+                        Grid.Column="4"
+	                    x:Name="CUTID4"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID4"
+	                    TextChanged="CUTID4Changed"
+	                    KeyDown="CUTID4Finished"/>
+                    <TextBox
+                        Grid.Column="5"
+	                    x:Name="CUTID5"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID5"
+	                    TextChanged="CUTID5Changed"
+	                    KeyDown="CUTID5Finished"/>
+                    <TextBox
+                        Grid.Column="6"
+                        x:Name="CUTid"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="CUTidChanged"
+                        KeyDown="CUTidFinished"/>
+                    <TextBox
+                        Grid.Column="7"
+                        x:Name="CUTt"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="t"
+                        TextChanged="CUTtChanged"
+                        KeyDown="CUTtFinished"/>
+                    <Button
+                        Grid.Column="8"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        Click="CUTConfirm"/>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="CombinedEE" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Name="CEEID0"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="ID0"
+                        TextChanged="CEEID0Changed"
+                        KeyDown="CEEID0Finished"/>
+                    <TextBox
+                        Grid.Column="1"
+	                    x:Name="CEEID1"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID1"
+	                    TextChanged="CEEID1Changed"
+	                    KeyDown="CEEID1Finished"/>
+                    <TextBox
+                        Grid.Column="2"
+	                    x:Name="CEEID2"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID2"
+	                    TextChanged="CEEID2Changed"
+	                    KeyDown="CEEID2Finished"/>
+                    <TextBox
+                        Grid.Column="3"
+	                    x:Name="CEEID3"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID3"
+	                    TextChanged="CEEID3Changed"
+	                    KeyDown="CEEID3Finished"/>
+                    <TextBox
+                        Grid.Column="4"
+	                    x:Name="CEEID4"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID4"
+	                    TextChanged="CEEID4Changed"
+	                    KeyDown="CEEID4Finished"/>
+                    <TextBox
+                        Grid.Column="5"
+	                    x:Name="CEEID5"
+	                    Margin="8"
+	                    VerticalAlignment="Center"
+	                    FontFamily="{StaticResource CascadiaCode}"
+	                    PlaceholderText="ID5"
+	                    TextChanged="CEEID5Changed"
+	                    KeyDown="CEEID5Finished"/>
+                    <TextBox
+                        Grid.Column="6"
+                        x:Name="CEEid"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="id"
+                        TextChanged="CEEidChanged"
+                        KeyDown="CEEidFinished"/>
+                    <TextBox
+                        Grid.Column="7"
+                        x:Name="CEEp"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="param"
+                        TextChanged="CEEpChanged"
+                        KeyDown="CEEpFinished"/>
+                    <TextBox
+                        Grid.Column="8"
+                        x:Name="CEEf"
+                        Margin="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource CascadiaCode}"
+                        PlaceholderText="image"
+                        TextChanged="CEEfChanged"
+                        KeyDown="CEEfFinished"/>
+                    <Button
+                        Grid.Column="9"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        x:Uid="确认按钮"
+                        Click="CEEConfirm"/>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

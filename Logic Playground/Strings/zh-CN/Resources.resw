@@ -537,4 +537,8 @@
   <data name="请稍候……" xml:space="preserve">
     <value>请稍候……</value>
   </data>
+  <data name="组合操作.Content" xml:space="preserve">
+    <value>组合操作</value>
+    <comment>MainPage Operation Category</comment>
+  </data>
 </root>

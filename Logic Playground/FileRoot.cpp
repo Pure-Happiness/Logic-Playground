@@ -39,11 +39,18 @@ namespace winrt::Logic_Playground::implementation
 			wstring line;
 			if (!getline(input, line))
 			{
-				if (file && content != co_await FileIO::ReadTextAsync(file))
-					if (!temp_file)
-						CreateTempFile();
-					else
-						FileIO::WriteTextAsync(temp_file, content);
+				if (file)
+				{
+					wstring fr(co_await FileIO::ReadTextAsync(file));
+					auto CR[ret, last] = ranges::remove(fr, L'\r');
+					fr.erase(ret, last);
+					if (content == fr)
+						co_return;
+				}
+				if (!temp_file)
+					CreateTempFile();
+				else
+					FileIO::WriteTextAsync(temp_file, content);
 				co_return;
 			}
 			if (const OperationP operation = focus.ParseOperation(line))
@@ -99,12 +106,12 @@ namespace winrt::Logic_Playground::implementation
 		{
 			if (!co_await FetchFile(_position))
 				co_return;
-			SaveFile();
 		}
 		catch (...)
 		{
 			AppNotificationManager::Default().Show(AppNotificationBuilder().AddText(ResourceLoader().GetString(L"OpenFilePickerFailure")).BuildNotification());
 		}
+		SaveFile();
 	}
 
 	fire_and_forget FileRoot::SaveAs(TabViewItem CR _position)

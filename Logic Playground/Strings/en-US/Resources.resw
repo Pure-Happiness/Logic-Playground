@@ -435,4 +435,7 @@
   <data name="请稍候……" xml:space="preserve">
     <value>Just a moment...</value>
   </data>
+  <data name="组合操作.Content" xml:space="preserve">
+    <value>Combined Operations</value>
+  </data>
 </root>
