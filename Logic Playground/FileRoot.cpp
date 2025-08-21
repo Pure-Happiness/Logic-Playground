@@ -67,6 +67,10 @@ namespace winrt::Logic_Playground::implementation
 		}
 	Error:
 		AppNotificationManager::Default().Show(AppNotificationBuilder().AddText(ResourceLoader().GetString(L"文件读取错误")).BuildNotification());
+		if (!temp_file)
+			CreateTempFile();
+		else
+			FileIO::WriteTextAsync(temp_file, content);
 	}
 
 	MainPageP FileRoot::PageRoot() const

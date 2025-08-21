@@ -184,7 +184,7 @@
     <value>Redo</value>
   </data>
   <data name="上一级.Label" xml:space="preserve">
-    <value>Move to parent</value>
+    <value>Parent</value>
   </data>
   <data name="OpenFileFailure" xml:space="preserve">
     <value>Oops, cannot open the chosen file 😵‍💫</value>
@@ -437,5 +437,14 @@
   </data>
   <data name="组合操作.Content" xml:space="preserve">
     <value>Combined Operations</value>
+  </data>
+  <data name="WebSite.Text" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="Feedback.Content" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="Documentation.Text" xml:space="preserve">
+    <value>Documentation</value>
   </data>
 </root>

@@ -507,7 +507,7 @@
     <comment>MainPage Error Basic</comment>
   </data>
   <data name="NotATheoremName" xml:space="preserve">
-    <value> 非类型名称。</value>
+    <value> 非定理名称。</value>
     <comment>MainPage Error Basic</comment>
   </data>
   <data name="EmptyParameterName" xml:space="preserve">
@@ -540,5 +540,17 @@
   <data name="组合操作.Content" xml:space="preserve">
     <value>组合操作</value>
     <comment>MainPage Operation Category</comment>
+  </data>
+  <data name="WebSite.Text" xml:space="preserve">
+    <value>网站</value>
+    <comment>Settings About</comment>
+  </data>
+  <data name="Feedback.Content" xml:space="preserve">
+    <value>反馈</value>
+    <comment>Settings About</comment>
+  </data>
+  <data name="Documentation.Text" xml:space="preserve">
+    <value>文档</value>
+    <comment>Settings About</comment>
   </data>
 </root>

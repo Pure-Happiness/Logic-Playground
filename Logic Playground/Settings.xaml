@@ -75,38 +75,86 @@
                     </ComboBox>
                 </Grid>
                 <Expander
-                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     CornerRadius="8"
                     HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
                     x:Uid="Recovery">
                     <StackPanel
                         x:Name="toRecover"
                         Spacing="12"
                         Loaded="RecoveryLoaded"/>
                 </Expander>
-                <Grid
-	                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-	                CornerRadius="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <BitmapIcon
-                        Margin="16"
-                        VerticalAlignment="Center"
-                        ShowAsMonochrome="False"
-                        UriSource="ms-appx:///Assets/StoreLogo.scale-100.png"/>
-                    <TextBlock
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        Text="Logic Playground&#x000A;逻辑游乐场"/>
-                    <TextBlock
-                        Grid.Column="2"
-                        Margin="16"
-                        VerticalAlignment="Center"
-                        Text="0.3.0"/>
-                </Grid>
+                <Expander
+                    Background="Transparent"
+                    Padding="0"
+                    CornerRadius="8"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <Grid Margin="0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <BitmapIcon
+		                        Margin="0,0,16,0"
+		                        VerticalAlignment="Center"
+		                        ShowAsMonochrome="False"
+		                        UriSource="ms-appx:///Assets/StoreLogo.scale-100.png"/>
+                            <TextBlock
+		                        Grid.Column="1"
+		                        VerticalAlignment="Center"
+		                        Text="Logic Playground&#x000A;逻辑游乐场"/>
+                            <TextBlock
+		                        Grid.Column="2"
+		                        VerticalAlignment="Center"
+		                        Text="0.3.1"/>
+                        </Grid>
+                    </Expander.Header>
+                    <StackPanel Spacing="1">
+                        <StackPanel
+                            Padding="16,12"
+                            Spacing="12"
+                            Background="{ThemeResource ExpanderDropDownBackground}">
+                            <TextBlock x:Uid="Website"/>
+                            <HyperlinkButton
+                                Padding="0"
+                                CornerRadius="0"
+                                Content="GitHub: https://github.com/Pure-Happiness/Logic-Playground"
+                                NavigateUri="https://github.com/Pure-Happiness/Logic-Playground"/>
+                            <HyperlinkButton
+                                Padding="0"
+                                CornerRadius="0"
+                                Content="Gitee: https://gitee.com/Pure-Happiness/Logic-Playground"
+                                NavigateUri="https://gitee.com/Pure-Happiness/Logic-Playground"/>
+                        </StackPanel>
+                        <StackPanel
+                            Padding="16,12"
+                            Spacing="12"
+                            Background="{ThemeResource ExpanderDropDownBackground}">
+                            <TextBlock x:Uid="Documentation"/>
+                            <HyperlinkButton
+	                            Padding="0"
+	                            CornerRadius="0"
+	                            Content="GitHub: https://github.com/Pure-Happiness/Logic-Playground/wiki"
+	                            NavigateUri="https://github.com/Pure-Happiness/Logic-Playground/wiki"/>
+                            <HyperlinkButton
+	                            Padding="0"
+	                            CornerRadius="0"
+	                            Content="Gitee: https://gitee.com/Pure-Happiness/Logic-Playground/wikis"
+	                            NavigateUri="https://gitee.com/Pure-Happiness/Logic-Playground/wikis"/>
+                        </StackPanel>
+                        <HyperlinkButton
+                            Padding="16,12"
+                            CornerRadius="0"
+                            Background="{ThemeResource ExpanderDropDownBackground}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            x:Uid="Feedback"
+                            NavigateUri="https://github.com/Pure-Happiness/Logic-Playground/issues"/>
+                    </StackPanel>
+                </Expander>
             </StackPanel>
         </ScrollView>
     </Grid>
