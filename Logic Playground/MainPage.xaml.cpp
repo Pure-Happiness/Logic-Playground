@@ -2882,7 +2882,7 @@ namespace winrt::Logic_Playground::implementation
 				for (UIElement CR item : ObjP::Generate(value))
 					items.Append(item);
 			}
-			container.Text(wstring(L"Object ").append(L" ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
+			container.Text(wstring(L"Object ").append(hstring(_name)).append(L" ").append(hstring(_expression)));
 			Ö÷Ãæ°å().Children().Append(container);
 			return MakeOperation(OperationCategory::Object, { _name, _expression });
 		}
