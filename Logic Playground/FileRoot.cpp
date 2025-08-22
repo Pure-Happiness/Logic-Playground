@@ -67,6 +67,12 @@ namespace winrt::Logic_Playground::implementation
 		}
 	Error:
 		AppNotificationManager::Default().Show(AppNotificationBuilder().AddText(ResourceLoader().GetString(L"文件读取错误")).BuildNotification());
+		{
+			const apartment_context ui;
+			co_await resume_after(114514us);
+			co_await ui;
+		}
+		focus.ShowError();
 		if (!temp_file)
 			CreateTempFile();
 		else

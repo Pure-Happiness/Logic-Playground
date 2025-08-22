@@ -447,4 +447,7 @@
   <data name="Documentation.Text" xml:space="preserve">
     <value>Documentation</value>
   </data>
+  <data name="格式错误" xml:space="preserve">
+    <value>Illegal format</value>
+  </data>
 </root>

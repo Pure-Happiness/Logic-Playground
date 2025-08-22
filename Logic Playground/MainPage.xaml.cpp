@@ -75,358 +75,354 @@ namespace winrt::Logic_Playground::implementation
 		wstring op;
 		input >> op;
 		if (input.fail())
-			return nullptr;
-		try
+			goto IllegalFormat;
+		if (op == L"Object")
 		{
-			if (op == L"Object")
-			{
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					return nullptr;
-				wstring expression;
-				input >> expression;
-				if (input.fail() || !CheckIllegal(expression))
-					return nullptr;
-				return OperationObject(name, expression);
-			}
-			if (op == L"Type")
-			{
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					return nullptr;
-				wstring expression;
-				input >> expression;
-				if (input.fail() || !CheckIllegal(expression, IsValidTypeExpression))
-					return nullptr;
-				return OperationType(name, expression);
-			}
-			if (op == L"Copy")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationCopy(ID, id);
-			}
-			if (op == L"Function")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring param;
-				input >> param;
-				if (input.fail() || !CheckIllegal(param, IsValidName))
-					return nullptr;
-				wstring image;
-				input >> image;
-				if (input.fail() || !CheckIllegal(image))
-					return nullptr;
-				wstring arg;
-				input >> arg;
-				if (input.fail() || !CheckIllegal(arg))
-					return nullptr;
-				return OperationFunction(ID, param, image, arg);
-			}
-			if (op == L"Template")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring param;
-				input >> param;
-				if (input.fail() || !CheckIllegal(param, IsValidName))
-					return nullptr;
-				wstring image;
-				input >> image;
-				if (input.fail() || !CheckIllegal(image))
-					return nullptr;
-				wstring arg;
-				input >> arg;
-				if (input.fail() || !CheckIllegal(arg, IsValidTypeExpression))
-					return nullptr;
-				return OperationTemplate(ID, param, image, arg);
-			}
-			if (op == L"EI")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					return nullptr;
-				return OperationEI(ID, a);
-			}
-			if (op == L"EIB")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationEIB(ID, id);
-			}
-			if (op == L"EIF")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationEIF(ID, id);
-			}
-			if (op == L"EIT")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationEIT(ID, id);
-			}
-			if (op == L"EE")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				wstring f;
-				input >> f;
-				if (input.fail() || !CheckIllegal(f))
-					return nullptr;
-				return OperationEE(ID, id, f);
-			}
-			if (op == L"EEB")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationEEB(ID, id);
-			}
-			if (op == L"ET")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring idA;
-				input >> idA;
-				if (input.fail() || !CheckIllegal(idA))
-					return nullptr;
-				wstring idB;
-				input >> idB;
-				if (input.fail() || !CheckIllegal(idB))
-					return nullptr;
-				return OperationET(ID, idA, idB);
-			}
-			if (op == L"ER")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationER(ID, id);
-			}
-			if (op == L"C0")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					return nullptr;
-				wstring b;
-				input >> b;
-				if (input.fail() || !CheckIllegal(b))
-					return nullptr;
-				return OperationC0(ID, id, a, b);
-			}
-			if (op == L"C1")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					return nullptr;
-				wstring b;
-				input >> b;
-				if (input.fail() || !CheckIllegal(b))
-					return nullptr;
-				return OperationC1(ID, id, a, b);
-			}
-			if (op == L"C2")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring idA;
-				input >> idA;
-				if (input.fail() || !CheckIllegal(idA))
-					return nullptr;
-				wstring idB;
-				input >> idB;
-				if (input.fail() || !CheckIllegal(idB))
-					return nullptr;
-				return OperationC2(ID, idA, idB);
-			}
-			if (op == L"C3")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				return OperationC3(ID, id);
-			}
-			if (op == L"UF")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				wstring a;
-				input >> a;
-				if (input.fail() || !CheckIllegal(a))
-					return nullptr;
-				return OperationUF(ID, id, a);
-			}
-			if (op == L"UT")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring id;
-				input >> id;
-				if (input.fail() || !CheckIllegal(id))
-					return nullptr;
-				wstring t;
-				input >> t;
-				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
-					return nullptr;
-				return OperationUT(ID, id, t);
-			}
-			if (op == L"Scope")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					return nullptr;
-				return OperationScope(NAME);
-			}
-			if (op == L"Assume")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					return nullptr;
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				wstring p;
-				input >> p;
-				if (input.fail() || !CheckIllegal(p))
-					return nullptr;
-				return OperationAssume(NAME, ID, p);
-			}
-			if (op == L"ArbitraryObject")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					return nullptr;
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					return nullptr;
-				wstring t;
-				input >> t;
-				if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
-					return nullptr;
-				return OperationArbitraryObject(NAME, name, t);
-			}
-			if (op == L"ArbitraryType")
-			{
-				wstring NAME;
-				input >> NAME;
-				if (input.fail() || !CheckIllegal(NAME))
-					return nullptr;
-				wstring name;
-				input >> name;
-				if (input.fail() || !CheckIllegal(name, IsValidName))
-					return nullptr;
-				return OperationArbitraryType(NAME, name);
-			}
-			if (op == L"Export")
-			{
-				wstring ID;
-				input >> ID;
-				if (input.fail() || !CheckIllegal(ID))
-					return nullptr;
-				return OperationExport(ID);
-			}
-			if (op == L"Exit")
-				return OperationExit();
-			error_flyout.Content(RegularText(ResourceLoader().GetString(L"未知操作")));
-			return nullptr;
+			wstring name;
+			input >> name;
+			if (input.fail() || !CheckIllegal(name, IsValidName))
+				goto IllegalFormat;
+			wstring expression;
+			input >> expression;
+			if (input.fail() || !CheckIllegal(expression))
+				goto IllegalFormat;
+			return OperationObject(name, expression);
 		}
-		catch (...)
+		if (op == L"Type")
 		{
-			return nullptr;
+			wstring name;
+			input >> name;
+			if (input.fail() || !CheckIllegal(name, IsValidName))
+				goto IllegalFormat;
+			wstring expression;
+			input >> expression;
+			if (input.fail() || !CheckIllegal(expression, IsValidTypeExpression))
+				goto IllegalFormat;
+			return OperationType(name, expression);
 		}
+		if (op == L"Copy")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationCopy(ID, id);
+		}
+		if (op == L"Function")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring param;
+			input >> param;
+			if (input.fail() || !CheckIllegal(param, IsValidName))
+				goto IllegalFormat;
+			wstring image;
+			input >> image;
+			if (input.fail() || !CheckIllegal(image))
+				goto IllegalFormat;
+			wstring arg;
+			input >> arg;
+			if (input.fail() || !CheckIllegal(arg))
+				goto IllegalFormat;
+			return OperationFunction(ID, param, image, arg);
+		}
+		if (op == L"Template")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring param;
+			input >> param;
+			if (input.fail() || !CheckIllegal(param, IsValidName))
+				goto IllegalFormat;
+			wstring image;
+			input >> image;
+			if (input.fail() || !CheckIllegal(image))
+				goto IllegalFormat;
+			wstring arg;
+			input >> arg;
+			if (input.fail() || !CheckIllegal(arg, IsValidTypeExpression))
+				goto IllegalFormat;
+			return OperationTemplate(ID, param, image, arg);
+		}
+		if (op == L"EI")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring a;
+			input >> a;
+			if (input.fail() || !CheckIllegal(a))
+				goto IllegalFormat;
+			return OperationEI(ID, a);
+		}
+		if (op == L"EIB")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationEIB(ID, id);
+		}
+		if (op == L"EIF")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationEIF(ID, id);
+		}
+		if (op == L"EIT")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationEIT(ID, id);
+		}
+		if (op == L"EE")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			wstring f;
+			input >> f;
+			if (input.fail() || !CheckIllegal(f))
+				goto IllegalFormat;
+			return OperationEE(ID, id, f);
+		}
+		if (op == L"EEB")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationEEB(ID, id);
+		}
+		if (op == L"ET")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring idA;
+			input >> idA;
+			if (input.fail() || !CheckIllegal(idA))
+				goto IllegalFormat;
+			wstring idB;
+			input >> idB;
+			if (input.fail() || !CheckIllegal(idB))
+				goto IllegalFormat;
+			return OperationET(ID, idA, idB);
+		}
+		if (op == L"ER")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationER(ID, id);
+		}
+		if (op == L"C0")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			wstring a;
+			input >> a;
+			if (input.fail() || !CheckIllegal(a))
+				goto IllegalFormat;
+			wstring b;
+			input >> b;
+			if (input.fail() || !CheckIllegal(b))
+				goto IllegalFormat;
+			return OperationC0(ID, id, a, b);
+		}
+		if (op == L"C1")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			wstring a;
+			input >> a;
+			if (input.fail() || !CheckIllegal(a))
+				goto IllegalFormat;
+			wstring b;
+			input >> b;
+			if (input.fail() || !CheckIllegal(b))
+				goto IllegalFormat;
+			return OperationC1(ID, id, a, b);
+		}
+		if (op == L"C2")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring idA;
+			input >> idA;
+			if (input.fail() || !CheckIllegal(idA))
+				goto IllegalFormat;
+			wstring idB;
+			input >> idB;
+			if (input.fail() || !CheckIllegal(idB))
+				goto IllegalFormat;
+			return OperationC2(ID, idA, idB);
+		}
+		if (op == L"C3")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			return OperationC3(ID, id);
+		}
+		if (op == L"UF")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			wstring a;
+			input >> a;
+			if (input.fail() || !CheckIllegal(a))
+				goto IllegalFormat;
+			return OperationUF(ID, id, a);
+		}
+		if (op == L"UT")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring id;
+			input >> id;
+			if (input.fail() || !CheckIllegal(id))
+				goto IllegalFormat;
+			wstring t;
+			input >> t;
+			if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
+				goto IllegalFormat;
+			return OperationUT(ID, id, t);
+		}
+		if (op == L"Scope")
+		{
+			wstring NAME;
+			input >> NAME;
+			if (input.fail() || !CheckIllegal(NAME))
+				goto IllegalFormat;
+			return OperationScope(NAME);
+		}
+		if (op == L"Assume")
+		{
+			wstring NAME;
+			input >> NAME;
+			if (input.fail() || !CheckIllegal(NAME))
+				goto IllegalFormat;
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			wstring p;
+			input >> p;
+			if (input.fail() || !CheckIllegal(p))
+				goto IllegalFormat;
+			return OperationAssume(NAME, ID, p);
+		}
+		if (op == L"ArbitraryObject")
+		{
+			wstring NAME;
+			input >> NAME;
+			if (input.fail() || !CheckIllegal(NAME))
+				goto IllegalFormat;
+			wstring name;
+			input >> name;
+			if (input.fail() || !CheckIllegal(name, IsValidName))
+				goto IllegalFormat;
+			wstring t;
+			input >> t;
+			if (input.fail() || !CheckIllegal(t, IsValidTypeExpression))
+				goto IllegalFormat;
+			return OperationArbitraryObject(NAME, name, t);
+		}
+		if (op == L"ArbitraryType")
+		{
+			wstring NAME;
+			input >> NAME;
+			if (input.fail() || !CheckIllegal(NAME))
+				goto IllegalFormat;
+			wstring name;
+			input >> name;
+			if (input.fail() || !CheckIllegal(name, IsValidName))
+				goto IllegalFormat;
+			return OperationArbitraryType(NAME, name);
+		}
+		if (op == L"Export")
+		{
+			wstring ID;
+			input >> ID;
+			if (input.fail() || !CheckIllegal(ID))
+				goto IllegalFormat;
+			return OperationExport(ID);
+		}
+		if (op == L"Exit")
+			return OperationExit();
+		error_flyout.Content(RegularText(ResourceLoader().GetString(L"未知操作")));
+		return nullptr;
+	IllegalFormat:
+		error_flyout.Content(RegularText(ResourceLoader().GetString(L"格式错误")));
+		return nullptr;
 	}
 
 	OperationP MainPage::RedoOperation(OperationP CR operation)
@@ -599,6 +595,11 @@ namespace winrt::Logic_Playground::implementation
 		}
 		auto CR[x, y] = _item.TransformToVisual(主面板()).TransformPoint({ 0, 0 });
 		滚().ScrollTo(x, y - 16);
+	}
+
+	void MainPage::ShowError()
+	{
+		error_flyout.ShowAt(操作面板());
 	}
 
 	void MainPage::MoveToParent(IInspectable CR, RoutedEventArgs CR) const
@@ -866,7 +867,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::TypeNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -902,7 +903,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::CopyNewChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -938,7 +939,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::FTOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -1017,7 +1018,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::TemplateTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1077,7 +1078,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EqualityOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -1210,7 +1211,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EIBTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1246,7 +1247,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EIFTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1282,7 +1283,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EITTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1318,7 +1319,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EETheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1367,7 +1368,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::EEBTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1403,7 +1404,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ETTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1454,7 +1455,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ERTheoremNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1490,7 +1491,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ChoicesOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -1587,7 +1588,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::C1IDChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1647,7 +1648,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::C2IDChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1696,7 +1697,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::C3IDChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1732,7 +1733,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::UQOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -1800,7 +1801,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::UTIDChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1849,7 +1850,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ScopeOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -1933,7 +1934,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::AssumeNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -1982,7 +1983,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ArbitraryObjectScopeNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -2031,7 +2032,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ArbitraryTypeScopeNameChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -2067,7 +2068,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ExportTheoremChanged(IInspectable CR, TextChangedEventArgs CR)
@@ -2089,7 +2090,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::ExitConfirm(IInspectable CR, RoutedEventArgs CR)
@@ -2100,7 +2101,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	fire_and_forget MainPage::ImportClick(IInspectable CR, RoutedEventArgs CR)
@@ -2154,7 +2155,7 @@ namespace winrt::Logic_Playground::implementation
 				root.get().AddOperationS(operation);
 				return;
 			}
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::CombinedOperationCategoryChosen(IInspectable CR, SelectionChangedEventArgs CR)
@@ -2294,7 +2295,7 @@ namespace winrt::Logic_Playground::implementation
 			return;
 		}
 	fail:
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::CUFID0Changed(IInspectable CR, TextChangedEventArgs CR)
@@ -2452,7 +2453,7 @@ namespace winrt::Logic_Playground::implementation
 			InvalidReason();
 		}
 	fail:
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::CUTID0Changed(IInspectable CR, TextChangedEventArgs CR)
@@ -2610,7 +2611,7 @@ namespace winrt::Logic_Playground::implementation
 			InvalidReason();
 		}
 	fail:
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	void MainPage::CEEID0Changed(IInspectable CR, TextChangedEventArgs CR)
@@ -2776,7 +2777,7 @@ namespace winrt::Logic_Playground::implementation
 			InvalidReason();
 		}
 	fail:
-		error_flyout.ShowAt(操作面板());
+		ShowError();
 	}
 
 	bool MainPage::CheckObjectName(hstring CR s) const

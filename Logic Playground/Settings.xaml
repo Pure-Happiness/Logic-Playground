@@ -109,7 +109,7 @@
                             <TextBlock
 		                        Grid.Column="2"
 		                        VerticalAlignment="Center"
-		                        Text="0.3.2"/>
+		                        Text="0.3.3"/>
                         </Grid>
                     </Expander.Header>
                     <StackPanel Spacing="1">

@@ -34,6 +34,7 @@ namespace winrt::Logic_Playground::implementation
 		[[nodiscard]] LinkedMapP Theorems() const;
 		void Display() const;
 		fire_and_forget Display(UIElement _item);
+		void ShowError();
 
 		void MoveToParent(IInspectable CR, RoutedEventArgs CR) const;
 		void ParentMiddleClick(IInspectable CR, PointerRoutedEventArgs CR args);
