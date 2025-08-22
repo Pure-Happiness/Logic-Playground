@@ -1,4 +1,4 @@
-![LOGO](https://github.com/Pure-Happiness/Logic-Playground/blob/master/Logic%20Playground/Assets/SplashScreen.scale-400.png)
+![LOGO](Logic%20Playground/Assets/SplashScreen.scale-400.png)
 
 # Logic Playground
 
@@ -10,7 +10,7 @@ Many axiomatic systems have addressed the first problem, but most are unfriendly
 
 My project, Logic Playground, combines the strengths of axiomatic systems and the Lambda Calculus. It removes the Lambda Calculus’s restriction of direct computability, adds expressive symbols for relations such as “for all”, and introduces a set of inference rules for proofs. This novel language is concise and uniform, with only eight operators and three keywords.
 
-For more information, please refer to the [wiki](https://github.com/Pure-Happiness/Logic-Playground/wiki).
+For more information, please refer to the [wiki](../../wiki).
 
 # 逻辑游乐场
 
@@ -22,4 +22,4 @@ For more information, please refer to the [wiki](https://github.com/Pure-Happine
 
 我的项目 Logic Playground 融合了公理系统与λ演算的优势：解除λ演算对直接可计算性的限制，添加"任意"等关系表达符号，并引入一套用于证明的推理规则。这种新型语言仅用八个运算符和三个关键词，兼具简洁性与统一性。
 
-更多信息详见[文档](https://github.com/Pure-Happiness/Logic-Playground/wiki)。
+更多信息详见[文档](../../wiki)。
