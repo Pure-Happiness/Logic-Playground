@@ -1360,6 +1360,7 @@
                     SelectedIndex="0"
                     SelectionChanged="CombinedOperationCategoryChosen">
                     <ComboBoxItem Content="EIRTE"/>
+                    <ComboBoxItem Content="EIIRT"/>
                     <ComboBoxItem Content="UF"/>
                     <ComboBoxItem Content="UT"/>
                     <ComboBoxItem Content="EE"/>
@@ -1439,6 +1440,82 @@
                         VerticalAlignment="Center"
                         x:Uid="确认按钮"
                         Click="EIRTEConfirm"/>
+                </Grid>
+                <Grid Grid.Column="1" x:Name="EIIRT" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+		                x:Name="EIIRTID0"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID0"
+		                TextChanged="EIIRTID0Changed"
+		                KeyDown="EIIRTID0Finished"/>
+                    <TextBox
+		                Grid.Column="1"
+		                x:Name="EIIRTID1"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID1"
+		                TextChanged="EIIRTID1Changed"
+		                KeyDown="EIIRTID1Finished"/>
+                    <TextBox
+		                Grid.Column="2"
+		                x:Name="EIIRTID2"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID2"
+		                TextChanged="EIIRTID2Changed"
+		                KeyDown="EIIRTID2Finished"/>
+                    <TextBox
+		                Grid.Column="3"
+		                x:Name="EIIRTID3"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="ID3"
+		                TextChanged="EIIRTID3Changed"
+		                KeyDown="EIIRTID3Finished"/>
+                    <TextBox
+		                Grid.Column="4"
+		                x:Name="EIIRTidA"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="idA"
+		                TextChanged="EIIRTidAChanged"
+		                KeyDown="EIIRTidAFinished"/>
+                    <TextBox
+		                Grid.Column="5"
+		                x:Name="EIIRTidB"
+		                Margin="8"
+		                HorizontalAlignment="Stretch"
+		                VerticalAlignment="Center"
+		                FontFamily="{StaticResource CascadiaCode}"
+		                PlaceholderText="idB"
+		                TextChanged="EIIRTidBChanged"
+		                KeyDown="EIIRTidBFinished"/>
+                    <Button
+		                Grid.Column="6"
+		                Margin="8"
+		                VerticalAlignment="Center"
+		                x:Uid="确认按钮"
+		                Click="EIIRTConfirm"/>
                 </Grid>
                 <Grid Grid.Column="1" x:Name="CombinedUF" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>

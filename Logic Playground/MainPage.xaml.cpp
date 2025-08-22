@@ -2165,6 +2165,7 @@ namespace winrt::Logic_Playground::implementation
 			{
 			case 0:
 				EIRTE().Visibility(Visibility::Visible);
+				EIIRT().Visibility(Visibility::Collapsed);
 				CombinedUF().Visibility(Visibility::Collapsed);
 				CombinedUT().Visibility(Visibility::Collapsed);
 				CombinedEE().Visibility(Visibility::Collapsed);
@@ -2172,20 +2173,31 @@ namespace winrt::Logic_Playground::implementation
 				break;
 			case 1:
 				EIRTE().Visibility(Visibility::Collapsed);
+				EIIRT().Visibility(Visibility::Visible);
+				CombinedUF().Visibility(Visibility::Collapsed);
+				CombinedUT().Visibility(Visibility::Collapsed);
+				CombinedEE().Visibility(Visibility::Collapsed);
+				EIIRTID0().Focus(FocusState::Programmatic);
+				break;
+			case 2:
+				EIRTE().Visibility(Visibility::Collapsed);
+				EIIRT().Visibility(Visibility::Collapsed);
 				CombinedUF().Visibility(Visibility::Visible);
 				CombinedUT().Visibility(Visibility::Collapsed);
 				CombinedEE().Visibility(Visibility::Collapsed);
 				CUFID0().Focus(FocusState::Programmatic);
 				break;
-			case 2:
+			case 3:
 				EIRTE().Visibility(Visibility::Collapsed);
+				EIIRT().Visibility(Visibility::Collapsed);
 				CombinedUF().Visibility(Visibility::Collapsed);
 				CombinedUT().Visibility(Visibility::Visible);
 				CombinedEE().Visibility(Visibility::Collapsed);
 				CUTID0().Focus(FocusState::Programmatic);
 				break;
-			case 3:
+			case 4:
 				EIRTE().Visibility(Visibility::Collapsed);
+				EIIRT().Visibility(Visibility::Collapsed);
 				CombinedUF().Visibility(Visibility::Collapsed);
 				CombinedUT().Visibility(Visibility::Collapsed);
 				CombinedEE().Visibility(Visibility::Visible);
@@ -2289,6 +2301,109 @@ namespace winrt::Logic_Playground::implementation
 			else
 				goto fail;
 			if (const OperationP operation = OperationEEB(EIRTEID3().Text(), EIRTEID2().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			return;
+		}
+	fail:
+		ShowError();
+	}
+
+	void MainPage::EIIRTID0Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTID0());
+	}
+
+	void MainPage::EIIRTID0Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIIRTID1().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIIRTID1Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTID1());
+	}
+
+	void MainPage::EIIRTID1Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIIRTID2().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIIRTID2Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTID2());
+	}
+
+	void MainPage::EIIRTID2Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIIRTID3().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIIRTID3Changed(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTID3());
+	}
+
+	void MainPage::EIIRTID3Finished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIIRTidA().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIIRTidAChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTidA());
+	}
+
+	void MainPage::EIIRTidAFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			EIIRTidB().Focus(FocusState::Programmatic);
+	}
+
+	void MainPage::EIIRTidBChanged(IInspectable CR, TextChangedEventArgs CR)
+	{
+		RemoveIllegal(EIIRTidB());
+	}
+
+	void MainPage::EIIRTidBFinished(IInspectable CR, KeyRoutedEventArgs CR args)
+	{
+		if (args.Key() == VirtualKey::Enter)
+			if (const hstring t0 = EIIRTID0().Text(); !CheckTheoremName(t0))
+				EIIRTID0().Focus(FocusState::Programmatic);
+			else if (const hstring t1 = EIIRTID1().Text(); !CheckTheoremName(t1) || t1 == t0)
+				EIIRTID1().Focus(FocusState::Programmatic);
+			else if (const hstring t2 = EIIRTID2().Text(); !CheckTheoremName(t2) || t2 == t0 || t2 == t1)
+				EIIRTID2().Focus(FocusState::Programmatic);
+			else if (const hstring t3 = EIIRTID3().Text(); !CheckTheoremName(t3) || t3 == t0 || t3 == t1 || t3 == t2)
+				EIIRTID3().Focus(FocusState::Programmatic);
+			else if (!theorems.Lookup(EIIRTidA().Text()))
+				EIIRTidA().Focus(FocusState::Programmatic);
+			else if (theorems.Lookup(EIIRTidB().Text()))
+				EIIRTConfirm(nullptr, nullptr);
+	}
+
+	void MainPage::EIIRTConfirm(IInspectable CR, RoutedEventArgs CR)
+	{
+		if (CheckStatus())
+		{
+			if (const OperationP operation = OperationEIB(EIIRTID0().Text(), EIIRTidA().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationEIB(EIIRTID1().Text(), EIIRTidB().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationER(EIIRTID2().Text(), EIIRTID1().Text()))
+				root.get().AddOperationS(operation);
+			else
+				goto fail;
+			if (const OperationP operation = OperationET(EIIRTID3().Text(), EIIRTID0().Text(), EIIRTID2().Text()))
 				root.get().AddOperationS(operation);
 			else
 				goto fail;
